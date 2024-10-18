@@ -107,14 +107,15 @@ public class Excursion {
         this.precioInscripcion = precioInscripcion;
     }
 
-    //Métodos de la clase Excursión
 
+    //Métodos de la clase Excursión
     /**
-     * Metodo para calcular el precio de inscripción
-     * @return sólo devuelve el precio de la inscripción
+     * Método calculoPrecioExcursion
+     * @return devuelve el precio total de la excursión
      */
-    public double calculoPrecioInscripcion() {
-        return this.precioInscripcion;
+    public double calculoPrecioExcursion() {
+        //calcular el precio total de la excursión, aunque consideramos que este dato realmente puede venir dado de la BBDD
+        return precioInscripcion; // Por ahora, devolvemos solo el precio de inscripción
     }
 
     /**
