@@ -1,18 +1,20 @@
+package backsolutions.modelo;
+
 /**
- * Se crea la clase Seguro
+ * Se crea la clase backsolutions.modelo.Seguro
  */
 public class Seguro {
 
     /**
-     * Atributos de la clase Seguro
+     * Atributos de la clase backsolutions.modelo.Seguro
      */
     private String tipo;
     private double precio;
 
-    //Constructor de la clase Seguro con los parámetros necesarios para inicializar un seguro
+    //Constructor de la clase backsolutions.modelo.Seguro con los parámetros necesarios para inicializar un seguro
 
     /**
-     * Atributos de la clase Seguro añadidos al constructor
+     * Atributos de la clase backsolutions.modelo.Seguro añadidos al constructor
      * @param tipo parámetro identificativo del tipo de seguro
      * @param precio parámetro identificativo dle precio del seguro
      */
@@ -52,15 +54,15 @@ public class Seguro {
         this.precio = precio;
     }
 
-    //Métodos de la clase Seguro
+    //Métodos de la clase backsolutions.modelo.Seguro
 
     /**
-     * Representación de la información de la clase Seguro con toString
-     * @return devuelve el método toString de la clase Seguro
+     * Representación de la información de la clase backsolutions.modelo.Seguro con toString
+     * @return devuelve el método toString de la clase backsolutions.modelo.Seguro
      */
     @Override
     public String toString() {
-        return "Seguro{" +
+        return "backsolutions.modelo.Seguro{" +
                 "tipo='" + tipo + '\'' +
                 ", precio=" + precio +
                 '}';

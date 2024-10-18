@@ -1,7 +1,9 @@
+package backsolutions.modelo;
+
 import java.util.List;
 
 /**
- * Se crea la clase SenderosMontañas
+ * Se crea la clase backsolutions.modelo.SenderosMontañas
  */
 
 public class SenderosMontañas {
@@ -15,10 +17,10 @@ public class SenderosMontañas {
     private List<Excursion> excursiones;
     private List<Inscripcion> inscripciones;
 
-    //Constructor de la clase SenderosMontañas con los parámetros necesarios para inicializar la aplicación
+    //Constructor de la clase backsolutions.modelo.SenderosMontañas con los parámetros necesarios para inicializar la aplicación
 
     /**
-     * Atributos de la clase SenderosMontañas añadidos en el constructor
+     * Atributos de la clase backsolutions.modelo.SenderosMontañas añadidos en el constructor
      * @param nif parámetro distintivo del nif
      * @param cuotaBaseMensual parámetro de la cuota base mensual
      * @param socios parámetro del listado de socios
@@ -107,7 +109,7 @@ public class SenderosMontañas {
         this.inscripciones = inscripciones;
     }
 
-    //Métodos de la clase SenderosMontañas
+    //Métodos de la clase backsolutions.modelo.SenderosMontañas
 
     /**
      * Representación de la información de la clase senderosMontañas con toString
@@ -115,7 +117,7 @@ public class SenderosMontañas {
      */
     @Override
     public String toString() {
-        return "SenderosMontañas{" +
+        return "backsolutions.modelo.SenderosMontañas{" +
                 "nif='" + nif + '\'' +
                 ", cuotaBaseMensual=" + cuotaBaseMensual +
                 ", socios=" + socios +

@@ -1,22 +1,24 @@
+package backsolutions.modelo;
+
 import java.util.List;
 
 /**
- * Se crea la clase abstracta Socio
+ * Se crea la clase abstracta backsolutions.modelo.Socio
  */
 
 public abstract class Socio {
 
     /**
-     * Atributos de la clase asbtracta Socio
+     * Atributos de la clase asbtracta backsolutions.modelo.Socio
      */
     private int numSocio;
     private String nombre;
     private List<Inscripcion> inscripciones;
 
-    //Constructor de la clase Socio con los parámetros necesarios para inicializar un Socio
+    //Constructor de la clase backsolutions.modelo.Socio con los parámetros necesarios para inicializar un backsolutions.modelo.Socio
 
     /**
-     * Atributos de la clase Socio añadidos en el constructor
+     * Atributos de la clase backsolutions.modelo.Socio añadidos en el constructor
      * @param numSocio parámetro distintivo del número de socio
      * @param nombre parámetro del nombre del socio
      * @param inscripciones parámetro de las inscripciones del socio
@@ -73,11 +75,11 @@ public abstract class Socio {
         this.inscripciones = inscripciones;
     }
 
-    //Métodos de la clase Socio
+    //Métodos de la clase backsolutions.modelo.Socio
 
     @Override
     public String toString() {
-        return "Socio{" +
+        return "backsolutions.modelo.Socio{" +
                 "numSocio=" + numSocio +
                 ", nombre='" + nombre + '\'' +
                 ", inscripciones=" + inscripciones +
@@ -87,7 +89,7 @@ public abstract class Socio {
     /**
      * Método getTipo
      * @return devuelve el tipo de socio, que es específico para cada subclase del socio
-     * (Estandar, Federado, Infantil)
+     * (backsolutions.modelo.Estandar, backsolutions.modelo.Federado, backsolutions.modelo.Infantil)
      */
     public abstract String getTipo();
 }

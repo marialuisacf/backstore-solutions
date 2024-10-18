@@ -1,21 +1,23 @@
+package backsolutions.modelo;
+
 import java.util.List;
 
 /**
- * Se crea la clase Federado
+ * Se crea la clase backsolutions.modelo.Federado
  */
 
 public class Federado extends Socio {
 
     /**
-     * Atributos de la clase Federado
+     * Atributos de la clase backsolutions.modelo.Federado
      */
     private String nif;
     private Federacion federacion;
 
-    //Constructor de la clase Federado con los parámetros necesarios para inicializar un socio federado
+    //Constructor de la clase backsolutions.modelo.Federado con los parámetros necesarios para inicializar un socio federado
 
     /**
-     * Atributos de la clase Federado añadidos al constructor
+     * Atributos de la clase backsolutions.modelo.Federado añadidos al constructor
      * @param numSocio parámetro del número del socio
      * @param nombre parámetro identificativo del nombre del socio
      * @param inscripciones parámetro identificativo de inscirpciones
@@ -59,11 +61,11 @@ public class Federado extends Socio {
         this.federacion = federacion;
     }
 
-    //Métodos de la clase Federado
+    //Métodos de la clase backsolutions.modelo.Federado
 
     @Override
     public String toString() {
-        return "Federado{" +
+        return "backsolutions.modelo.Federado{" +
                 "nif='" + nif + '\'' +
                 ", federacion=" + federacion +
                 '}';
@@ -71,8 +73,8 @@ public class Federado extends Socio {
 
     /**
      * override
-     * @return devuelve el tipo "Federado"
+     * @return devuelve el tipo "backsolutions.modelo.Federado"
      */
     @Override
-    public java.lang.String getTipo(){return "Federado";}
+    public java.lang.String getTipo(){return "backsolutions.modelo.Federado";}
 }

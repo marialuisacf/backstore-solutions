@@ -1,19 +1,21 @@
+package backsolutions.modelo;
+
 import java.util.List;
 
 /**
- * Se crea la clase DetallesFactura
+ * Se crea la clase backsolutions.modelo.DetallesFactura
  */
 
 public class DetallesFactura {
     /**
-     * Atributos de la clase DetallesFactura
+     * Atributos de la clase backsolutions.modelo.DetallesFactura
      */
     private List<Inscripcion> listaInscripcion;
 
-    //Constructor de la clase DetallesFactura con los parámetros necesarios para inicializar un DetalleFactura
+    //Constructor de la clase backsolutions.modelo.DetallesFactura con los parámetros necesarios para inicializar un DetalleFactura
 
     /**
-     * Atributos de la clase DetallesFactura añadidos al constructor
+     * Atributos de la clase backsolutions.modelo.DetallesFactura añadidos al constructor
      * @param listaInscripcion parámetro identificativo de la lista de inscripción
      */
     public DetallesFactura(List<Inscripcion> listaInscripcion) {
@@ -37,15 +39,15 @@ public class DetallesFactura {
         this.listaInscripcion = listaInscripcion;
     }
 
-    //Métodos de la clase DetallesFactura
+    //Métodos de la clase backsolutions.modelo.DetallesFactura
 
     /**
-     * Representación de la información de la clase DetallesFactura con toString
-     * @return devuelve el método toString de la clase DetallesFactura
+     * Representación de la información de la clase backsolutions.modelo.DetallesFactura con toString
+     * @return devuelve el método toString de la clase backsolutions.modelo.DetallesFactura
      */
     @Override
     public String toString() {
-        return "DetallesFactura{" +
+        return "backsolutions.modelo.DetallesFactura{" +
                 "listaInscripcion=" + listaInscripcion +
                 '}';
     }

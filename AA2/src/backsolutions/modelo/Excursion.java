@@ -1,12 +1,14 @@
+package backsolutions.modelo;
+
 import java.time.LocalDate;
 
 /**
- * Se crea la clase Excursion
+ * Se crea la clase backsolutions.modelo.Excursion
  */
 
 public class Excursion {
     /**
-     * Atributos de la clase Excursion
+     * Atributos de la clase backsolutions.modelo.Excursion
      */
     private String codigo;
     private String descripcion;
@@ -14,10 +16,10 @@ public class Excursion {
     private int numDias;
     private double precioInscripcion;
 
-    //Constructor de la clase Excursion con los parámetros necesarios para inicializar una excursion
+    //Constructor de la clase backsolutions.modelo.Excursion con los parámetros necesarios para inicializar una excursion
 
     /**
-     * Atributos de la clase Excursion añadidos al constructor
+     * Atributos de la clase backsolutions.modelo.Excursion añadidos al constructor
      * @param codigo parámetro identificativo del codigo de la excursion
      * @param descripcion parámetro identificativo de la descripción de la excursión
      * @param fecha parámetro identificativo de la fecha de la excursión
@@ -113,7 +115,7 @@ public class Excursion {
      */
     @Override
     public String toString() {
-        return "Excursion{" +
+        return "backsolutions.modelo.Excursion{" +
                 "codigo='" + codigo + '\'' +
                 ", descripcion='" + descripcion + '\'' +
                 ", fecha=" + fecha +

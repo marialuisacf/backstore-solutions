@@ -1,21 +1,23 @@
+package backsolutions.modelo;
+
 import java.util.List;
 
 /**
- * Se crea la clase Estandar
+ * Se crea la clase backsolutions.modelo.Estandar
  */
 
 public class Estandar extends Socio {
 
     /**
-     * Atributos de la clase Estandar
+     * Atributos de la clase backsolutions.modelo.Estandar
      */
     private String nif;
     private Seguro seguro;
 
-    //Constructor de la clase Estandar con los parámetros necesarios para inicializar un socio estandar
+    //Constructor de la clase backsolutions.modelo.Estandar con los parámetros necesarios para inicializar un socio estandar
 
     /**
-     * Atributos de la clase Estandar añadidos al constructor
+     * Atributos de la clase backsolutions.modelo.Estandar añadidos al constructor
      * @param numSocio parámetro del número del socio
      * @param nombre parámetro identificativo del nombre del socio
      * @param inscripciones parámetro identificativo de inscirpciones
@@ -59,11 +61,11 @@ public class Estandar extends Socio {
         this.seguro = seguro;
     }
 
-    //Métodos de la clase Estandar
+    //Métodos de la clase backsolutions.modelo.Estandar
 
     @Override
     public String toString() {
-        return "Estandar{" +
+        return "backsolutions.modelo.Estandar{" +
                 "nif='" + nif + '\'' +
                 ", seguro=" + seguro +
                 '}';
@@ -71,8 +73,8 @@ public class Estandar extends Socio {
 
     /**
      * override
-     * @return devuelve el tipo "Estandar"
+     * @return devuelve el tipo "backsolutions.modelo.Estandar"
      */
     @Override
-    public java.lang.String getTipo(){return "Estandar";}
+    public java.lang.String getTipo(){return "backsolutions.modelo.Estandar";}
 }

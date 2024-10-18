@@ -1,21 +1,23 @@
+package backsolutions.modelo;
+
 /**
- * Se crea la clase Factura
+ * Se crea la clase backsolutions.modelo.Factura
  */
 
 public class Factura {
 
     /**
-     * Atributos de la clase Factura
+     * Atributos de la clase backsolutions.modelo.Factura
      */
     private Socio socio;
     private double totalExcursiones;
     private double totalCuota;
     private double totalPagar;
 
-    //Constructor de la clase Factura con los parámetros necesarios para inicializar una factura
+    //Constructor de la clase backsolutions.modelo.Factura con los parámetros necesarios para inicializar una factura
 
     /**
-     * Atributos de la clase Factura añadidos al constructor
+     * Atributos de la clase backsolutions.modelo.Factura añadidos al constructor
      * @param socio parámetro identificativo del socio asociado a la factura
      * @param totalExcursiones parámetro del total de las excursiones
      * @param totalCuota parámetro del total de la cuota
@@ -87,15 +89,15 @@ public class Factura {
         this.totalPagar = totalPagar;
     }
 
-    //Métodos de la clase Factura
+    //Métodos de la clase backsolutions.modelo.Factura
 
     /**
-     * Representación de la información de la clase Factura con toString
-     * @return devuelve el método toString de la clase Factura
+     * Representación de la información de la clase backsolutions.modelo.Factura con toString
+     * @return devuelve el método toString de la clase backsolutions.modelo.Factura
      */
     @Override
     public String toString() {
-        return "Factura{" +
+        return "backsolutions.modelo.Factura{" +
                 "socio=" + socio +
                 ", totalExcursiones=" + totalExcursiones +
                 ", totalCuota=" + totalCuota +

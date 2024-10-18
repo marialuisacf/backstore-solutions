@@ -1,12 +1,14 @@
+package backsolutions.modelo;
+
 import java.time.LocalDate;
 /**
- * Se crea la clase Inscripcion
+ * Se crea la clase backsolutions.modelo.Inscripcion
  */
 
 public class Inscripcion {
 
     /**
-     * Atributos de la clase Inscripcion
+     * Atributos de la clase backsolutions.modelo.Inscripcion
      */
     private String numInscripcion;
     private Socio socio;
@@ -16,7 +18,7 @@ public class Inscripcion {
     //Constructor de la clase Inscripción con los parámetros necesarios para inicializar una inscripción
 
     /**
-     * Atributos de la clase Inscripcion añadidos al constructor
+     * Atributos de la clase backsolutions.modelo.Inscripcion añadidos al constructor
      * @param socio parámetro identificativo del socio inscrito
      * @param excursion parámetro identifiactivo de la excursión
      * @param fechaInscripcion parámetro identificativo de la inscripción
@@ -83,22 +85,22 @@ public class Inscripcion {
     }
 
     /**
-     * Setter de fecha Inscripcion
+     * Setter de fecha backsolutions.modelo.Inscripcion
      * @param fechaInscripcion parámetro de la fecha de inscripcion
      */
     public void setFechaInscripcion(LocalDate fechaInscripcion) {
         this.fechaInscripcion = fechaInscripcion;
     }
 
-    //Métodos de la clase Inscripcion
+    //Métodos de la clase backsolutions.modelo.Inscripcion
 
     /**
-     * Representación de la información de la clase Inscripcion con toString
-     * @return devuelve el método toString de la clase Inscripcion
+     * Representación de la información de la clase backsolutions.modelo.Inscripcion con toString
+     * @return devuelve el método toString de la clase backsolutions.modelo.Inscripcion
      */
     @Override
     public String toString() {
-        return "Inscripcion{" +
+        return "backsolutions.modelo.Inscripcion{" +
                 "numInscripcion='" + numInscripcion + '\'' +
                 ", socio=" + socio +
                 ", excursion=" + excursion +

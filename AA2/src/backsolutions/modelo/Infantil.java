@@ -1,20 +1,22 @@
+package backsolutions.modelo;
+
 import java.util.List;
 
 /**
- * Se crea la clase Infantil
+ * Se crea la clase backsolutions.modelo.Infantil
  */
 
 public class Infantil extends Socio {
 
     /**
-     * Atributos de la clase Infantil
+     * Atributos de la clase backsolutions.modelo.Infantil
      */
     private String numSocioTutor;
 
-    //Constructor de la clase Infantil con los parámetros necesarios para inicializar un socio infantil
+    //Constructor de la clase backsolutions.modelo.Infantil con los parámetros necesarios para inicializar un socio infantil
 
     /**
-     * Atributos de la clase Infantil añadidos al constructor
+     * Atributos de la clase backsolutions.modelo.Infantil añadidos al constructor
      * @param numSocio parámetro del número del socio
      * @param nombre parámetro identificativo del nombre del socio
      * @param inscripciones parámetro identificativo de inscirpciones
@@ -42,19 +44,19 @@ public class Infantil extends Socio {
         this.numSocioTutor = numSocioTutor;
     }
 
-    //Métodos de la clase Infantil
+    //Métodos de la clase backsolutions.modelo.Infantil
 
     @Override
     public String toString() {
-        return "Infantil{" +
+        return "backsolutions.modelo.Infantil{" +
                 "numSocioTutor='" + numSocioTutor + '\'' +
                 '}';
     }
 
     /**
      * override
-     * @return devuelve el tipo "Infantil"
+     * @return devuelve el tipo "backsolutions.modelo.Infantil"
      */
     @Override
-    public java.lang.String getTipo(){return "Infantil";}
+    public java.lang.String getTipo(){return "backsolutions.modelo.Infantil";}
 }

@@ -1,3 +1,5 @@
+package backsolutions.modelo;
+
 /**
  * Se crea la clase Federación
  */
@@ -13,7 +15,7 @@ public class Federacion {
     //Constructor de la clase Federación con los parámetros necesarios para inicializar una federación
 
     /**
-     * Atributos de la clase Federacion añadidos al constructor
+     * Atributos de la clase backsolutions.modelo.Federacion añadidos al constructor
      * @param codigo parámetro identificativo del código de la federación
      * @param nombre parámetro identificativo del nombre de la federación
      */
@@ -53,15 +55,15 @@ public class Federacion {
         this.nombre = nombre;
     }
 
-    //Métodos de la clase Federacion
+    //Métodos de la clase backsolutions.modelo.Federacion
 
     /**
-     * Representación de la información de la clase Federacion con toString
-     * @return devuelve el método toString de la clase Federacion
+     * Representación de la información de la clase backsolutions.modelo.Federacion con toString
+     * @return devuelve el método toString de la clase backsolutions.modelo.Federacion
      */
     @Override
     public String toString() {
-        return "Federacion{" +
+        return "backsolutions.modelo.Federacion{" +
                 "codigo='" + codigo + '\'' +
                 ", nombre='" + nombre + '\'' +
                 '}';
