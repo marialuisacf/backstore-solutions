@@ -1,5 +1,6 @@
 package backsolutions.modelo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,12 +22,11 @@ public abstract class Socio {
      * Atributos de la clase backsolutions.modelo.Socio añadidos en el constructor
      * @param numSocio parámetro distintivo del número de socio
      * @param nombre parámetro del nombre del socio
-     * @param inscripciones parámetro de las inscripciones del socio
      */
-    public Socio(int numSocio, String nombre, List<Inscripcion> inscripciones) {
+    public Socio(int numSocio, String nombre) {
         this.numSocio = numSocio;
         this.nombre = nombre;
-        this.inscripciones = inscripciones;
+        this.inscripciones = new ArrayList<Inscripcion>(); //inicializa la lista de inscripciones
     }
 
     //Getter y Setter
@@ -77,12 +77,23 @@ public abstract class Socio {
 
     //Métodos de la clase backsolutions.modelo.Socio
 
+    /**
+     * Metodo para calcular la cuota mensual, que debe ser implementado en las subclases.
+     * @return devuelve la cuota mensual correspondiente a cada tipo de socio.
+     */
+    public abstract double calculoCuotaMensual();
+
+    /**
+     * Metodo para obtener los detalles del socio
+     * @return devuelve una cadena con los detalles del socio.
+     */
+    public abstract String detallesSocio();
+
     @Override
     public String toString() {
-        return "backsolutions.modelo.Socio{" +
+        return "Socio{" +
                 "numSocio=" + numSocio +
                 ", nombre='" + nombre + '\'' +
-                ", inscripciones=" + inscripciones +
                 '}';
     }
 

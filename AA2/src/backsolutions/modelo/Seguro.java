@@ -54,7 +54,15 @@ public class Seguro {
         this.precio = precio;
     }
 
+
     //Métodos de la clase backsolutions.modelo.Seguro
+    /**
+     * Metodo detallesSeguro
+     * @return devuelve una descripcion del seguro
+     */
+    public String detallesSeguro() {
+        return "Tipo de Seguro: " + tipo + ", Precio: " + precio;
+    }
 
     /**
      * Representación de la información de la clase backsolutions.modelo.Seguro con toString

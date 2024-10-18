@@ -20,16 +20,14 @@ public class Federado extends Socio {
      * Atributos de la clase backsolutions.modelo.Federado añadidos al constructor
      * @param numSocio parámetro del número del socio
      * @param nombre parámetro identificativo del nombre del socio
-     * @param inscripciones parámetro identificativo de inscirpciones
      * @param nif parámetro del nif del socio
      * @param federacion parámetro de la federación del socio
      */
-    public Federado(int numSocio, String nombre, List<Inscripcion> inscripciones, String nif, Federacion federacion) {
-        super(numSocio, nombre, inscripciones);
+    public Federado(int numSocio, String nombre, String nif, Federacion federacion) {
+        super(numSocio, nombre);
         this.nif = nif;
         this.federacion = federacion;
     }
-
     //Getter y Setter
 
     /**
@@ -62,10 +60,23 @@ public class Federado extends Socio {
     }
 
     //Métodos de la clase backsolutions.modelo.Federado
+    @Override
+    public double calculoCuotaMensual() {
+        return 10.0 * 0.95; // Debido al 5% de descuento para socios federados
+    }
+
+    public Federacion obtenerFederacion() {
+        return federacion;
+    }
+
+    @Override
+    public String detallesSocio() {
+        return "Socio Federado: " + getNombre() + ", NIF: " + nif + ", Federación: " + federacion;
+    }
 
     @Override
     public String toString() {
-        return "backsolutions.modelo.Federado{" +
+        return "Federado{" +
                 "nif='" + nif + '\'' +
                 ", federacion=" + federacion +
                 '}';
@@ -76,5 +87,5 @@ public class Federado extends Socio {
      * @return devuelve el tipo "backsolutions.modelo.Federado"
      */
     @Override
-    public java.lang.String getTipo(){return "backsolutions.modelo.Federado";}
+    public java.lang.String getTipo(){return "Federado";}
 }

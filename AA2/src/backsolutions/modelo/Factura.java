@@ -5,7 +5,6 @@ package backsolutions.modelo;
  */
 
 public class Factura {
-
     /**
      * Atributos de la clase backsolutions.modelo.Factura
      */
@@ -15,19 +14,15 @@ public class Factura {
     private double totalPagar;
 
     //Constructor de la clase backsolutions.modelo.Factura con los parámetros necesarios para inicializar una factura
-
     /**
      * Atributos de la clase backsolutions.modelo.Factura añadidos al constructor
      * @param socio parámetro identificativo del socio asociado a la factura
-     * @param totalExcursiones parámetro del total de las excursiones
-     * @param totalCuota parámetro del total de la cuota
-     * @param totalPagar parámetro del total a pagar
      */
-    public Factura(Socio socio, double totalExcursiones, double totalCuota, double totalPagar) {
+    public Factura(Socio socio) {
         this.socio = socio;
-        this.totalExcursiones = totalExcursiones;
-        this.totalCuota = totalCuota;
-        this.totalPagar = totalPagar;
+        this.totalExcursiones = 0.0; //Inicializa en 0, ya que cuando se dan de alta empiezan con 0 excursiones.
+        this.totalCuota = socio.calculoCuotaMensual(); //Calcula directamente a partir del socio, es más útil para mantener la consistencia del estado inicial.
+        this.totalPagar = calcularTotalFactura(); //Se calcula automáticamente a partir de los valores iniciales.
     }
 
     //Getter y Setter
@@ -91,9 +86,25 @@ public class Factura {
 
     //Métodos de la clase backsolutions.modelo.Factura
 
+    public double calcularTotalFactura() {
+        return totalExcursiones + totalCuota + totalPagar;
+    }
+
+    public void agregarTotalExcursiones(double total){
+        this.totalExcursiones += total;
+        this.totalCuota = calcularTotalFactura(); //Actualiza total a pagar
+    }
+
+    public String generarFactura() {
+        return "Factura para: " + socio.detallesSocio() +
+                "\nTotal Cuota: " + totalCuota +
+                "\nTotal Excursiones: " + totalExcursiones +
+                "\nTotal a Pagar: " + totalPagar;
+    }
+
     /**
      * Representación de la información de la clase backsolutions.modelo.Factura con toString
-     * @return devuelve el método toString de la clase backsolutions.modelo.Factura
+     * @return devuelve el metodo toString de la clase backsolutions.modelo.Factura
      */
     @Override
     public String toString() {
