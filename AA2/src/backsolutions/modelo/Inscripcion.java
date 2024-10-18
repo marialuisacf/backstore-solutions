@@ -14,6 +14,7 @@ public class Inscripcion {
     private Socio socio;
     private Excursion excursion;
     private LocalDate fechaInscripcion;
+    private Seguro seguro; //Atributo para el seguro contratado (opcional para algunos socios como Federado o Infantil)
 
     //Constructor de la clase Inscripción con los parámetros necesarios para inicializar una inscripción
 
@@ -23,12 +24,14 @@ public class Inscripcion {
      * @param socio parámetro que identifica al socio que realiza la inscripcion
      * @param excursion parámetro que identifica la excursion a la que se inscribe el socio
      * @param fechaInscripcion identifica la fecha en la que se realizó la inscripción
+     * @param seguro identifica el seguro del socio Estandar.
      */
-    public Inscripcion(String numInscripcion, Socio socio, Excursion excursion, LocalDate fechaInscripcion) {
+    public Inscripcion(String numInscripcion, Socio socio, Excursion excursion, LocalDate fechaInscripcion, Seguro seguro) {
         this.numInscripcion = numInscripcion;
         this.socio = socio;
         this.excursion = excursion;
         this.fechaInscripcion = fechaInscripcion;
+        this.seguro = seguro;
     }
     //Getter y Setter
 
@@ -90,28 +93,51 @@ public class Inscripcion {
         this.fechaInscripcion = fechaInscripcion;
     }
 
-
-    //Métodos de la clase backsolutions.modelo.Inscripcion
-
     /**
-     * Método para calcular el precio total de la inscripción.
-     * Este es el resultado de sumar el precio de la excursión y la cuota mensual del socio.
-     * @return double que representa el precio total
+     * Getter de seguro
+     * @return devuelve el precio del seguro contratado por el socio Estandar
      */
-    public double calculoPrecioTotal() {
-        // Sumar el precio de la excursión y la cuota mensual del socio
-        return excursion.calculoPrecioExcursion(socio) + socio.calculoCuotaMensual();
+    public Seguro getSeguro() {
+        return seguro;
     }
 
     /**
-     * Método para verificar si la inscripción puede ser cancelada.
-     * La inscripción puede cancelarse hasta el día anterior a la excursión.
-     * @return boolean true si se puede cancelar, false si ya ha pasado la fecha límite.
+     * Setter seguro
+     * @param seguro parámetro del seguro contratado
      */
+    public void setSeguro(Seguro seguro) {
+        this.seguro = seguro;
+    }
+
+    //Métodos de la clase Inscripcion
+
+    /**
+     * Metodo para calcular el precio total de la inscripción.
+     * @return El precio total de la inscripción basado en el tipo de socio y si requiere seguro.
+     */
+    public double calculoPrecioTotal() {
+        double precioExcursion = excursion.calculoPrecioExcursion(socio);
+
+        if (socio instanceof Estandar) {
+            //Los socios estándar deben contratar un seguro, se suma al precio de la excursión
+            return precioExcursion + seguro.getPrecio();
+        } else if (socio instanceof Federado || socio instanceof Infantil) {
+            //Los socios federados e infantiles no pagan seguro, solo el precio de la excursión
+            return precioExcursion;
+        } else {
+            //Caso por defecto para cualquier otro tipo de socio
+            return precioExcursion;
+        }
+    }
+
+    // Metodo para verificar si se puede cancelar la inscripción
     public boolean verificarCancelacion() {
         LocalDate fechaExcursion = excursion.getFecha();
-        // Verificar si la fecha de la inscripción es antes de la fecha de la excursión
-        return LocalDate.now().isBefore(fechaExcursion);
+        //Se puede cancelar solo hasta el día anterior a la excursión
+        LocalDate fechaLimiteCancelacion = fechaExcursion.minusDays(1);
+        //se calcula la fecha límite para cancelar
+        return LocalDate.now().isBefore(fechaLimiteCancelacion);
+        //verifica si la fecha actual es anterior a esa fecha límite.
     }
 
     /**
