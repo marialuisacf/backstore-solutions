@@ -84,6 +84,14 @@ public abstract class Socio {
     public abstract double calculoCuotaMensual();
 
     /**
+     * Metodo opcional para obtener el seguro
+     * @return
+     */
+    public Seguro obtenerSeguro() {
+        return null; // Implementación por defecto que retorna null
+    }
+
+    /**
      * Metodo para obtener los detalles del socio
      * @return devuelve una cadena con los detalles del socio.
      */
