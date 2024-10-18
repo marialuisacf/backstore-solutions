@@ -31,7 +31,7 @@ public class Excursion {
         this.descripcion = descripcion;
         this.fecha = fecha;
         this.numDias = numDias;
-        this.precioInscripcion = precioInscripcion;
+        this.precioInscripcion = precioInscripcion; //es el precio de la excursión que introducimos por terminal.
     }
 
     //Getter y Setter
@@ -110,43 +110,41 @@ public class Excursion {
 
     //Métodos de la clase Excursión
     /**
-     * Método para calcular el precio de la excursión basado en el tipo de socio.
-     * El cálculo varía si el socio es estándar, federado o infantil.
-     * @param socio El socio que participa en la excursión.
-     * @return double que representa el precio de la excursión
+     * Metodo para calcular el precio de la excursión según el tipo de socio. Sólo hablamos aquí de la excursión no de si se añade el precio del seguro
+     * @param socio El socio que está realizando la inscripción.
+     * @return El precio de la excursión.
      */
     public double calculoPrecioExcursion(Socio socio) {
-        double precioFinal = precioInscripcion;
-
-        if (socio instanceof Estandar) {
-            // Si es un socio estándar, se añade el precio del seguro contratado
-            Estandar estandar = (Estandar) socio;
-            precioFinal += estandar.getSeguro().getPrecio();
-        } else if (socio instanceof Federado) {
-            // Si es un socio federado, tiene un 10% de descuento sobre el precio de inscripción
-            precioFinal *= 0.90;
+        if (socio instanceof Federado) {
+            // 10% de descuento para socios federados
+            return precioInscripcion * 0.90;
         } else if (socio instanceof Infantil) {
-            // Si es un socio infantil, solo paga el precio de inscripción, sin seguro ni descuentos
-            // Ya que el precio de inscripción es suficiente
+            // Los socios infantiles pagan el precio completo
+            return precioInscripcion;
+        } else {
+            // Los socios estándar pagan el precio completo
+            return precioInscripcion;
         }
-
-        return precioFinal;
     }
 
-    /**
-     * Metodo para mostrar detalles de la excursión
-     * @return
-     */
+    // Método para mostrar detalles de la excursión
     public String detallesExcursion() {
-        return "Excursión: " + this.codigo + ", Descripción: " + this.descripcion + ", Fecha: " + this.fecha + ", Días: " + this.numDias + ", Precio: " + this.precioInscripcion;
+        return "Excursion{" +
+                "Codigo='" + codigo + '\'' +
+                ", Descripcion='" + descripcion + '\'' +
+                ", Fecha=" + fecha +
+                ", Numero de días=" + numDias +
+                ", Precio de la excursion=" + precioInscripcion +
+                '}';
     }
+
     /**
      * Representación de la información de la clase Excursión con toString
      * @return devuelve el método toString de la clase Excursión
      */
     @Override
     public String toString() {
-        return "backsolutions.modelo.Excursion{" +
+        return "Excursion{" +
                 "codigo='" + codigo + '\'' +
                 ", descripcion='" + descripcion + '\'' +
                 ", fecha=" + fecha +
