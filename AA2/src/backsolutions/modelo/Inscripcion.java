@@ -18,20 +18,18 @@ public class Inscripcion {
     //Constructor de la clase Inscripción con los parámetros necesarios para inicializar una inscripción
 
     /**
-     * Atributos de la clase backsolutions.modelo.Inscripcion añadidos al constructor
-     * @param socio parámetro identificativo del socio inscrito
-     * @param excursion parámetro identifiactivo de la excursión
-     * @param fechaInscripcion parámetro identificativo de la inscripción
-     * @param numInscripcion parámetro identificativo del número de la inscripción
+     * Constructor de la clase Inscripcion
+     * @param numInscripcion parámetro identificativo del número de la inscricion
+     * @param socio parámetro que identifica al socio que realiza la inscripcion
+     * @param excursion parámetro que identifica la excursion a la que se inscribe el socio
+     * @param fechaInscripcion identifica la fecha en la que se realizó la inscripción
      */
-    public Inscripcion(Socio socio, Excursion excursion, LocalDate fechaInscripcion, String numInscripcion) {
+    public Inscripcion(String numInscripcion, Socio socio, Excursion excursion, LocalDate fechaInscripcion) {
+        this.numInscripcion = numInscripcion;
         this.socio = socio;
         this.excursion = excursion;
         this.fechaInscripcion = fechaInscripcion;
-        this.numInscripcion = numInscripcion;
-
     }
-
     //Getter y Setter
 
     /**
@@ -57,42 +55,60 @@ public class Inscripcion {
     }
     /**
      * Setter de socio
-     * @param socio parámetro identificativo del socio inscrito
+     * @param socio parámetro identificativo del socio que realizo la inscripcion
      */
     public void setSocio(Socio socio) {
         this.socio = socio;
     }
     /**
      * Getter de excursion
-     * @return devuelve la excursion
+     * @return devuelve la excursion relacionada con la inscripcion
      */
     public Excursion getExcursion() {
         return excursion;
     }
     /**
      * Setter de excursion
-     * @param excursion parámetro identificativo de la excursion
+     * @param excursion parámetro identificativo de la excursion relacionada con la inscripcion
      */
     public void setExcursion(Excursion excursion) {
         this.excursion = excursion;
     }
     /**
      * Getter de fechaInscripcion
-     * @return devuelve la fecha de la inscripción
+     * @return devuelve la fecha en que se realizo la inscripcion
      */
     public LocalDate getFechaInscripcion() {
         return fechaInscripcion;
     }
 
     /**
-     * Setter de fecha backsolutions.modelo.Inscripcion
+     * Setter de fechaInscripcion
      * @param fechaInscripcion parámetro de la fecha de inscripcion
      */
     public void setFechaInscripcion(LocalDate fechaInscripcion) {
         this.fechaInscripcion = fechaInscripcion;
     }
 
+
     //Métodos de la clase backsolutions.modelo.Inscripcion
+
+    /**
+     * Metodo para calcular el precio total de la inscripcion
+     * @return devuelve el precio total que debe pagar el socio por la inscripcion
+     */
+    public double calculoPrecioTotal() {
+        return excursion.calculoPrecioExcursion() + socio.calculoCuotaMensual();
+    }
+
+    /**
+     * Metodo para verificar si es posible cancelar la inscripcion
+     * @return devuelve true si la inscripcion puede cancelarse 1 dia antes del inicio de la excursion, si no es así devuelve false
+     */
+    public boolean verificarCancelacion() {
+        LocalDate fechaInicioExcursion = excursion.getFecha();
+        return fechaInscripcion.isBefore(fechaInicioExcursion.minusDays(1));
+    }
 
     /**
      * Representación de la información de la clase backsolutions.modelo.Inscripcion con toString
@@ -100,10 +116,10 @@ public class Inscripcion {
      */
     @Override
     public String toString() {
-        return "backsolutions.modelo.Inscripcion{" +
+        return "Inscripcion{" +
                 "numInscripcion='" + numInscripcion + '\'' +
-                ", socio=" + socio +
-                ", excursion=" + excursion +
+                ", socio=" + socio.getNombre() +
+                ", excursion=" + excursion.getDescripcion() +
                 ", fechaInscripcion=" + fechaInscripcion +
                 '}';
     }
