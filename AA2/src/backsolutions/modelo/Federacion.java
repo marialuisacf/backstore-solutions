@@ -57,6 +57,11 @@ public class Federacion {
 
     //Métodos de la clase backsolutions.modelo.Federacion
 
+    // Metodo para obtener los detalles de la federación
+    public String detallesFederacion() {
+        return "Federación: " + nombre + ", Código: " + codigo;
+    }
+    
     /**
      * Representación de la información de la clase backsolutions.modelo.Federacion con toString
      * @return devuelve el método toString de la clase backsolutions.modelo.Federacion
