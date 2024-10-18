@@ -18,6 +18,7 @@ public class Factura {
     /**
      * Atributos de la clase Factura añadidos al constructor
      * @param socio parámetro identificativo del socio asociado a la Factura
+     * @param inscripciones parámetro identificativo del listado de inscripciones
      */
     public Factura(Socio socio, List<Inscripcion> inscripciones) {
         this.socio = socio;
@@ -75,7 +76,7 @@ public class Factura {
     }
 
     // Metodo para generar la factura mensual
-    
+
     public String generarFacturaMensual() {
         StringBuilder factura = new StringBuilder();
         factura.append("Factura Mensual para el socio: ").append(socio.getNombre()).append("\n");
