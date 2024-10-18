@@ -94,20 +94,24 @@ public class Inscripcion {
     //Métodos de la clase backsolutions.modelo.Inscripcion
 
     /**
-     * Metodo para calcular el precio total de la inscripcion
-     * @return devuelve el precio total que debe pagar el socio por la inscripcion
+     * Método para calcular el precio total de la inscripción.
+     * Este es el resultado de sumar el precio de la excursión y la cuota mensual del socio.
+     * @return double que representa el precio total
      */
     public double calculoPrecioTotal() {
-        return excursion.calculoPrecioExcursion() + socio.calculoCuotaMensual();
+        // Sumar el precio de la excursión y la cuota mensual del socio
+        return excursion.calculoPrecioExcursion(socio) + socio.calculoCuotaMensual();
     }
 
     /**
-     * Metodo para verificar si es posible cancelar la inscripcion
-     * @return devuelve true si la inscripcion puede cancelarse 1 dia antes del inicio de la excursion, si no es así devuelve false
+     * Método para verificar si la inscripción puede ser cancelada.
+     * La inscripción puede cancelarse hasta el día anterior a la excursión.
+     * @return boolean true si se puede cancelar, false si ya ha pasado la fecha límite.
      */
     public boolean verificarCancelacion() {
-        LocalDate fechaInicioExcursion = excursion.getFecha();
-        return fechaInscripcion.isBefore(fechaInicioExcursion.minusDays(1));
+        LocalDate fechaExcursion = excursion.getFecha();
+        // Verificar si la fecha de la inscripción es antes de la fecha de la excursión
+        return LocalDate.now().isBefore(fechaExcursion);
     }
 
     /**

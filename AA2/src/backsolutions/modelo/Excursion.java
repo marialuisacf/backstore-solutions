@@ -110,12 +110,27 @@ public class Excursion {
 
     //Métodos de la clase Excursión
     /**
-     * Método calculoPrecioExcursion
-     * @return devuelve el precio total de la excursión
+     * Método para calcular el precio de la excursión basado en el tipo de socio.
+     * El cálculo varía si el socio es estándar, federado o infantil.
+     * @param socio El socio que participa en la excursión.
+     * @return double que representa el precio de la excursión
      */
-    public double calculoPrecioExcursion() {
-        //calcular el precio total de la excursión, aunque consideramos que este dato realmente puede venir dado de la BBDD
-        return precioInscripcion; // Por ahora, devolvemos solo el precio de inscripción
+    public double calculoPrecioExcursion(Socio socio) {
+        double precioFinal = precioInscripcion;
+
+        if (socio instanceof Estandar) {
+            // Si es un socio estándar, se añade el precio del seguro contratado
+            Estandar estandar = (Estandar) socio;
+            precioFinal += estandar.getSeguro().getPrecio();
+        } else if (socio instanceof Federado) {
+            // Si es un socio federado, tiene un 10% de descuento sobre el precio de inscripción
+            precioFinal *= 0.90;
+        } else if (socio instanceof Infantil) {
+            // Si es un socio infantil, solo paga el precio de inscripción, sin seguro ni descuentos
+            // Ya que el precio de inscripción es suficiente
+        }
+
+        return precioFinal;
     }
 
     /**
