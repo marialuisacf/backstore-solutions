@@ -110,6 +110,21 @@ public class Excursion {
     //Métodos de la clase Excursión
 
     /**
+     * Metodo para calcular el precio de inscripción
+     * @return sólo devuelve el precio de la inscripción
+     */
+    public double calculoPrecioInscripcion() {
+        return this.precioInscripcion;
+    }
+
+    /**
+     * Metodo para mostrar detalles de la excursión
+     * @return
+     */
+    public String detallesExcursion() {
+        return "Excursión: " + this.codigo + ", Descripción: " + this.descripcion + ", Fecha: " + this.fecha + ", Días: " + this.numDias + ", Precio: " + this.precioInscripcion;
+    }
+    /**
      * Representación de la información de la clase Excursión con toString
      * @return devuelve el método toString de la clase Excursión
      */
