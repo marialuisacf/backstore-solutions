@@ -61,5 +61,4 @@ public class Datos {
         return inscripciones;
     }
 
-    // Métodos adicionales que consideres necesarios para gestionar los datos
 }
