@@ -11,6 +11,11 @@ public class ControladorInscripcion {
         this.inscripciones = inscripciones;
     }
 
+    //metodo para mostrar todas las inscripciones
+    public List<Inscripcion> mostrarInscripciones() {
+        return inscripciones; // Devuelve la lista de inscripciones
+    }
+
     //metodo para añadir inscripciones con excepciones personalizadas
     public void addInscripcion(Inscripcion inscripcion) throws InscripcionInvalidaExcepcion {
         // Verificar si la inscripción ya existe

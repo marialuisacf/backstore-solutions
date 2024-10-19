@@ -8,6 +8,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
+import java.util.List;
+
 
 public class VistaPrincipal {
 
@@ -62,7 +64,7 @@ public class VistaPrincipal {
                     cancelarInscripcion(scanner);
                     break;
                 case 8:
-                    //mostrarInscripciones(scanner);
+                    mostrarInscripciones();
                     break;
                 case 9:
                     System.out.println("Saliendo del programa.");
@@ -75,6 +77,7 @@ public class VistaPrincipal {
         scanner.close();
     }
 
+    //CASO 1:
     private void addExcursion(Scanner scanner) {
         // Solicitar al usuario los datos para crear la excursión
         System.out.print("Ingrese el código de la excursión: ");
@@ -111,6 +114,7 @@ public class VistaPrincipal {
         }
     }
 
+    //CASO 2:
     private void filtrarExcursiones(Scanner scanner) {
         System.out.print("Ingrese la fecha de inicio (dd-MM-yyyy): ");
         String inicioString = scanner.next();
@@ -137,6 +141,7 @@ public class VistaPrincipal {
         }
     }
 
+    //CASO 3:
     private void addSocio(Scanner scanner) {
         // Solicitar al usuario los datos para crear un socio
         System.out.println("Ingrese el tipo de socio (1 = Estándar, 2 = Federado, 3 = Infantil): ");
@@ -191,6 +196,7 @@ public class VistaPrincipal {
         }
     }
 
+    //CASO 4:
     private void modificarSeguro(Scanner scanner) {
         System.out.print("Ingrese el número de socio estándar: ");
         int numSocio = scanner.nextInt();
@@ -210,7 +216,7 @@ public class VistaPrincipal {
         }
     }
 
-    //CASO 5
+    //CASO 5:
     private void deleteSocio(Scanner scanner) {
         System.out.print("Ingrese el número de socio a eliminar: ");
         int numSocio = scanner.nextInt();
@@ -224,7 +230,7 @@ public class VistaPrincipal {
         }
     }
 
-    //CASO 6
+    //CASO 6:
     private void addInscripcion(Scanner scanner) {
         // Solicitar al usuario los datos necesarios para la inscripción
         System.out.print("Ingrese el número de inscripción: ");
@@ -269,6 +275,7 @@ public class VistaPrincipal {
         }
     }
 
+    //CASO 7:
     private void cancelarInscripcion(Scanner scanner) {
         System.out.print("Ingrese el número de socio para cancelar la inscripción: ");
         int numSocio = scanner.nextInt();
@@ -301,7 +308,17 @@ public class VistaPrincipal {
         }
     }
 
-
-
+    //CASO 8:
+    private void mostrarInscripciones() {
+        List<Inscripcion> inscripciones = controladorInscripcion.mostrarInscripciones();
+        if (inscripciones.isEmpty()) {
+            System.out.println("No hay inscripciones disponibles.");
+        } else {
+            System.out.println("Lista de Inscripciones:");
+            for (Inscripcion inscripcion : inscripciones) {
+                System.out.println(inscripcion);
+            }
+        }
+    }
 
 }

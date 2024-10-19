@@ -142,15 +142,16 @@ public class Inscripcion {
 
     /**
      * Representación de la información de la clase backsolutions.modelo.Inscripcion con toString
-     * @return devuelve el método toString de la clase backsolutions.modelo.Inscripcion
+     * @return devuelve el metodo toString de la clase backsolutions.modelo.Inscripcion
      */
     @Override
     public String toString() {
         return "Inscripcion{" +
                 "numInscripcion='" + numInscripcion + '\'' +
-                ", socio=" + socio.getNombre() +
-                ", excursion=" + excursion.getDescripcion() +
+                ", socio=" + socio +
+                ", excursion=" + excursion +
                 ", fechaInscripcion=" + fechaInscripcion +
+                ", seguro=" + seguro +
                 '}';
     }
 }
