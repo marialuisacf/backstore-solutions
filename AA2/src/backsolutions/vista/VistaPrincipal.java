@@ -33,7 +33,7 @@ public class VistaPrincipal {
             System.out.println("4. Modificar tipo de seguro de un socio Estandar");
             System.out.println("5. Eliminar Socio");
             System.out.println("6. Añadir Inscripción");
-            System.out.println("7. Eliminar Inscripción");
+            System.out.println("7. Cancelar Inscripción");
             System.out.println("8. Mostrar Inscripciones");
             System.out.println("9. Salir");
             System.out.print("Seleccione una opción: ");
@@ -59,7 +59,7 @@ public class VistaPrincipal {
                     addInscripcion(scanner);
                     break;
                 case 7:
-                    //deleteInscripcion(scanner);
+                    cancelarInscripcion(scanner);
                     break;
                 case 8:
                     //mostrarInscripciones(scanner);
@@ -215,7 +215,7 @@ public class VistaPrincipal {
         System.out.print("Ingrese el número de socio a eliminar: ");
         int numSocio = scanner.nextInt();
 
-        // Intentar eliminar el socio a través del controlador
+        //Eliminamos el socio a través del controlador
         try {
             controladorSocio.deleteSocio(numSocio);
             System.out.println("Socio eliminado con éxito.");
@@ -260,7 +260,7 @@ public class VistaPrincipal {
         // Crear la nueva instancia de Inscripción
         Inscripcion inscripcion = new Inscripcion(numInscripcion, socio, excursion, LocalDate.now(), seguro);
 
-        // Intentar agregar la inscripción a través del controlador
+        // Agregamos la inscripción a través del controlador
         try {
             controladorInscripcion.addInscripcion(inscripcion);
             System.out.println("Inscripción añadida con éxito.");
@@ -268,6 +268,39 @@ public class VistaPrincipal {
             System.out.println("Error al añadir la inscripción: " + e.getMessage());
         }
     }
+
+    private void cancelarInscripcion(Scanner scanner) {
+        System.out.print("Ingrese el número de socio para cancelar la inscripción: ");
+        int numSocio = scanner.nextInt();
+        scanner.nextLine(); // Limpiar el buffer
+
+        System.out.print("Ingrese el código de la excursión para cancelar la inscripción: ");
+        String codigoExcursion = scanner.nextLine();
+
+        // Buscar el socio correspondiente utilizando el ControladorSocio
+        Socio socio = controladorSocio.buscarSocio(numSocio);
+        if (socio == null) {
+            System.out.println("No se encontró un socio con el número proporcionado.");
+            return;
+        }
+
+        // Buscar la excursión correspondiente utilizando el ControladorExcursion
+        Excursion excursion = controladorExcursion.buscarExcursion(codigoExcursion);
+        if (excursion == null) {
+            System.out.println("No se encontró una excursión con el código proporcionado.");
+            return;
+        }
+
+        //Cancelamos la inscripción a través del controlador
+        try {
+            controladorInscripcion.cancelarInscripcion(socio, excursion);
+        } catch (InscripcionInvalidaExcepcion e) {
+            System.out.println("Error al cancelar la inscripción: " + e.getMessage());
+        } catch (SocioNoEncontradoExcepcion e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
 
 
 
