@@ -7,9 +7,11 @@ import java.util.List;
 
 public class ControladorSocio {
     private Lista<Socio> socios;
+    private ControladorInscripcion controladorInscripcion;
 
-    public ControladorSocio() {
-        this.socios = new Lista<>(); // Inicializamos la lista de socios
+    public ControladorSocio(ControladorInscripcion controladorInscripcion) {
+        this.controladorInscripcion = controladorInscripcion; // Asigna la instancia de ControladorInscripcion
+        this.socios = new Lista<>(); // Inicializa la lista de socios
     }
 
     // Metodo para buscar un socio por número
@@ -71,9 +73,6 @@ public class ControladorSocio {
         ((backsolutions.modelo.Estandar) socio).modificarSeguro(nuevoTipoSeguro, nuevoPrecioSeguro);
         System.out.println("Tipo de seguro modificado con éxito.");
     }
-
-
-
 
     // Método para mostrar los socios filtrados por tipo
     public List<Socio> mostrarSociosFiltrados(String filtro) throws ControladorExcepcion {
@@ -139,5 +138,50 @@ public class ControladorSocio {
         return resultado;
     }
 
+    public void mostrarFacturaMensual(Socio socio) {
+        List<Inscripcion> inscripciones = obtenerInscripcionesDelSocio(socio);
+
+        if (inscripciones.isEmpty()) {
+            System.out.println("No hay inscripciones para el socio con número: " + socio.getNumSocio());
+        } else {
+            System.out.println("Facturas Mensuales para el Socio: " + socio.getNumSocio());
+            for (Inscripcion inscripcion : inscripciones) {
+                double importe = calcularImporte(inscripcion); // Método que ya tienes
+                System.out.printf("Excursión: %s, Importe: %.2f%n", inscripcion.getExcursion().getDescripcion(), importe);
+            }
+        }
+    }
+
+    // Metodo para obtener las inscripciones de un socio
+    private List<Inscripcion> obtenerInscripcionesDelSocio(Socio socio) {
+        List<Inscripcion> inscripcionesDelSocio = new ArrayList<>();
+
+        // Obtener la lista de inscripciones desde el controlador de inscripciones
+        List<Inscripcion> todasLasInscripciones = controladorInscripcion.getInscripciones();
+
+        // Iterar sobre las inscripciones y agregar las que corresponden al socio
+        for (Inscripcion inscripcion : todasLasInscripciones) {
+            if (inscripcion.getSocio().getNumSocio() == socio.getNumSocio()) {
+                inscripcionesDelSocio.add(inscripcion);
+            }
+        }
+
+        return inscripcionesDelSocio;
+    }
+
+    private double calcularImporte(Inscripcion inscripcion) {
+        double precioBase = inscripcion.getExcursion().getPrecioInscripcion();
+
+        // Aplica descuentos según el tipo de socio
+        if (inscripcion.getSocio() instanceof Estandar) {
+            return precioBase + inscripcion.getSeguro().getPrecio(); // Asegúrate de tener un método para obtener el precio del seguro
+        } else if (inscripcion.getSocio() instanceof Federado) {
+            return precioBase * 0.9; // Descuento del 10% para federados
+        } else if (inscripcion.getSocio() instanceof Infantil) {
+            return precioBase * 0.5; // Descuento del 50% para infantiles
+        }
+
+        return precioBase; // Si no se aplica ningún descuento
+    }
 
 }

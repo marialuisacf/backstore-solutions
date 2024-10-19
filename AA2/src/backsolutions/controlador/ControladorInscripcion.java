@@ -1,7 +1,7 @@
 package backsolutions.controlador;
 
 import backsolutions.modelo.*;
-
+import java.util.ArrayList;
 import java.util.List;
 
 public class ControladorInscripcion {
@@ -96,15 +96,44 @@ public class ControladorInscripcion {
 
         // Aplica descuentos según el tipo de socio
         if (inscripcion.getSocio() instanceof Estandar) {
-            return precioBase + inscripcion.getSeguro().getPrecio(); // Asumiendo que tienes un método para obtener el precio del seguro
+            return precioBase + inscripcion.getSeguro().getPrecio();
         } else if (inscripcion.getSocio() instanceof Federado) {
-            return precioBase * 0.9; // Descuento del 10% para federados
+            return precioBase * 0.9;
         } else if (inscripcion.getSocio() instanceof Infantil) {
-            return precioBase * 0.5; // Descuento del 50% para infantiles
+            return precioBase * 0.5;
         }
 
-        return precioBase; // Si no se aplica ningún descuento
+        return precioBase;
     }
 
+    public List<Inscripcion> getInscripciones() {
+        return inscripciones; // Devuelve la lista de inscripciones
+    }
+
+    public List<Inscripcion> mostrarInscripcionesPorSocio(int numSocio) throws ControladorExcepcion {
+        List<Inscripcion> inscripcionesDelSocio = new ArrayList<>();
+
+        // Filtrar las inscripciones para que solo queden las que corresponden al socio dado
+        for (Inscripcion inscripcion : inscripciones) {
+            if (inscripcion.getSocio().getNumSocio() == numSocio) {
+                inscripcionesDelSocio.add(inscripcion);
+            }
+        }
+
+        return inscripcionesDelSocio;
+    }
+
+    public double generarFacturaMensual(Socio socio) throws ControladorExcepcion {
+        double cuotaMensual = socio.calculoCuotaMensual(); // Calcula la cuota mensual
+        double totalInscripciones = 0.0;
+
+        // Obtener las inscripciones del socio
+        List<Inscripcion> inscripciones = mostrarInscripcionesPorSocio(socio.getNumSocio());
+        for (Inscripcion inscripcion : inscripciones) {
+            totalInscripciones += calcularImporte(inscripcion); // Calcula el importe de cada inscripción
+        }
+
+        return totalInscripciones + cuotaMensual; // Devuelve el total de la factura mensual
+    }
 
 }

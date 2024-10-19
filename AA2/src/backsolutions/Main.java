@@ -12,10 +12,14 @@ public class Main {
         ArrayList<Excursion> excursiones = new ArrayList<>();
         ArrayList<Inscripcion> inscripciones = new ArrayList<>();
 
-        // Pasar listas vacías al constructor
-        ControladorExcursion controladorExcursion = new ControladorExcursion(excursiones);
-        ControladorSocio controladorSocio = new ControladorSocio();
+        // Crear el controlador de inscripciones primero
         ControladorInscripcion controladorInscripcion = new ControladorInscripcion(inscripciones, excursiones);
+
+        // Luego, crear el controlador de socios y pasar el controlador de inscripciones
+        ControladorSocio controladorSocio = new ControladorSocio(controladorInscripcion);
+
+        // Finalmente, crear el controlador de excursiones
+        ControladorExcursion controladorExcursion = new ControladorExcursion(excursiones);
 
         // Crear la vista principal
         VistaPrincipal vista = new VistaPrincipal(controladorExcursion, controladorSocio, controladorInscripcion);

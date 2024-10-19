@@ -64,10 +64,10 @@ public class VistaPrincipal {
                     deleteSocio(scanner);
                     break;
                 case 6:
-                    mostrarSocios(); // Caso 6 añadido
+                    mostrarSocios();
                     break;
                 case 7:
-                    //mostrarFacturaMensual(); // Caso 7 añadido
+                    mostrarFacturaMensual();
                     break;
                 case 8:
                     addInscripcion(scanner);
@@ -262,7 +262,25 @@ public class VistaPrincipal {
     }
 
     //CASO 7:
+    private void mostrarFacturaMensual() {
+        System.out.print("Ingrese el número de socio para mostrar la factura mensual: ");
+        int numSocio = scanner.nextInt();
 
+        // Buscar el socio correspondiente utilizando el ControladorSocio
+        Socio socio = controladorSocio.buscarSocio(numSocio);
+        if (socio == null) {
+            System.out.println("No se encontró un socio con el número proporcionado.");
+            return;
+        }
+
+        // Generar la factura mensual
+        try {
+            double totalFactura = controladorInscripcion.generarFacturaMensual(socio);
+            System.out.println("La factura mensual para el socio " + numSocio + " es: " + totalFactura + "€");
+        } catch (ControladorExcepcion e) {
+            System.out.println("Error al generar la factura: " + e.getMessage());
+        }
+    }
 
     //CASO 8:
     private void addInscripcion(Scanner scanner) {
