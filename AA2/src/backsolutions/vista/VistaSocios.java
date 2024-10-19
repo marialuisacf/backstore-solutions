@@ -55,11 +55,56 @@ public class VistaSocios {
     }
 
     private void addSocio() {
-        // Aquí pedirías los datos del socio y lo añadirías
-        // Ejemplo:
         System.out.print("Ingrese el número de socio: ");
         int numSocio = scanner.nextInt();
-        // controladorSocio.addSocio(socio);
+        scanner.nextLine(); // Limpiar buffer
+
+        System.out.print("Ingrese el nombre del socio: ");
+        String nombre = scanner.nextLine();
+
+        System.out.print("Seleccione el tipo de socio (Estandar/Federado/Infantil): ");
+        String tipo = scanner.nextLine().toLowerCase(); // Convertir a minúsculas para facilitar la comparación
+
+        Socio socio = null;
+
+        switch (tipo) {
+            case "estandar":
+                System.out.print("Ingrese el NIF: ");
+                String nifEstandar = scanner.nextLine();
+                System.out.print("Ingrese el tipo de Seguro: ");
+                String tipoSeguro = scanner.nextLine();
+                System.out.print("Ingrese el precio del Seguro: ");
+                double precioSeguro = scanner.nextDouble();
+                scanner.nextLine(); // Limpiar buffer
+                backsolutions.modelo.Seguro seguro = new backsolutions.modelo.Seguro(tipoSeguro, precioSeguro);
+                socio = new backsolutions.modelo.Estandar(numSocio, nombre, nifEstandar, seguro);
+                break;
+            case "federado":
+                System.out.print("Ingrese el NIF: ");
+                String nifFederado = scanner.nextLine();
+                System.out.print("Ingrese el código de la Federación: ");
+                String codigoFederacion = scanner.nextLine();
+                System.out.print("Ingrese el nombre de la Federación: ");
+                String nombreFederacion = scanner.nextLine();
+                backsolutions.modelo.Federacion federacion = new backsolutions.modelo.Federacion(codigoFederacion, nombreFederacion);
+                socio = new backsolutions.modelo.Federado(numSocio, nombre, nifFederado, federacion);
+                break;
+            case "infantil":
+                System.out.print("Ingrese el número de socio del tutor: ");
+                String numSocioTutor = scanner.nextLine();
+                socio = new backsolutions.modelo.Infantil(numSocio, nombre, numSocioTutor);
+                break;
+            default:
+                System.out.println("Tipo de socio no válido. Debe ser 'Estandar', 'Federado' o 'Infantil'.");
+                return; // Salir del método si el tipo es inválido
+        }
+
+        try {
+            controladorSocio.addSocio(socio); // Llamar al método correcto en el controlador
+            System.out.println("Socio añadido con éxito.");
+        } catch (backsolutions.controlador.ControladorExcepcion e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private void deleteSocio() {

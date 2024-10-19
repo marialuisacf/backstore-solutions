@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.time.LocalDate;
+import backsolutions.controlador.ControladorSocio;
 
 /**
  * Se crea la clase backsolutions.modelo.SenderosMontañas
@@ -19,6 +20,7 @@ public class SenderosMontañas {
     private List<Socio> socios;
     private List<Excursion> excursiones;
     private List<Inscripcion> inscripciones;
+    private ControladorSocio controladorSocio;
 
     //Constructor de la clase backsolutions.modelo.SenderosMontañas con los parámetros necesarios para inicializar la aplicación
 
@@ -34,6 +36,7 @@ public class SenderosMontañas {
         this.socios = new ArrayList<>();
         this.excursiones = new ArrayList<>();
         this.inscripciones = new ArrayList<>();
+        this.controladorSocio = controladorSocio; //para inicializar controlador
     }
 
     //Getter y Setter
@@ -121,9 +124,58 @@ public class SenderosMontañas {
 
     // Métodos para gestionar socios
 
-    public void addSocio(Socio socio) {
-        socios.add(socio);
+    private void addSocio() {
+        System.out.print("Ingrese el número de socio: ");
+        int numSocio = scanner.nextInt();
+        scanner.nextLine(); // Limpiar buffer
+
+        System.out.print("Ingrese el nombre del socio: ");
+        String nombre = scanner.nextLine();
+
+        System.out.print("Seleccione el tipo de socio (Estandar/Federado/Infantil): ");
+        String tipo = scanner.nextLine().toLowerCase(); // Convertir a minúsculas para facilitar la comparación
+
+        Socio socio = null;
+
+        switch (tipo) {
+            case "estandar":
+                System.out.print("Ingrese el NIF: ");
+                String nifEstandar = scanner.nextLine();
+                System.out.print("Ingrese el tipo de Seguro: ");
+                String tipoSeguro = scanner.nextLine();
+                System.out.print("Ingrese el precio del Seguro: ");
+                double precioSeguro = scanner.nextDouble();
+                scanner.nextLine(); // Limpiar buffer
+                Seguro seguro = new Seguro(tipoSeguro, precioSeguro);
+                socio = new Estandar(numSocio, nombre, nifEstandar, seguro);
+                break;
+            case "federado":
+                System.out.print("Ingrese el NIF: ");
+                String nifFederado = scanner.nextLine();
+                System.out.print("Ingrese el código de la Federación: ");
+                String codigoFederacion = scanner.nextLine();
+                System.out.print("Ingrese el nombre de la Federación: ");
+                String nombreFederacion = scanner.nextLine();
+                Federacion federacion = new Federacion(codigoFederacion, nombreFederacion);
+                socio = new Federado(numSocio, nombre, nifFederado, federacion);
+                break;
+            case "infantil":
+                System.out.print("Ingrese el número de socio del tutor: ");
+                String numSocioTutor = scanner.nextLine();
+                socio = new Infantil(numSocio, nombre, numSocioTutor);
+                break;
+            default:
+                System.out.println("Tipo de socio no válido. Debe ser 'Estandar', 'Federado' o 'Infantil'.");
+                return; // Salir del método si el tipo es inválido
+        }
+
+        try {
+            controladorSocio.addSocio(socio); // Usar la instancia del controlador
+        } catch (backsolutions.controlador.ControladorExcepcion e) {
+            System.out.println(e.getMessage());
+        }
     }
+
     // metodo para eliminar socio y verificar su baja
     public void deleteSocio(Socio socio) {
         // Verificar si el socio tiene inscripciones
