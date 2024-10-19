@@ -1,9 +1,6 @@
 package backsolutions.vista;
 
-import backsolutions.controlador.ControladorInscripcion;
-import backsolutions.modelo.Inscripcion;
-import backsolutions.modelo.Socio;
-import backsolutions.modelo.Excursion;
+import backsolutions.controlador.*;
 
 import java.util.Scanner;
 

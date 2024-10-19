@@ -320,8 +320,6 @@ public class VistaPrincipal {
             return;
         }
 
-        // Imprimir encabezado
-        System.out.println("Lista de Inscripciones:");
 
         // Recorrer y mostrar cada inscripción
         for (Inscripcion inscripcion : inscripciones) {
@@ -332,9 +330,7 @@ public class VistaPrincipal {
             String descripcion = inscripcion.getExcursion().getDescripcion();
             double importe = calcularImporte(inscripcion); // Método que calculará el importe con cargos o descuentos
 
-            // Imprimir detalles de la inscripción
-            System.out.printf("Número de Socio: %s, Nombre: %s, Fecha de Excursión: %s, Descripción: %s, Importe: %.2f\n",
-                    numSocio, nombre, fechaExcursion, descripcion, importe);
+
         }
     }
 
