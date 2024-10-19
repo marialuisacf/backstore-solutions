@@ -6,9 +6,12 @@ import java.util.List;
 
 public class ControladorInscripcion {
     private List<Inscripcion> inscripciones;
+    private List<Excursion> excursiones;
 
-    public ControladorInscripcion(List<Inscripcion> inscripciones) {
+    //Constructor
+    public ControladorInscripcion(List<Inscripcion> inscripciones, List<Excursion> excursiones) {
         this.inscripciones = inscripciones;
+        this.excursiones = excursiones; // Inicializa la lista de excursiones
     }
 
     //metodo para mostrar todas las inscripciones
@@ -18,13 +21,23 @@ public class ControladorInscripcion {
 
     //metodo para añadir inscripciones con excepciones personalizadas
     public void addInscripcion(Inscripcion inscripcion) throws InscripcionInvalidaExcepcion {
-        // Verificar si la inscripción ya existe
-        if (inscripciones.stream().anyMatch(i -> i.getNumInscripcion().equals(inscripcion.getNumInscripcion()))) {
-            throw new InscripcionInvalidaExcepcion("La inscripción con número " + inscripcion.getNumInscripcion() + " ya existe.");
+        // Verificar si la excursión existe
+        boolean excursionExiste = excursiones.stream().anyMatch(e -> e.equals(inscripcion.getExcursion()));
+        if (!excursionExiste) {
+            throw new InscripcionInvalidaExcepcion("La excursión " + inscripcion.getExcursion().getCodigo() + " no existe.");
         }
+
+        // Verificar si el socio ya está inscrito en la misma excursión
+        if (inscripciones.stream().anyMatch(i -> i.getSocio().equals(inscripcion.getSocio()) && i.getExcursion().equals(inscripcion.getExcursion()))) {
+            throw new InscripcionInvalidaExcepcion("El socio ya está inscrito en esta excursión.");
+        }
+
+        // Si pasa todas las verificaciones, añade la inscripción
         inscripciones.add(inscripcion);
         System.out.println("Inscripción añadida con éxito.");
     }
+
+
 
     //metodo para cancelar inscripciones con excepciones personalizadas
     public void cancelarInscripcion(Socio socio, Excursion excursion) throws InscripcionInvalidaExcepcion, SocioNoEncontradoExcepcion {

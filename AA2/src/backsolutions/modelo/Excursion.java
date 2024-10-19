@@ -138,6 +138,19 @@ public class Excursion {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Excursion)) return false;
+        Excursion other = (Excursion) obj;
+        return codigo != null && codigo.equals(other.codigo); // Comparar por código
+    }
+
+    @Override
+    public int hashCode() {
+        return codigo != null ? codigo.hashCode() : 0; // Asegúrate de que hashCode esté implementado también
+    }
+
     /**
      * Representación de la información de la clase Excursión con toString
      * @return devuelve el método toString de la clase Excursión

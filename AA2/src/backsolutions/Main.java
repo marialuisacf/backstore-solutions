@@ -15,7 +15,7 @@ public class Main {
         // Pasar listas vacías al constructor
         ControladorExcursion controladorExcursion = new ControladorExcursion(excursiones);
         ControladorSocio controladorSocio = new ControladorSocio();
-        ControladorInscripcion controladorInscripcion = new ControladorInscripcion(inscripciones);
+        ControladorInscripcion controladorInscripcion = new ControladorInscripcion(inscripciones, excursiones);
 
         // Crear la vista principal
         VistaPrincipal vista = new VistaPrincipal(controladorExcursion, controladorSocio, controladorInscripcion);

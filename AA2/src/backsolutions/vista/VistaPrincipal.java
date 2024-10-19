@@ -235,10 +235,11 @@ public class VistaPrincipal {
         // Solicitar al usuario los datos necesarios para la inscripción
         System.out.print("Ingrese el número de inscripción: ");
         String numInscripcion = scanner.nextLine();
+        scanner.nextLine(); // Limpiar el buffer después de nextInt()
 
         System.out.print("Ingrese el número de socio para la inscripción: ");
         int numSocio = scanner.nextInt();
-        scanner.nextLine(); // Limpiar el buffer
+        scanner.nextLine(); // Limpiar el buffer después de nextInt()
 
         System.out.print("Ingrese el código de la excursión a inscribir: ");
         String codigoExcursion = scanner.nextLine();
