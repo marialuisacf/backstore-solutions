@@ -11,6 +11,14 @@ public class ControladorExcursion {
         this.excursiones = excursiones;
     }
 
+    // Metodo para buscar una excursión por código
+    public Excursion buscarExcursion(String codigoExcursion) {
+        return excursiones.stream()
+                .filter(exc -> exc.getCodigo().equals(codigoExcursion))
+                .findFirst()
+                .orElse(null);
+    }
+
     public void addExcursion(Excursion excursion) throws ControladorExcepcion {
         if (excursiones.stream().anyMatch(e -> e.getCodigo().equals(excursion.getCodigo()))) {
             throw new ControladorExcepcion("La excursión con código " + excursion.getCodigo() + " ya existe.");

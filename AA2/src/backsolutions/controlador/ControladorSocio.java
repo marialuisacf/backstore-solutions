@@ -10,6 +10,17 @@ public class ControladorSocio {
         this.socios = new Lista<>(); // Inicializamos la lista de socios
     }
 
+    // Método para buscar un socio por número
+    public Socio buscarSocio(int numSocio) {
+        for (int i = 0; i < socios.size(); i++) {
+            Socio socio = socios.obtener(i);
+            if (socio.getNumSocio() == numSocio) {
+                return socio;
+            }
+        }
+        return null; // Retorna null si no se encuentra el socio
+    }
+
     public void addSocio(Socio socio) throws ControladorExcepcion {
         // Verificamos si el socio ya existe
         for (int i = 0; i < socios.size(); i++) {

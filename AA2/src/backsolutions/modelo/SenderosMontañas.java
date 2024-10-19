@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.time.LocalDate;
-import backsolutions.controlador.ControladorSocio;
+import backsolutions.controlador.*;
 
 /**
  * Se crea la clase backsolutions.modelo.SenderosMontañas
@@ -21,6 +21,7 @@ public class SenderosMontañas {
     private List<Excursion> excursiones;
     private List<Inscripcion> inscripciones;
     private ControladorSocio controladorSocio;
+    private ControladorInscripcion controladorInscripcion;
 
     //Constructor de la clase backsolutions.modelo.SenderosMontañas con los parámetros necesarios para inicializar la aplicación
 
@@ -37,6 +38,7 @@ public class SenderosMontañas {
         this.excursiones = new ArrayList<>();
         this.inscripciones = new ArrayList<>();
         this.controladorSocio = controladorSocio; //para inicializar controlador
+        this.controladorInscripcion = controladorInscripcion;
     }
 
     //Getter y Setter
@@ -211,13 +213,14 @@ public class SenderosMontañas {
 
         if (respuesta.equalsIgnoreCase("no")) {
             System.out.println("Por favor, primero debe darse de alta como socio.");
-            // Aquí se podría llamar a un metodo para gestionar el alta de socio, llevar al usuario a la opcion darse de alta
+            // Aquí se podría llamar a un método para gestionar el alta de socio
             return;
         }
 
         // Si es socio, se le pide su número de socio
         System.out.print("Introduce tu número de socio: ");
         int numSocio = scanner.nextInt(); // Lee como un int
+        scanner.nextLine(); // Limpiar el buffer después de leer el número
 
         // Verificar si el socio ya existe
         Socio socio = socios.stream()
@@ -236,15 +239,21 @@ public class SenderosMontañas {
         // Crear el objeto Seguro si es necesario
         Seguro seguro = null;
         if (socio instanceof Estandar) {
-            // Lógica para crear un nuevo seguro si el socio es estándar
-            seguro = crearNuevoSeguro(); //para solicitar datos del seguro
+            seguro = crearNuevoSeguro(); // Método para solicitar datos del seguro
         }
 
         // Crear una nueva inscripción
         Inscripcion inscripcion = new Inscripcion(numInscripcion, socio, excursion, LocalDate.now(), seguro);
-        inscripciones.add(inscripcion);
-        System.out.println("Inscripción realizada con éxito para el socio " + socio.getNombre());
+
+        // Intentar agregar la inscripción a través del controlador
+        try {
+            controladorInscripcion.addInscripcion(inscripcion);
+            System.out.println("Inscripción realizada con éxito para el socio " + socio.getNombre());
+        } catch (InscripcionInvalidaExcepcion e) {
+            System.out.println("Error al añadir la inscripción: " + e.getMessage());
+        }
     }
+
 
     // Metodo para generar un número de inscripción único
     private String generarNumeroInscripcion() {

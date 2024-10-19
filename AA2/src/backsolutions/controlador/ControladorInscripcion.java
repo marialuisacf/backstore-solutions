@@ -1,8 +1,7 @@
 package backsolutions.controlador;
 
-import backsolutions.modelo.Inscripcion;
-import backsolutions.modelo.Socio;
-import backsolutions.modelo.Excursion;
+import backsolutions.modelo.*;
+
 import java.util.List;
 
 public class ControladorInscripcion {
