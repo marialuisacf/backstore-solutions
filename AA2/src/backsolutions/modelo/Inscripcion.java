@@ -147,8 +147,8 @@ public class Inscripcion {
     @Override
     public String toString() {
         return "Inscripcion{" +
-                "numInscripcion='" + numInscripcion + '\'' +
-                ", socio=" + socio +
+                "Número de inscripción='" + numInscripcion + '\'' +
+                ", Socio=" + socio +
                 ", excursion=" + excursion +
                 ", fechaInscripcion=" + fechaInscripcion +
                 ", seguro=" + seguro +

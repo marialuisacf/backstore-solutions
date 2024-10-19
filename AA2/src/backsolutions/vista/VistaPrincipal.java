@@ -311,15 +311,54 @@ public class VistaPrincipal {
 
     //CASO 8:
     private void mostrarInscripciones() {
+        // Llamar al metodo del controlador para obtener la lista de inscripciones
         List<Inscripcion> inscripciones = controladorInscripcion.mostrarInscripciones();
+
+        // Verificar si hay inscripciones
         if (inscripciones.isEmpty()) {
-            System.out.println("No hay inscripciones disponibles.");
-        } else {
-            System.out.println("Lista de Inscripciones:");
-            for (Inscripcion inscripcion : inscripciones) {
-                System.out.println(inscripcion);
-            }
+            System.out.println("No hay inscripciones registradas.");
+            return;
+        }
+
+        // Imprimir encabezado
+        System.out.println("Lista de Inscripciones:");
+
+        // Recorrer y mostrar cada inscripción
+        for (Inscripcion inscripcion : inscripciones) {
+            // Suponiendo que tienes métodos en Inscripcion, Socio y Excursion para obtener los detalles
+            int numSocio = inscripcion.getSocio().getNumSocio(); // Cambia según el método correcto
+            String nombre = ""; // Cambia según el método correcto para obtener el nombre del socio
+            String fechaExcursion = inscripcion.getExcursion().getFecha().toString(); // Asegúrate de que el formato sea adecuado
+            String descripcion = inscripcion.getExcursion().getDescripcion();
+            double importe = calcularImporte(inscripcion); // Método que calculará el importe con cargos o descuentos
+
+            // Imprimir detalles de la inscripción
+            System.out.printf("Número de Socio: %s, Nombre: %s, Fecha de Excursión: %s, Descripción: %s, Importe: %.2f\n",
+                    numSocio, nombre, fechaExcursion, descripcion, importe);
         }
     }
+
+    // Metodo para calcular el importe con cargos o descuentos aplicados
+    private double calcularImporte(Inscripcion inscripcion) {
+        double precioExcursion = inscripcion.getExcursion().getPrecioInscripcion();
+        double cuotaMensual = inscripcion.getSocio().calculoCuotaMensual(); // Asegúrate de que este método exista en la clase Socio
+
+        // Calcular el importe basado en el tipo de socio y los cargos o descuentos
+        double importe = precioExcursion + cuotaMensual;
+
+        // Aquí puedes aplicar lógica adicional para descuentos o cargos según el tipo de socio
+        if (inscripcion.getSocio() instanceof Estandar) {
+            // Suponiendo que los Estandar no tienen descuentos adicionales
+        } else if (inscripcion.getSocio() instanceof Federado) {
+            // Aplica un descuento, por ejemplo:
+            importe *= 0.9; // 10% de descuento para federados
+        } else if (inscripcion.getSocio() instanceof Infantil) {
+            // Lógica para socios infantiles
+            importe -= inscripcion.getExcursion().getPrecioInscripcion(); // Sin cargos
+        }
+
+        return importe;
+    }
+
 
 }
