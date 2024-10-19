@@ -1,7 +1,9 @@
 package backsolutions.controlador;
 
-import backsolutions.modelo.Lista;
-import backsolutions.modelo.Socio;
+import backsolutions.modelo.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ControladorSocio {
     private Lista<Socio> socios;
@@ -10,7 +12,7 @@ public class ControladorSocio {
         this.socios = new Lista<>(); // Inicializamos la lista de socios
     }
 
-    // Método para buscar un socio por número
+    // Metodo para buscar un socio por número
     public Socio buscarSocio(int numSocio) {
         for (int i = 0; i < socios.size(); i++) {
             Socio socio = socios.obtener(i);
@@ -65,8 +67,77 @@ public class ControladorSocio {
             throw new ControladorExcepcion("No se encontró un socio estándar con el número proporcionado.");
         }
 
-        // Llamamos al método modificarSeguro de la clase Estandar
+        // Llamamos al metodo modificarSeguro de la clase Estandar
         ((backsolutions.modelo.Estandar) socio).modificarSeguro(nuevoTipoSeguro, nuevoPrecioSeguro);
         System.out.println("Tipo de seguro modificado con éxito.");
     }
+
+
+
+
+    // Método para mostrar los socios filtrados por tipo
+    public List<Socio> mostrarSociosFiltrados(String filtro) throws ControladorExcepcion {
+        List<Socio> resultado = new ArrayList<>();
+
+        for (int i = 0; i < socios.size(); i++) {
+            Socio socio = socios.obtener(i);
+            switch (filtro.toLowerCase()) {
+                case "todos":
+                    resultado.add(socio);
+                    break;
+                case "estandar":
+                    if (socio instanceof Estandar) {
+                        resultado.add(socio);
+                    }
+                    break;
+                case "federado":
+                    if (socio instanceof Federado) {
+                        resultado.add(socio);
+                    }
+                    break;
+                case "infantil":
+                    if (socio instanceof Infantil) {
+                        resultado.add(socio);
+                    }
+                    break;
+                default:
+                    throw new ControladorExcepcion("Filtro no válido: " + filtro);
+            }
+        }
+
+        return resultado;
+    }
+
+    // Metodo para mostrar todos los socios
+    public List<Socio> mostrarSocios(String filtro) throws ControladorExcepcion {
+        List<Socio> resultado = new ArrayList<>();
+        for (int i = 0; i < socios.size(); i++) {
+            Socio socio = socios.obtener(i);
+            switch (filtro.toLowerCase()) {
+                case "todos":
+                    resultado.add(socio);
+                    break;
+                case "estandar":
+                    if (socio instanceof Estandar) {
+                        resultado.add(socio);
+                    }
+                    break;
+                case "federado":
+                    if (socio instanceof Federado) {
+                        resultado.add(socio);
+                    }
+                    break;
+                case "infantil":
+                    if (socio instanceof Infantil) {
+                        resultado.add(socio);
+                    }
+                    break;
+                default:
+                    throw new ControladorExcepcion("Filtro no válido: " + filtro);
+            }
+        }
+        return resultado;
+    }
+
+
 }

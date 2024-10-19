@@ -12,15 +12,19 @@ import java.util.List;
 
 
 public class VistaPrincipal {
+    private VistaSocios vistaSocios;
+    private Scanner scanner;
 
     private ControladorExcursion controladorExcursion;
     private ControladorSocio controladorSocio;
     private ControladorInscripcion controladorInscripcion;
 
-    public VistaPrincipal(ControladorExcursion controladorExcursion, ControladorSocio controladorSocio, ControladorInscripcion controladorInscripcion) { // Modificado
+    public VistaPrincipal(ControladorExcursion controladorExcursion, ControladorSocio controladorSocio, ControladorInscripcion controladorInscripcion) {
         this.controladorExcursion = controladorExcursion;
         this.controladorSocio = controladorSocio;
-        this.controladorInscripcion = controladorInscripcion; // Asignado
+        this.controladorInscripcion = controladorInscripcion;
+        this.vistaSocios = new VistaSocios(controladorSocio); // Inicializar VistaSocios
+        this.scanner = new Scanner(System.in); // Inicializar el scanner aquí
     }
 
     public void mostrarMenu() {
@@ -34,10 +38,12 @@ public class VistaPrincipal {
             System.out.println("3. Añadir Socio");
             System.out.println("4. Modificar tipo de seguro de un socio Estandar");
             System.out.println("5. Eliminar Socio");
-            System.out.println("6. Añadir Inscripción");
-            System.out.println("7. Cancelar Inscripción");
-            System.out.println("8. Mostrar Inscripciones");
-            System.out.println("9. Salir");
+            System.out.println("6. Mostrar Socios (Todos o por tipo de socio)"); // Nueva opción
+            System.out.println("7. Mostrar Factura mensual por socios"); // Nueva opción
+            System.out.println("8. Añadir Inscripción");
+            System.out.println("9. Cancelar Inscripción");
+            System.out.println("10. Mostrar Inscripciones");
+            System.out.println("11. Salir");
             System.out.print("Seleccione una opción: ");
             opcion = scanner.nextInt();
 
@@ -58,21 +64,27 @@ public class VistaPrincipal {
                     deleteSocio(scanner);
                     break;
                 case 6:
-                    addInscripcion(scanner);
+                    mostrarSocios(); // Caso 6 añadido
                     break;
                 case 7:
-                    cancelarInscripcion(scanner);
+                    //mostrarFacturaMensual(); // Caso 7 añadido
                     break;
                 case 8:
-                    mostrarInscripciones();
+                    addInscripcion(scanner);
                     break;
                 case 9:
+                    cancelarInscripcion(scanner);
+                    break;
+                case 10:
+                    mostrarInscripciones();
+                    break;
+                case 11:
                     System.out.println("Saliendo del programa.");
                     break;
                 default:
                     System.out.println("Opción no válida.");
             }
-        } while (opcion != 9);
+        } while (opcion != 11);
 
         scanner.close();
     }
@@ -231,6 +243,28 @@ public class VistaPrincipal {
     }
 
     //CASO 6:
+    private void mostrarSocios() {
+        System.out.println("Seleccione el filtro (todos, estandar, federado, infantil): ");
+        String filtro = scanner.nextLine();
+
+        try {
+            List<Socio> socios = controladorSocio.mostrarSocios(filtro);
+            if (socios.isEmpty()) {
+                System.out.println("No se encontraron socios.");
+            } else {
+                for (Socio socio : socios) {
+                    System.out.println(socio); // Esto llamará al método toString() del socio
+                }
+            }
+        } catch (ControladorExcepcion e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    //CASO 7:
+
+
+    //CASO 8:
     private void addInscripcion(Scanner scanner) {
         // Solicitar al usuario los datos necesarios para la inscripción
         System.out.print("Ingrese el número de inscripción: ");
@@ -276,7 +310,7 @@ public class VistaPrincipal {
         }
     }
 
-    //CASO 7:
+    //CASO 9:
     private void cancelarInscripcion(Scanner scanner) {
         System.out.print("Ingrese el número de socio para cancelar la inscripción: ");
         int numSocio = scanner.nextInt();
@@ -324,11 +358,11 @@ public class VistaPrincipal {
         // Recorrer y mostrar cada inscripción
         for (Inscripcion inscripcion : inscripciones) {
             // Suponiendo que tienes métodos en Inscripcion, Socio y Excursion para obtener los detalles
-            int numSocio = inscripcion.getSocio().getNumSocio(); // Cambia según el método correcto
-            String nombre = ""; // Cambia según el método correcto para obtener el nombre del socio
+            int numSocio = inscripcion.getSocio().getNumSocio(); // Cambia según el metodo correcto
+            String nombre = ""; // Cambia según el metodo correcto para obtener el nombre del socio
             String fechaExcursion = inscripcion.getExcursion().getFecha().toString(); // Asegúrate de que el formato sea adecuado
             String descripcion = inscripcion.getExcursion().getDescripcion();
-            double importe = calcularImporte(inscripcion); // Método que calculará el importe con cargos o descuentos
+            double importe = calcularImporte(inscripcion); // Metodo que calculará el importe con cargos o descuentos
 
 
         }
@@ -337,7 +371,7 @@ public class VistaPrincipal {
     // Metodo para calcular el importe con cargos o descuentos aplicados
     private double calcularImporte(Inscripcion inscripcion) {
         double precioExcursion = inscripcion.getExcursion().getPrecioInscripcion();
-        double cuotaMensual = inscripcion.getSocio().calculoCuotaMensual(); // Asegúrate de que este método exista en la clase Socio
+        double cuotaMensual = inscripcion.getSocio().calculoCuotaMensual(); // Asegúrate de que este metodo exista en la clase Socio
 
         // Calcular el importe basado en el tipo de socio y los cargos o descuentos
         double importe = precioExcursion + cuotaMensual;

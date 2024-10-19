@@ -76,10 +76,7 @@ public class Federado extends Socio {
 
     @Override
     public String toString() {
-        return "Federado{" +
-                "nif='" + nif + '\'' +
-                ", federacion=" + federacion +
-                '}';
+        return super.toString() + ", NIF: " + nif + ", Federación: " + federacion.getNombre();
     }
 
     /**

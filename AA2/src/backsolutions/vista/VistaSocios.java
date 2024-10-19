@@ -1,8 +1,9 @@
 package backsolutions.vista;
 
-import backsolutions.controlador.ControladorSocio;
-import backsolutions.modelo.Socio;
+import backsolutions.controlador.*;
+import backsolutions.modelo.*;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class VistaSocios {
@@ -16,12 +17,13 @@ public class VistaSocios {
 
     public void mostrarMenu() {
         int opcion = 0;
-        while (opcion != 4) { // Cambia a 4 ya que hay una nueva opción
+        while (opcion != 5) { // Cambia a 5 para incluir la nueva opción
             System.out.println("---- Menú Socios ----");
             System.out.println("1. Añadir socio");
             System.out.println("2. Eliminar socio");
             System.out.println("3. Modificar tipo de seguro de un socio estándar");
-            System.out.println("4. Salir");
+            System.out.println("4. Mostrar socios"); // Nueva opción
+            System.out.println("5. Salir");
             System.out.print("Seleccione una opción: ");
             opcion = scanner.nextInt();
             scanner.nextLine(); // Limpiar buffer
@@ -29,10 +31,31 @@ public class VistaSocios {
             switch (opcion) {
                 case 1 -> addSocio();
                 case 2 -> deleteSocio();
-                case 3 -> modificarTipoSeguro(); //Añadir nuevo metodo aquí
-                case 4 -> System.out.println("Saliendo del menú socios.");
+                case 3 -> modificarTipoSeguro();
+                case 4 -> mostrarSocios(); // Llamar al método aquí
+                case 5 -> System.out.println("Saliendo del menú socios.");
                 default -> System.out.println("Opción no válida.");
             }
+        }
+    }
+
+    private void mostrarSocios() {
+        System.out.print("Ingrese el filtro para mostrar socios (todos/estandar/federado/infantil): ");
+        String filtro = scanner.nextLine().toLowerCase(); // Obtener el filtro del usuario y convertir a minúsculas
+
+        try {
+            List<Socio> socios = controladorSocio.mostrarSocios(filtro); // Llamar al método mostrarSocios() del controlador
+
+            if (socios.isEmpty()) {
+                System.out.println("No hay socios registrados con el filtro: " + filtro);
+            } else {
+                System.out.println("---- Lista de Socios ----");
+                for (Socio socio : socios) {
+                    System.out.println(socio.toString()); // Asegúrate de que Socio tenga un método toString() definido
+                }
+            }
+        } catch (ControladorExcepcion e) {
+            System.out.println(e.getMessage()); // Manejo de excepciones si el filtro no es válido
         }
     }
 

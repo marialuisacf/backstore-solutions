@@ -84,10 +84,9 @@ public class Estandar extends Socio {
 
     @Override
     public String toString() {
-        return "Estandar{" +
-                "nif='" + nif + '\'' +
-                ", seguro=" + seguro +
-                '}';
+        return super.toString() +
+                ", NIF: " + nif +
+                ", Seguro: " + seguro.toString(); // Asegúrate de que Seguro también tenga un metodo toString
     }
 
     /**

@@ -56,9 +56,7 @@ public class Infantil extends Socio {
 
     @Override
     public String toString() {
-        return "Infantil{" +
-                "numSocioTutor='" + numSocioTutor + '\'' +
-                '}';
+        return super.toString() + ", Número de Socio Tutor: " + numSocioTutor;
     }
 
     /**

@@ -99,10 +99,7 @@ public abstract class Socio {
 
     @Override
     public String toString() {
-        return "Socio{" +
-                "numSocio=" + numSocio +
-                ", nombre='" + nombre + '\'' +
-                '}';
+        return "Número de Socio: " + numSocio + ", Nombre: " + nombre + ", Tipo: " + this.getClass().getSimpleName();
     }
 
     /**
