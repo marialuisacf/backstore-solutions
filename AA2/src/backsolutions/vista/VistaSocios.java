@@ -16,11 +16,12 @@ public class VistaSocios {
 
     public void mostrarMenu() {
         int opcion = 0;
-        while (opcion != 3) {
+        while (opcion != 4) { // Cambia a 4 ya que hay una nueva opción
             System.out.println("---- Menú Socios ----");
             System.out.println("1. Añadir socio");
             System.out.println("2. Eliminar socio");
-            System.out.println("3. Salir");
+            System.out.println("3. Modificar tipo de seguro de un socio estándar");
+            System.out.println("4. Salir");
             System.out.print("Seleccione una opción: ");
             opcion = scanner.nextInt();
             scanner.nextLine(); // Limpiar buffer
@@ -28,9 +29,28 @@ public class VistaSocios {
             switch (opcion) {
                 case 1 -> addSocio();
                 case 2 -> deleteSocio();
-                case 3 -> System.out.println("Saliendo del menú socios.");
+                case 3 -> modificarTipoSeguro(); //Añadir nuevo metodo aquí
+                case 4 -> System.out.println("Saliendo del menú socios.");
                 default -> System.out.println("Opción no válida.");
             }
+        }
+    }
+
+    private void modificarTipoSeguro() {
+        System.out.print("Ingrese el número de socio estándar: ");
+        int numSocio = scanner.nextInt();
+        scanner.nextLine(); // Limpiar buffer
+
+        System.out.print("Ingrese el nuevo tipo de seguro: ");
+        String nuevoTipoSeguro = scanner.nextLine();
+
+        System.out.print("Ingrese el nuevo precio del seguro: ");
+        double nuevoPrecioSeguro = scanner.nextDouble();
+
+        try {
+            controladorSocio.modificarSeguro(numSocio, nuevoTipoSeguro, nuevoPrecioSeguro);
+        } catch (backsolutions.controlador.ControladorExcepcion e) {
+            System.out.println(e.getMessage());
         }
     }
 

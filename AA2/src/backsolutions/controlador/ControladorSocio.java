@@ -32,4 +32,19 @@ public class ControladorSocio {
         System.out.println("Socio eliminado con éxito.");
     }
 
+    public void modificarSeguro(int numSocio, String nuevoTipoSeguro, double nuevoPrecioSeguro) throws ControladorExcepcion {
+        Socio socio = socios.stream()
+                .filter(s -> s instanceof backsolutions.modelo.Estandar && s.getNumSocio() == numSocio)
+                .findFirst()
+                .orElse(null);
+
+        if (socio == null) {
+            throw new ControladorExcepcion("No se encontró un socio estándar con el número proporcionado.");
+        }
+
+        // Llamar al método modificarSeguro de la clase Estandar
+        ((backsolutions.modelo.Estandar) socio).modificarSeguro(nuevoTipoSeguro, nuevoPrecioSeguro);
+        System.out.println("Tipo de seguro modificado con éxito.");
+    }
+
 }

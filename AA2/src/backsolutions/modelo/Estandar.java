@@ -72,6 +72,11 @@ public class Estandar extends Socio {
         return this.seguro; // Devuelve el seguro del socio
     }
 
+    public void modificarSeguro(String nuevoTipo, double nuevoPrecio) {
+        Seguro nuevoSeguro = new Seguro(nuevoTipo, nuevoPrecio);
+        this.setSeguro(nuevoSeguro);
+    }
+
     @Override
     public String detallesSocio() {
         return "Socio Estándar: " + getNombre() + ", NIF: " + nif + ", Seguro: " + seguro;
