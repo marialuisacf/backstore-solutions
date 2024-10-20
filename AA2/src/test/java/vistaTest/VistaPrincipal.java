@@ -1,14 +1,13 @@
-package backsolutions.vista;
+package vistaTest;
 
-import backsolutions.controlador.*;
-import backsolutions.modelo.*;
-
+import controladorTest.*;
+import modeloTest.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Scanner;
 import java.util.List;
+import java.util.Scanner;
 
 
 public class VistaPrincipal {
@@ -32,25 +31,18 @@ public class VistaPrincipal {
         int opcion;
 
         do {
-            System.out.println("Bienvenido a Senderos y Montañas - Menú de opciones:");
-            System.out.println("-----------------------------------------------------");
-            System.out.println("Gestión de excursiones:");
+            System.out.println("Menú de opciones:");
             System.out.println("1. Añadir Excursión");
             System.out.println("2. Mostrar Excursiones con filtro entre fechas");
-            System.out.println();
-            System.out.println("Gestión de socios:");
             System.out.println("3. Añadir Socio");
-            System.out.println("4. Modificar tipo de seguro de un socio Estándar");
+            System.out.println("4. Modificar tipo de seguro de un socio Estandar");
             System.out.println("5. Eliminar Socio");
-            System.out.println("6. Mostrar Socios (Todos o por tipo de socio)");
-            System.out.println("7. Mostrar Factura mensual por socios");
-            System.out.println();
-            System.out.println("Gestión de inscripciones:");
+            System.out.println("6. Mostrar Socios (Todos o por tipo de socio)"); // Nueva opción
+            System.out.println("7. Mostrar Factura mensual por socios"); // Nueva opción
             System.out.println("8. Añadir Inscripción");
             System.out.println("9. Cancelar Inscripción");
             System.out.println("10. Mostrar Inscripciones");
             System.out.println("11. Salir");
-            System.out.println("-----------------------------------------------------");
             System.out.print("Seleccione una opción: ");
             opcion = scanner.nextInt();
 
