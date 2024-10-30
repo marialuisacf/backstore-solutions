@@ -128,6 +128,7 @@ public class VistaPrincipal {
         // Intentar agregar la excursión a través del controlador
         try {
             controladorExcursion.addExcursion(excursion);
+            System.out.println("Excursión añadida con éxito.");
         } catch (ControladorExcepcion e) {
             System.out.println("Error al añadir la excursión: " + e.getMessage());
         }
@@ -152,9 +153,14 @@ public class VistaPrincipal {
             return; // Salir si las fechas son inválidas
         }
 
-        //Filtramos excursiones a través del controlador
+        // Filtramos excursiones a través del controlador
         try {
-            controladorExcursion.filtrarExcursiones(inicio, fin);
+            List<Excursion> excursionesFiltradas = controladorExcursion.filtrarExcursiones(inicio, fin);
+            if (excursionesFiltradas.isEmpty()) {
+                System.out.println("No se encontraron excursiones en el rango de fechas proporcionado.");
+            } else {
+                excursionesFiltradas.forEach(System.out::println);
+            }
         } catch (ControladorExcepcion e) {
             System.out.println("Error: " + e.getMessage());
         }

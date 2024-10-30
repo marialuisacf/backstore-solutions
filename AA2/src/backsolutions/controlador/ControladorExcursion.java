@@ -24,14 +24,15 @@ public class ControladorExcursion {
             throw new ControladorExcepcion("La excursión con código " + excursion.getCodigo() + " ya existe.");
         }
         excursiones.add(excursion);
-        System.out.println("Excursión añadida con éxito.");
     }
 
-    public void mostrarExcursiones() {
-        excursiones.forEach(System.out::println);
+
+
+    public List<Excursion> mostrarExcursiones() {
+        return excursiones;
     }
 
-    public void filtrarExcursiones(LocalDate inicio, LocalDate fin) throws ControladorExcepcion {
+    public List<Excursion> filtrarExcursiones(LocalDate inicio, LocalDate fin) throws ControladorExcepcion {
         List<Excursion> filtradas = excursiones.stream()
                 .filter(exc -> exc.getFecha().isAfter(inicio) && exc.getFecha().isBefore(fin))
                 .toList();
@@ -40,6 +41,6 @@ public class ControladorExcursion {
             throw new ControladorExcepcion("No se encontraron excursiones en el rango de fechas proporcionado.");
         }
 
-        filtradas.forEach(System.out::println);
+        return filtradas;
     }
 }

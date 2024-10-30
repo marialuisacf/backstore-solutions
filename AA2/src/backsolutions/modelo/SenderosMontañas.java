@@ -125,135 +125,77 @@ public class SenderosMontañas {
     }
 
     // Métodos para gestionar socios
-
-    private void addSocio() {
-        System.out.print("Ingrese el número de socio: ");
-        int numSocio = scanner.nextInt();
-        scanner.nextLine(); // Limpiar buffer
-
-        System.out.print("Ingrese el nombre del socio: ");
-        String nombre = scanner.nextLine();
-
-        System.out.print("Seleccione el tipo de socio (Estandar/Federado/Infantil): ");
-        String tipo = scanner.nextLine().toLowerCase(); // Convertir a minúsculas para facilitar la comparación
-
+    public void addSocio(int numSocio, String nombre, String tipo, String nif, Seguro seguro, Federacion federacion) {
         Socio socio = null;
 
-        switch (tipo) {
+        switch (tipo.toLowerCase()) {
             case "estandar":
-                System.out.print("Ingrese el NIF: ");
-                String nifEstandar = scanner.nextLine();
-                System.out.print("Ingrese el tipo de Seguro: ");
-                String tipoSeguro = scanner.nextLine();
-                System.out.print("Ingrese el precio del Seguro: ");
-                double precioSeguro = scanner.nextDouble();
-                scanner.nextLine(); // Limpiar buffer
-                Seguro seguro = new Seguro(tipoSeguro, precioSeguro);
-                socio = new Estandar(numSocio, nombre, nifEstandar, seguro);
+                socio = new Estandar(numSocio, nombre, nif, seguro);
                 break;
             case "federado":
-                System.out.print("Ingrese el NIF: ");
-                String nifFederado = scanner.nextLine();
-                System.out.print("Ingrese el código de la Federación: ");
-                String codigoFederacion = scanner.nextLine();
-                System.out.print("Ingrese el nombre de la Federación: ");
-                String nombreFederacion = scanner.nextLine();
-                Federacion federacion = new Federacion(codigoFederacion, nombreFederacion);
-                socio = new Federado(numSocio, nombre, nifFederado, federacion);
+                socio = new Federado(numSocio, nombre, nif, federacion);
                 break;
             case "infantil":
-                System.out.print("Ingrese el número de socio del tutor: ");
-                String numSocioTutor = scanner.nextLine();
-                socio = new Infantil(numSocio, nombre, numSocioTutor);
+                socio = new Infantil(numSocio, nombre, nif);
                 break;
             default:
-                System.out.println("Tipo de socio no válido. Debe ser 'Estandar', 'Federado' o 'Infantil'.");
-                return; // Salir del método si el tipo es inválido
+                throw new IllegalArgumentException("Tipo de socio no válido. Debe ser 'Estandar', 'Federado' o 'Infantil'.");
         }
 
         try {
             controladorSocio.addSocio(socio); // Usar la instancia del controlador
-        } catch (backsolutions.controlador.ControladorExcepcion e) {
-            System.out.println(e.getMessage());
+        } catch (ControladorExcepcion e) {
+            // Manejo de excepciones, puedes almacenar el mensaje en una lista o lanzar otra excepción
         }
     }
 
-    // metodo para eliminar socio y verificar su baja
+    // Método para eliminar socio y verificar su baja
     public void deleteSocio(Socio socio) {
-        // Verificar si el socio tiene inscripciones
         boolean tieneInscripciones = inscripciones.stream()
                 .anyMatch(inscripcion -> inscripcion.getSocio().equals(socio));
-        //anyMatch es el metodo que sigue buscando en la lista de inscripciones si hay alguna inscripcion donde el socio coincida con el socio a eliminar.
+
         if (tieneInscripciones) {
-            System.out.println("No se puede dar de baja al socio " + socio.getNombre() + " porque está inscrito en una o más excursiones.");
+            // Manejo de la baja del socio que tiene inscripciones (puedes lanzar una excepción o similar)
         } else {
             socios.remove(socio);
-            System.out.println("Socio " + socio.getNombre() + " eliminado con éxito.");
-            //si el socio no tiene inscripciones se procede a eliminarlo de la lista de socios.
+            // Mensaje de éxito (puedes manejarlo de otra manera)
         }
     }
-    private Scanner scanner = new Scanner(System.in);
 
-    // Metodo para añadir inscripciones y verificar la inscripción (verificar existencia excursión, verificación existencia socio)
-    public void addInscripcion(String codigoExcursion) {
-        // Verificar si la excursión existe
+    // Método para añadir inscripciones y verificar la inscripción
+    public void addInscripcion(String codigoExcursion, boolean esSocio, int numSocio, Seguro seguro) {
         Excursion excursion = excursiones.stream()
                 .filter(exc -> exc.getCodigo().equals(codigoExcursion))
                 .findFirst()
                 .orElse(null);
 
         if (excursion == null) {
-            System.out.println("La excursión con el código " + codigoExcursion + " no existe.");
-            return;
+            throw new IllegalArgumentException("La excursión con el código " + codigoExcursion + " no existe.");
         }
 
-        // Preguntar al usuario si ya es cliente
-        System.out.print("¿Es usted socio? (si/no): ");
-        String respuesta = scanner.nextLine(); // Suponiendo que tienes un scanner para entrada
-
-        if (respuesta.equalsIgnoreCase("no")) {
-            System.out.println("Por favor, primero debe darse de alta como socio.");
-            // Aquí se podría llamar a un método para gestionar el alta de socio
-            return;
+        if (!esSocio) {
+            throw new IllegalStateException("El usuario debe ser socio para inscribirse.");
         }
 
-        // Si es socio, se le pide su número de socio
-        System.out.print("Introduce tu número de socio: ");
-        int numSocio = scanner.nextInt(); // Lee como un int
-        scanner.nextLine(); // Limpiar el buffer después de leer el número
-
-        // Verificar si el socio ya existe
         Socio socio = socios.stream()
-                .filter(s -> s.getNumSocio() == numSocio) // Compara por numSocio
+                .filter(s -> s.getNumSocio() == numSocio)
                 .findFirst()
                 .orElse(null);
 
         if (socio == null) {
-            System.out.println("No se encontró un socio con el número proporcionado.");
-            return;
+            throw new IllegalArgumentException("No se encontró un socio con el número proporcionado.");
         }
 
-        // Generar un número de inscripción único
         String numInscripcion = generarNumeroInscripcion();
-
-        // Crear el objeto Seguro si es necesario
-        Seguro seguro = null;
-        if (socio instanceof Estandar) {
-            seguro = crearNuevoSeguro(); // Método para solicitar datos del seguro
-        }
-
-        // Crear una nueva inscripción
         Inscripcion inscripcion = new Inscripcion(numInscripcion, socio, excursion, LocalDate.now(), seguro);
 
-        // Intentar agregar la inscripción a través del controlador
         try {
             controladorInscripcion.addInscripcion(inscripcion);
-            System.out.println("Inscripción realizada con éxito para el socio " + socio.getNombre());
+            // Mensaje de éxito (puedes manejarlo de otra manera)
         } catch (InscripcionInvalidaExcepcion e) {
-            System.out.println("Error al añadir la inscripción: " + e.getMessage());
+            // Manejo de la excepción
         }
     }
-
 
     // Metodo para generar un número de inscripción único
     private String generarNumeroInscripcion() {

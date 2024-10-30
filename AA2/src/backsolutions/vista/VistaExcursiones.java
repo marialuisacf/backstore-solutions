@@ -60,11 +60,21 @@ public class VistaExcursiones {
         Excursion excursion = new Excursion(codigo, descripcion, fecha, numDias, precioInscripcion);
 
         // Añadir la excursión a través del controlador
-        controladorExcursion.addExcursion(excursion);
+        try {
+            controladorExcursion.addExcursion(excursion);
+            System.out.println("Excursión añadida con éxito.");
+        } catch (backsolutions.controlador.ControladorExcepcion e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private void mostrarExcursiones() {
-        controladorExcursion.mostrarExcursiones();
+        List<Excursion> excursiones = controladorExcursion.mostrarExcursiones();
+        if (excursiones.isEmpty()) {
+            System.out.println("No hay excursiones disponibles.");
+        } else {
+            excursiones.forEach(System.out::println);
+        }
     }
 
     private void filtrarExcursiones() {
@@ -72,6 +82,12 @@ public class VistaExcursiones {
         LocalDate inicio = LocalDate.parse(scanner.nextLine());
         System.out.print("Ingrese la fecha de fin (YYYY-MM-DD): ");
         LocalDate fin = LocalDate.parse(scanner.nextLine());
-        controladorExcursion.filtrarExcursiones(inicio, fin);
+
+        try {
+            List<Excursion> filtradas = controladorExcursion.filtrarExcursiones(inicio, fin);
+            filtradas.forEach(System.out::println);
+        } catch (backsolutions.controlador.ControladorExcepcion e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
