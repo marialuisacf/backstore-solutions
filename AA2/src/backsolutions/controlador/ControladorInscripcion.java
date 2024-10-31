@@ -30,7 +30,6 @@ public class ControladorInscripcion {
 
         // Si pasa todas las verificaciones, añade la inscripción
         inscripciones.add(inscripcion);
-        System.out.println("Inscripción añadida con éxito.");
     }
 
 
@@ -53,45 +52,16 @@ public class ControladorInscripcion {
         }
 
         inscripciones.remove(inscripcion);
-        System.out.println("Inscripción cancelada con éxito.");
+
     }
 
-    // Metodo para mostrar todas las inscripciones
+    // Método para mostrar todas las inscripciones
     public List<Inscripcion> mostrarInscripciones() {
-        // Comprueba si hay inscripciones
-        if (inscripciones.isEmpty()) {
-            System.out.println("No hay inscripciones registradas.");
-            return inscripciones; // Devuelve la lista vacía
-        }
-
-        System.out.println("Lista de Inscripciones:");
-        for (Inscripcion inscripcion : inscripciones) {
-            // Obtiene los detalles necesarios
-            int numSocio = inscripcion.getSocio().getNumSocio(); // Suponiendo que 'nif' es el número de socio
-            String nombreSocio = ""; // Añade lógica para obtener el nombre según el tipo de socio
-
-            // Obtener el nombre según el tipo de socio
-            if (inscripcion.getSocio() instanceof Estandar) {
-                nombreSocio = ((Estandar) inscripcion.getSocio()).getNombre(); // Asegúrate de tener un método getNombre()
-            } else if (inscripcion.getSocio() instanceof Federado) {
-                nombreSocio = ((Federado) inscripcion.getSocio()).getNombre(); // Asegúrate de tener un método getNombre()
-            }
-
-            // Obtener detalles de la excursión
-            String fechaExcursion = inscripcion.getExcursion().getFecha().toString(); // Asegúrate de que esto devuelve la fecha correctamente
-            String descripcionExcursion = inscripcion.getExcursion().getDescripcion();
-            double importe = calcularImporte(inscripcion); // Asegúrate de tener un método para calcular el importe
-
-            // Imprime los detalles de la inscripción
-            System.out.printf("Número de Socio: %s, Nombre: %s, Fecha de Excursión: %s, Descripción: %s, Importe: %.2f%n",
-                    numSocio, nombreSocio, fechaExcursion, descripcionExcursion, importe);
-        }
-
         return inscripciones; // Devuelve la lista de inscripciones
     }
 
     // Método para calcular el importe
-    private double calcularImporte(Inscripcion inscripcion) {
+    public double calcularImporte(Inscripcion inscripcion) {
         double precioBase = inscripcion.getExcursion().getPrecioInscripcion();
 
         // Aplica descuentos según el tipo de socio

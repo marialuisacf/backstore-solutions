@@ -72,6 +72,7 @@ public class VistaSocios {
 
         try {
             controladorSocio.modificarSeguro(numSocio, nuevoTipoSeguro, nuevoPrecioSeguro);
+            System.out.println("Tipo de seguro modificado con éxito.");
         } catch (backsolutions.controlador.ControladorExcepcion e) {
             System.out.println(e.getMessage());
         }
@@ -134,6 +135,21 @@ public class VistaSocios {
         System.out.print("Ingrese el número de socio: ");
         int numSocio = scanner.nextInt();
         controladorSocio.deleteSocio(numSocio);
+        System.out.println("Socio eliminado con éxito.");
+    }
+
+    public void mostrarFacturaMensual() {
+        System.out.print("Ingrese el número de socio: ");
+        int numSocio = scanner.nextInt();
+        scanner.nextLine(); // Limpiar buffer
+
+        Socio socio = controladorSocio.buscarSocio(numSocio);
+        if (socio != null) {
+            String mensajeFactura = controladorSocio.mostrarFacturaMensual(socio);
+            System.out.println(mensajeFactura); // Muestra el mensaje de ControladorSocio
+        } else {
+            System.out.println("Socio no encontrado.");
+        }
     }
 
 }

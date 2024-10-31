@@ -216,6 +216,7 @@ public class VistaPrincipal {
         //Agregamos el socio a través del controlador
         try {
             controladorSocio.addSocio(socio);
+            System.out.println("Socio añadido con éxito.");
         } catch (ControladorExcepcion e) {
             System.out.println("Error al añadir el socio: " + e.getMessage());
         }
@@ -236,6 +237,7 @@ public class VistaPrincipal {
         //Modificamos el seguro a través del controlador
         try {
             controladorSocio.modificarSeguro(numSocio, nuevoTipoSeguro, nuevoPrecioSeguro);
+            System.out.println("Tipo de seguro modificado con éxito.");
         } catch (ControladorExcepcion e) {
             System.out.println("Error al modificar el seguro: " + e.getMessage());
         }
@@ -367,6 +369,7 @@ public class VistaPrincipal {
         //Cancelamos la inscripción a través del controlador
         try {
             controladorInscripcion.cancelarInscripcion(socio, excursion);
+            System.out.println("Inscripción cancelada con éxito.");
         } catch (InscripcionInvalidaExcepcion e) {
             System.out.println("Error al cancelar la inscripción: " + e.getMessage());
         } catch (SocioNoEncontradoExcepcion e) {
@@ -374,9 +377,9 @@ public class VistaPrincipal {
         }
     }
 
-    //CASO 8:
+    // CASO 10:
     private void mostrarInscripciones() {
-        // Llamar al metodo del controlador para obtener la lista de inscripciones
+        // Llamar al método del controlador para obtener la lista de inscripciones
         List<Inscripcion> inscripciones = controladorInscripcion.mostrarInscripciones();
 
         // Verificar si hay inscripciones
@@ -385,17 +388,31 @@ public class VistaPrincipal {
             return;
         }
 
+        System.out.println("Lista de Inscripciones:");
 
         // Recorrer y mostrar cada inscripción
         for (Inscripcion inscripcion : inscripciones) {
             // Suponiendo que tienes métodos en Inscripcion, Socio y Excursion para obtener los detalles
-            int numSocio = inscripcion.getSocio().getNumSocio(); // Cambia según el metodo correcto
-            String nombre = ""; // Cambia según el metodo correcto para obtener el nombre del socio
-            String fechaExcursion = inscripcion.getExcursion().getFecha().toString(); // Asegúrate de que el formato sea adecuado
-            String descripcion = inscripcion.getExcursion().getDescripcion();
-            double importe = calcularImporte(inscripcion); // Metodo que calculará el importe con cargos o descuentos
+            int numSocio = inscripcion.getSocio().getNumSocio(); // Cambia según el método correcto
+            String nombre = ""; // Cambia según el método correcto para obtener el nombre del socio
 
+            // Obtener el nombre del socio según el tipo
+            if (inscripcion.getSocio() instanceof Estandar) {
+                nombre = ((Estandar) inscripcion.getSocio()).getNombre(); // Asegúrate de tener un método getNombre()
+            } else if (inscripcion.getSocio() instanceof Federado) {
+                nombre = ((Federado) inscripcion.getSocio()).getNombre(); // Asegúrate de tener un método getNombre()
+            } else if (inscripcion.getSocio() instanceof Infantil) {
+                nombre = ((Infantil) inscripcion.getSocio()).getNombre(); // Asegúrate de que tienes este método
+            }
 
+            // Obtener detalles de la excursión
+            String fechaExcursion = inscripcion.getExcursion().getFecha().toString(); // Asegúrate de que esto devuelve la fecha correctamente
+            String descripcionExcursion = inscripcion.getExcursion().getDescripcion();
+            double importe = controladorInscripcion.calcularImporte(inscripcion); // Método que calculará el importe con cargos o descuentos
+
+            // Imprime los detalles de la inscripción
+            System.out.printf("Número de Socio: %s, Nombre: %s, Fecha de Excursión: %s, Descripción: %s, Importe: %.2f%n",
+                    numSocio, nombre, fechaExcursion, descripcionExcursion, importe);
         }
     }
 

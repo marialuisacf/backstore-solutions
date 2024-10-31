@@ -35,7 +35,6 @@ public class VistaInscripciones {
 
     private void addInscripcion() {
         // Aquí se piden los datos de la inscripción y el socio, y se crea el objeto Inscripcion
-        // Ejemplo:
         System.out.print("Ingrese el número de inscripción: ");
         String numInscripcion = scanner.nextLine();
         // Recoger más datos y luego añadir
@@ -44,7 +43,6 @@ public class VistaInscripciones {
 
     private void cancelarInscripcion() {
         // Aquí se piden los datos del socio y excursión, y se llama a controladorInscripcion.cancelarInscripcion
-        // Ejemplo:
         System.out.print("Ingrese el número del socio: ");
         int numSocio = scanner.nextInt();
         // controladorInscripcion.cancelarInscripcion(socio, excursion);

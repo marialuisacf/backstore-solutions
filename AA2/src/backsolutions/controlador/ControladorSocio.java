@@ -33,7 +33,6 @@ public class ControladorSocio {
             }
         }
         socios.agregar(socio); // Añadimos el nuevo socio
-        System.out.println("Socio añadido con éxito.");
     }
 
     public void deleteSocio(int numSocio) throws ControladorExcepcion {
@@ -51,7 +50,6 @@ public class ControladorSocio {
         }
 
         socios.eliminar(socio); // Eliminamos el socio
-        System.out.println("Socio eliminado con éxito.");
     }
 
     public void modificarSeguro(int numSocio, String nuevoTipoSeguro, double nuevoPrecioSeguro) throws ControladorExcepcion {
@@ -71,7 +69,6 @@ public class ControladorSocio {
 
         // Llamamos al metodo modificarSeguro de la clase Estandar
         ((backsolutions.modelo.Estandar) socio).modificarSeguro(nuevoTipoSeguro, nuevoPrecioSeguro);
-        System.out.println("Tipo de seguro modificado con éxito.");
     }
 
     // Método para mostrar los socios filtrados por tipo
@@ -138,17 +135,18 @@ public class ControladorSocio {
         return resultado;
     }
 
-    public void mostrarFacturaMensual(Socio socio) {
+    public String mostrarFacturaMensual(Socio socio) {
         List<Inscripcion> inscripciones = obtenerInscripcionesDelSocio(socio);
 
         if (inscripciones.isEmpty()) {
-            System.out.println("No hay inscripciones para el socio con número: " + socio.getNumSocio());
+            return "No hay inscripciones para el socio con número: " + socio.getNumSocio();
         } else {
-            System.out.println("Facturas Mensuales para el Socio: " + socio.getNumSocio());
+            StringBuilder mensaje = new StringBuilder("Facturas Mensuales para el Socio: " + socio.getNumSocio() + "\n");
             for (Inscripcion inscripcion : inscripciones) {
-                double importe = calcularImporte(inscripcion); // Método que ya tienes
-                System.out.printf("Excursión: %s, Importe: %.2f%n", inscripcion.getExcursion().getDescripcion(), importe);
+                double importe = calcularImporte(inscripcion); // Metodo que ya tenemos
+                mensaje.append(String.format("Excursión: %s, Importe: %.2f%n", inscripcion.getExcursion().getDescripcion(), importe));
             }
+            return mensaje.toString();
         }
     }
 
