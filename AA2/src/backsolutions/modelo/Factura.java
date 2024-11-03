@@ -11,20 +11,38 @@ public class Factura {
     /**
      * Atributos de la clase backsolutions.modelo.Factura
      */
+    private int idFactura;
     private Socio socio;
     private List<Inscripcion> inscripciones;
 
     //Constructor de la clase backsolutions.modelo.Factura con los parámetros necesarios para inicializar una factura
     /**
      * Atributos de la clase Factura añadidos al constructor
+     * @param idFactura parámetro identificativo de la factura
      * @param socio parámetro identificativo del socio asociado a la Factura
      * @param inscripciones parámetro identificativo del listado de inscripciones
      */
+    public Factura(int idFactura, Socio socio, List<Inscripcion> inscripciones) {
+        this.idFactura = idFactura;
+        this.socio = socio;
+        this.inscripciones = inscripciones;
+    }
+    // Constructor alternativo sin idFactura para cuando aún no se conoce el ID
     public Factura(Socio socio, List<Inscripcion> inscripciones) {
         this.socio = socio;
         this.inscripciones = inscripciones;
     }
-//Getters y Setters
+
+    // Getters y Setters
+    public int getIdFactura() {
+        return idFactura;
+    }
+
+    public void setIdFactura(int idFactura) {
+        this.idFactura = idFactura;
+    }
+
+    //Getters y Setters
     /**
      * Getter de socio
      * @return devuelve el socio de la factura
@@ -109,7 +127,7 @@ public class Factura {
     }
 
     // Metodo auxiliar para calcular el total de excursiones del mes
-    private double calculoTotalExcursionesMensual() {
+    public double calculoTotalExcursionesMensual() {
         double totalExcursiones = 0.0;
         for (Inscripcion inscripcion : inscripciones) {
             if (esDelMesActual(inscripcion.getFechaInscripcion())) {
@@ -126,7 +144,8 @@ public class Factura {
     @Override
     public String toString() {
         return "Factura{" +
-                "socio=" + socio +
+                "idFactura=" + idFactura +
+                ", socio=" + socio +
                 ", inscripciones=" + inscripciones +
                 '}';
     }
