@@ -86,7 +86,7 @@ public class Estandar extends Socio {
     public String toString() {
         return super.toString() +
                 ", NIF: " + nif +
-                ", Seguro: " + seguro.toString(); // Asegúrate de que Seguro también tenga un metodo toString
+                ", Seguro: " + (seguro != null ? seguro.toString() : "Sin seguro");
     }
 
     /**

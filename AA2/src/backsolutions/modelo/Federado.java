@@ -76,7 +76,9 @@ public class Federado extends Socio {
 
     @Override
     public String toString() {
-        return super.toString() + ", NIF: " + nif + ", Federación: " + federacion.getNombre();
+        return super.toString() +
+                ", NIF: " + nif +
+                ", Federación: " + (federacion != null ? federacion.getNombre() : "Sin federación");
     }
 
     /**
