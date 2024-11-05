@@ -70,9 +70,9 @@ public class Seguro {
      */
     @Override
     public String toString() {
-        return "backsolutions.modelo.Seguro{" +
+        return "especificaciones del seguro -> " +
                 "tipo='" + tipo + '\'' +
                 ", precio=" + precio +
-                '}';
+                '.';
     }
 }

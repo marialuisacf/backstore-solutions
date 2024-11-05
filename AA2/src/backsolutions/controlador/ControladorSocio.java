@@ -1,141 +1,85 @@
 package backsolutions.controlador;
 
 import backsolutions.modelo.*;
-
-import java.util.ArrayList;
+import backsolutions.modelo.dao.SocioDAO;
+import backsolutions.modelo.dao.SocioDAOImpl;
+import java.sql.SQLException;
 import java.util.List;
 
 public class ControladorSocio {
-    private Lista<Socio> socios;
+    private SocioDAO socioDAO;
     private ControladorInscripcion controladorInscripcion;
 
     public ControladorSocio(ControladorInscripcion controladorInscripcion) {
-        this.controladorInscripcion = controladorInscripcion; // Asigna la instancia de ControladorInscripcion
-        this.socios = new Lista<>(); // Inicializa la lista de socios
+        this.socioDAO = new SocioDAOImpl(); // Inicializamos SocioDAO
+        this.controladorInscripcion = controladorInscripcion;
     }
 
-    // Metodo para buscar un socio por número
-    public Socio buscarSocio(int numSocio) {
-        for (int i = 0; i < socios.size(); i++) {
-            Socio socio = socios.obtener(i);
-            if (socio.getNumSocio() == numSocio) {
-                return socio;
-            }
+    //Metodo para buscar un socio por su número identificador
+    public Socio buscarSocio(int numSocio) throws ControladorExcepcion {
+        try {
+            return socioDAO.buscarSocio(numSocio);
+        } catch (SQLException e) {
+            throw new ControladorExcepcion("Error al buscar el socio: " + e.getMessage());
         }
-        return null; // Retorna null si no se encuentra el socio
     }
 
+    //Metodo para añadir un nuevo socio a la BD
     public void addSocio(Socio socio) throws ControladorExcepcion {
-        // Verificamos si el socio ya existe
-        for (int i = 0; i < socios.size(); i++) {
-            if (socios.obtener(i).getNumSocio() == socio.getNumSocio()) {
-                throw new ControladorExcepcion("El socio con número " + socio.getNumSocio() + " ya existe.");
+        if (socio instanceof Estandar) {
+            // Aseguramos que el seguro se ha creado correctamente en el socio de tipo Estándar
+            Estandar estandar = (Estandar) socio;
+            if (estandar.getSeguro() == null) {
+                throw new ControladorExcepcion("Debe especificar un seguro para el socio estándar.");
             }
         }
-        socios.agregar(socio); // Añadimos el nuevo socio
+
+        try {
+            socioDAO.guardarSocio(socio); // Aquí es donde se envía el socio completo con seguro
+            System.out.println("Socio añadido correctamente.");
+        } catch (SQLException e) {
+            throw new ControladorExcepcion("Error al guardar el socio: " + e.getMessage());
+        }
     }
 
+    //Metodo para eliminar un socio por su número identificador numSocio
     public void deleteSocio(int numSocio) throws ControladorExcepcion {
-        Socio socio = null;
-        // Buscamos el socio por número
-        for (int i = 0; i < socios.size(); i++) {
-            if (socios.obtener(i).getNumSocio() == numSocio) {
-                socio = socios.obtener(i);
-                break; // Salimos del bucle una vez que encontramos el socio
-            }
+        try {
+            socioDAO.eliminarSocio(numSocio);
+            System.out.println("Socio eliminado correctamente.");
+        } catch (SQLException e) {
+            throw new ControladorExcepcion("Error al eliminar el socio: " + e.getMessage());
         }
-
-        if (socio == null) {
-            throw new ControladorExcepcion("No se encontró un socio con el número proporcionado.");
-        }
-
-        socios.eliminar(socio); // Eliminamos el socio
     }
 
+    //Metodo para buscar y actualizar el seguro de un socio estándar en la BD
     public void modificarSeguro(int numSocio, String nuevoTipoSeguro, double nuevoPrecioSeguro) throws ControladorExcepcion {
-        Socio socio = null;
+        try {
+            Socio socio = socioDAO.buscarSocio(numSocio);
 
-        // Buscamos el socio estándar por número
-        for (int i = 0; i < socios.size(); i++) {
-            if (socios.obtener(i) instanceof backsolutions.modelo.Estandar && socios.obtener(i).getNumSocio() == numSocio) {
-                socio = socios.obtener(i);
-                break; // Salimos del bucle una vez que encontramos el socio
+            if (socio instanceof Estandar) {
+                Estandar socioEstandar = (Estandar) socio;
+                socioEstandar.modificarSeguro(nuevoTipoSeguro, nuevoPrecioSeguro);
+                socioDAO.actualizarSocio(socioEstandar); // Guardamos los cambios en la BD
+                System.out.println("Seguro modificado correctamente.");
+            } else {
+                throw new ControladorExcepcion("El socio con el número " + numSocio + " no es de tipo Estándar.");
             }
+        } catch (SQLException e) {
+            throw new ControladorExcepcion("Error al modificar el seguro: " + e.getMessage());
         }
-
-        if (socio == null) {
-            throw new ControladorExcepcion("No se encontró un socio estándar con el número proporcionado.");
-        }
-
-        // Llamamos al metodo modificarSeguro de la clase Estandar
-        ((backsolutions.modelo.Estandar) socio).modificarSeguro(nuevoTipoSeguro, nuevoPrecioSeguro);
     }
 
-    // Método para mostrar los socios filtrados por tipo
+    // Metodo para mostrar socios con un filtro (todos/estandar/federado/infantil)
     public List<Socio> mostrarSociosFiltrados(String filtro) throws ControladorExcepcion {
-        List<Socio> resultado = new ArrayList<>();
-
-        for (int i = 0; i < socios.size(); i++) {
-            Socio socio = socios.obtener(i);
-            switch (filtro.toLowerCase()) {
-                case "todos":
-                    resultado.add(socio);
-                    break;
-                case "estandar":
-                    if (socio instanceof Estandar) {
-                        resultado.add(socio);
-                    }
-                    break;
-                case "federado":
-                    if (socio instanceof Federado) {
-                        resultado.add(socio);
-                    }
-                    break;
-                case "infantil":
-                    if (socio instanceof Infantil) {
-                        resultado.add(socio);
-                    }
-                    break;
-                default:
-                    throw new ControladorExcepcion("Filtro no válido: " + filtro);
-            }
+        try {
+            return socioDAO.listarSocios(filtro);
+        } catch (SQLException e) {
+            throw new ControladorExcepcion("Error al listar socios: " + e.getMessage());
         }
-
-        return resultado;
     }
 
-    // Metodo para mostrar todos los socios
-    public List<Socio> mostrarSocios(String filtro) throws ControladorExcepcion {
-        List<Socio> resultado = new ArrayList<>();
-        for (int i = 0; i < socios.size(); i++) {
-            Socio socio = socios.obtener(i);
-            switch (filtro.toLowerCase()) {
-                case "todos":
-                    resultado.add(socio);
-                    break;
-                case "estandar":
-                    if (socio instanceof Estandar) {
-                        resultado.add(socio);
-                    }
-                    break;
-                case "federado":
-                    if (socio instanceof Federado) {
-                        resultado.add(socio);
-                    }
-                    break;
-                case "infantil":
-                    if (socio instanceof Infantil) {
-                        resultado.add(socio);
-                    }
-                    break;
-                default:
-                    throw new ControladorExcepcion("Filtro no válido: " + filtro);
-            }
-        }
-        return resultado;
-    }
-
-    public String mostrarFacturaMensual(Socio socio) {
+    public String mostrarFacturaMensual(Socio socio) throws ControladorExcepcion {
         List<Inscripcion> inscripciones = obtenerInscripcionesDelSocio(socio);
 
         if (inscripciones.isEmpty()) {
@@ -143,28 +87,16 @@ public class ControladorSocio {
         } else {
             StringBuilder mensaje = new StringBuilder("Facturas Mensuales para el Socio: " + socio.getNumSocio() + "\n");
             for (Inscripcion inscripcion : inscripciones) {
-                double importe = calcularImporte(inscripcion); // Metodo que ya tenemos
+                double importe = calcularImporte(inscripcion); //metodo existente
                 mensaje.append(String.format("Excursión: %s, Importe: %.2f%n", inscripcion.getExcursion().getDescripcion(), importe));
             }
             return mensaje.toString();
         }
     }
 
-    // Metodo para obtener las inscripciones de un socio
+    // Metodo para obtener las inscripciones de un socio desde la BD a través del controladorInscripcion
     private List<Inscripcion> obtenerInscripcionesDelSocio(Socio socio) {
-        List<Inscripcion> inscripcionesDelSocio = new ArrayList<>();
-
-        // Obtener la lista de inscripciones desde el controlador de inscripciones
-        List<Inscripcion> todasLasInscripciones = controladorInscripcion.getInscripciones();
-
-        // Iterar sobre las inscripciones y agregar las que corresponden al socio
-        for (Inscripcion inscripcion : todasLasInscripciones) {
-            if (inscripcion.getSocio().getNumSocio() == socio.getNumSocio()) {
-                inscripcionesDelSocio.add(inscripcion);
-            }
-        }
-
-        return inscripcionesDelSocio;
+        return controladorInscripcion.mostrarInscripcionesPorSocio(socio.getNumSocio());
     }
 
     private double calcularImporte(Inscripcion inscripcion) {

@@ -32,7 +32,8 @@ public class VistaPrincipal {
         int opcion;
 
         do {
-            System.out.println("Bienvenido a Senderos y Montañas - Menú de opciones:");
+            System.out.println("-----------------------------------------------------");
+            System.out.println("¡Bienvenido a Senderos y Montañas! - Menú de opciones:");
             System.out.println("-----------------------------------------------------");
             System.out.println("Gestión de excursiones:");
             System.out.println("1. Añadir Excursión");
@@ -263,7 +264,7 @@ public class VistaPrincipal {
         String filtro = scanner.nextLine();
 
         try {
-            List<Socio> socios = controladorSocio.mostrarSocios(filtro);
+            List<Socio> socios = controladorSocio.mostrarSociosFiltrados(filtro);
             if (socios.isEmpty()) {
                 System.out.println("No se encontraron socios.");
             } else {

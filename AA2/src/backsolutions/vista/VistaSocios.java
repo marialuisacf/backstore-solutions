@@ -44,7 +44,7 @@ public class VistaSocios {
         String filtro = scanner.nextLine().toLowerCase(); // Obtener el filtro del usuario y convertir a minúsculas
 
         try {
-            List<Socio> socios = controladorSocio.mostrarSocios(filtro); // Llamar al método mostrarSocios() del controlador
+            List<Socio> socios = controladorSocio.mostrarSociosFiltrados(filtro); // Llamar al método mostrarSocios() del controlador
 
             if (socios.isEmpty()) {
                 System.out.println("No hay socios registrados con el filtro: " + filtro);
