@@ -36,7 +36,6 @@ public class ControladorSocio {
 
         try {
             socioDAO.guardarSocio(socio); // Aquí es donde se envía el socio completo con seguro
-            System.out.println("Socio añadido correctamente.");
         } catch (SQLException e) {
             throw new ControladorExcepcion("Error al guardar el socio: " + e.getMessage());
         }
@@ -46,7 +45,6 @@ public class ControladorSocio {
     public void deleteSocio(int numSocio) throws ControladorExcepcion {
         try {
             socioDAO.eliminarSocio(numSocio);
-            System.out.println("Socio eliminado correctamente.");
         } catch (SQLException e) {
             throw new ControladorExcepcion("Error al eliminar el socio: " + e.getMessage());
         }
@@ -61,7 +59,6 @@ public class ControladorSocio {
                 Estandar socioEstandar = (Estandar) socio;
                 socioEstandar.modificarSeguro(nuevoTipoSeguro, nuevoPrecioSeguro);
                 socioDAO.actualizarSocio(socioEstandar); // Guardamos los cambios en la BD
-                System.out.println("Seguro modificado correctamente.");
             } else {
                 throw new ControladorExcepcion("El socio con el número " + numSocio + " no es de tipo Estándar.");
             }
