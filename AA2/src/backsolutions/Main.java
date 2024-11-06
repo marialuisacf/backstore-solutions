@@ -26,3 +26,4 @@ public class Main {
         vista.mostrarMenu();  // Iniciamos el menú desde la vista VistaPrincipal
     }
 }
+// prueba
