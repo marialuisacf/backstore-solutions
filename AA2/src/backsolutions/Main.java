@@ -13,7 +13,7 @@ public class Main {
         ArrayList<Inscripcion> inscripciones = new ArrayList<>();
 
         // Crear el controlador de inscripciones primero
-        ControladorInscripcion controladorInscripcion = new ControladorInscripcion(inscripciones, excursiones);
+        ControladorInscripcion controladorInscripcion = new ControladorInscripcion();
 
         // Luego, crear el controlador de socios y pasar el controlador de inscripciones
         ControladorSocio controladorSocio = new ControladorSocio(controladorInscripcion);

@@ -37,8 +37,8 @@ public class SenderosMontañas {
         this.socios = new ArrayList<>();
         this.excursiones = new ArrayList<>();
         this.inscripciones = new ArrayList<>();
-        this.controladorSocio = controladorSocio; //para inicializar controlador
-        this.controladorInscripcion = controladorInscripcion;
+        this.controladorSocio = new ControladorSocio(new ControladorInscripcion()); // Inicializa controladorSocio
+        this.controladorInscripcion = new ControladorInscripcion(); // Inicializa controladorInscripcion
     }
 
     //Getter y Setter
@@ -164,6 +164,7 @@ public class SenderosMontañas {
 
     // Método para añadir inscripciones y verificar la inscripción
     public void addInscripcion(String codigoExcursion, boolean esSocio, int numSocio, Seguro seguro) {
+        // Buscar la excursión por su código
         Excursion excursion = excursiones.stream()
                 .filter(exc -> exc.getCodigo().equals(codigoExcursion))
                 .findFirst()
@@ -177,6 +178,7 @@ public class SenderosMontañas {
             throw new IllegalStateException("El usuario debe ser socio para inscribirse.");
         }
 
+        // Buscar el socio por su número
         Socio socio = socios.stream()
                 .filter(s -> s.getNumSocio() == numSocio)
                 .findFirst()
@@ -187,15 +189,22 @@ public class SenderosMontañas {
         }
 
         String numInscripcion = generarNumeroInscripcion();
+        // Crear la inscripción con los detalles proporcionados
         Inscripcion inscripcion = new Inscripcion(numInscripcion, socio, excursion, LocalDate.now(), seguro);
 
         try {
-            controladorInscripcion.addInscripcion(inscripcion);
-            // Mensaje de éxito (puedes manejarlo de otra manera)
+            // Asegurarse de que el seguro no es nulo antes de llamar al método del controlador
+            String tipoSeguro = (seguro != null) ? seguro.getTipo() : null;
+            double precioSeguro = (seguro != null) ? seguro.getPrecio() : 0.0;
+
+            // Llamar al controlador para añadir la inscripción con los datos correctos
+            controladorInscripcion.addInscripcion(codigoExcursion, numSocio, tipoSeguro, precioSeguro);
+            System.out.println("Inscripción añadida correctamente.");
         } catch (InscripcionInvalidaExcepcion e) {
-            // Manejo de la excepción
+            System.out.println("Error al añadir la inscripción: " + e.getMessage());
         }
     }
+
 
     // Metodo para generar un número de inscripción único
     private String generarNumeroInscripcion() {

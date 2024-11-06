@@ -35,27 +35,68 @@ public class VistaInscripciones {
     }
 
     private void addInscripcion() {
-        // Aquí se piden los datos de la inscripción y el socio, y se crea el objeto Inscripcion
-        System.out.print("Ingrese el número de inscripción: ");
-        String numInscripcion = scanner.nextLine();
+        System.out.print("Ingrese el número de socio para la inscripción: ");
+        int numSocio = scanner.nextInt();
+        scanner.nextLine(); // Limpiar el buffer
+
+        System.out.print("Ingrese el código de la excursión a inscribir: ");
+        String codigoExcursion = scanner.nextLine();
+
+        System.out.print("Ingrese el tipo de seguro (opcional): ");
+        String tipoSeguro = scanner.nextLine();
+        double precioSeguro = 0.0;
+
+        if (!tipoSeguro.isEmpty()) {
+            System.out.print("Ingrese el precio del seguro: ");
+            precioSeguro = scanner.nextDouble();
+        }
+
+        try {
+            controladorInscripcion.addInscripcion(codigoExcursion, numSocio, tipoSeguro, precioSeguro);
+            System.out.println("Inscripción añadida con éxito.");
+        } catch (ControladorExcepcion e) {
+            System.out.println("Error al añadir la inscripción: " + e.getMessage());
+        }
     }
 
     private void cancelarInscripcion() {
-        // Aquí se piden los datos del socio y excursión, y se llama a controladorInscripcion.cancelarInscripcion
-        System.out.print("Ingrese el número del socio: ");
+        System.out.print("Ingrese el número de socio para cancelar la inscripción: ");
         int numSocio = scanner.nextInt();
+        scanner.nextLine(); // Limpiar el buffer
+
+        System.out.print("Ingrese el código de la excursión para cancelar la inscripción: ");
+        String codigoExcursion = scanner.nextLine();
+
+        try {
+            // Llamar al método cancelarInscripcion en el controlador con los parámetros adecuados
+            controladorInscripcion.cancelarInscripcion(numSocio, codigoExcursion);
+            System.out.println("Inscripción cancelada con éxito.");
+        } catch (ControladorExcepcion e) {
+            System.out.println("Error al cancelar la inscripción: " + e.getMessage());
+        }
     }
 
+
     private void mostrarInscripciones() {
-        // Llama al metodo del controlador para obtener la lista de inscripciones y mostrarlas
-        var inscripciones = controladorInscripcion.getInscripciones();
-        if (inscripciones.isEmpty()) {
-            System.out.println("No hay inscripciones disponibles.");
-        } else {
-            System.out.println("---- Inscripciones ----");
-            for (var inscripcion : inscripciones) {
-                System.out.println(inscripcion);
+        try {
+            var inscripciones = controladorInscripcion.mostrarInscripciones();
+
+            if (inscripciones.isEmpty()) {
+                System.out.println("No hay inscripciones disponibles.");
+            } else {
+                System.out.println("---- Inscripciones ----");
+                for (var inscripcion : inscripciones) {
+                    String socioNombre = inscripcion.getSocio().getNombre();
+                    String excursionDescripcion = inscripcion.getExcursion().getDescripcion();
+                    String fechaExcursion = inscripcion.getExcursion().getFecha().toString();
+                    double importe = controladorInscripcion.calcularImporte(inscripcion);
+
+                    System.out.printf("Número de Inscripción: %s, Nombre del Socio: %s, Fecha de Excursión: %s, Descripción: %s, Importe: %.2f%n",
+                            inscripcion.getNumInscripcion(), socioNombre, fechaExcursion, excursionDescripcion, importe);
+                }
             }
+        } catch (ControladorExcepcion e) {
+            System.out.println("Error al mostrar las inscripciones: " + e.getMessage());
         }
     }
 

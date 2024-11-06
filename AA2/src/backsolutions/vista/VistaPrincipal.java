@@ -300,49 +300,32 @@ public class VistaPrincipal {
 
     //CASO 8:
     private void addInscripcion(Scanner scanner) {
-        // Solicitar al usuario los datos necesarios para la inscripción
-        System.out.print("Ingrese el número de inscripción: ");
-        String numInscripcion = scanner.nextLine();
-        scanner.nextLine(); // Limpiar el buffer después de nextInt()
-
         System.out.print("Ingrese el número de socio para la inscripción: ");
         int numSocio = scanner.nextInt();
-        scanner.nextLine(); // Limpiar el buffer después de nextInt()
+        scanner.nextLine(); // Limpiar el buffer
 
         System.out.print("Ingrese el código de la excursión a inscribir: ");
         String codigoExcursion = scanner.nextLine();
 
-        // Buscar el socio correspondiente utilizando el ControladorSocio
-        Socio socio = controladorSocio.buscarSocio(numSocio);
-        if (socio == null) {
-            System.out.println("No se encontró un socio con el número proporcionado.");
-            return;
+        System.out.print("Ingrese el tipo de seguro (opcional): ");
+        String tipoSeguro = scanner.nextLine();
+        double precioSeguro = 0.0;
+
+        // Si se ingresó un tipo de seguro, pedir el precio
+        if (!tipoSeguro.isEmpty()) {
+            System.out.print("Ingrese el precio del seguro: ");
+            precioSeguro = scanner.nextDouble();
         }
 
-        // Buscar la excursión correspondiente utilizando el ControladorExcursion
-        Excursion excursion = controladorExcursion.buscarExcursion(codigoExcursion);
-        if (excursion == null) {
-            System.out.println("No se encontró una excursión con el código proporcionado.");
-            return;
-        }
-
-        // Crear el seguro solo si el socio es de tipo Estandar
-        Seguro seguro = null;
-        if (socio instanceof Estandar) {
-            seguro = ((Estandar) socio).getSeguro(); // Obtener el seguro del socio Estandar
-        }
-
-        // Crear la nueva instancia de Inscripción
-        Inscripcion inscripcion = new Inscripcion(numInscripcion, socio, excursion, LocalDate.now(), seguro);
-
-        // Agregamos la inscripción a través del controlador
+        // Llamamos a addInscripcion en el controlador, con seguro opcional
         try {
-            controladorInscripcion.addInscripcion(inscripcion);
+            controladorInscripcion.addInscripcion(codigoExcursion, numSocio, tipoSeguro, precioSeguro);
             System.out.println("Inscripción añadida con éxito.");
-        } catch (InscripcionInvalidaExcepcion e) {
+        } catch (ControladorExcepcion e) {
             System.out.println("Error al añadir la inscripción: " + e.getMessage());
         }
     }
+
 
     //CASO 9:
     private void cancelarInscripcion(Scanner scanner) {
@@ -353,69 +336,38 @@ public class VistaPrincipal {
         System.out.print("Ingrese el código de la excursión para cancelar la inscripción: ");
         String codigoExcursion = scanner.nextLine();
 
-        // Buscar el socio correspondiente utilizando el ControladorSocio
-        Socio socio = controladorSocio.buscarSocio(numSocio);
-        if (socio == null) {
-            System.out.println("No se encontró un socio con el número proporcionado.");
-            return;
-        }
-
-        // Buscar la excursión correspondiente utilizando el ControladorExcursion
-        Excursion excursion = controladorExcursion.buscarExcursion(codigoExcursion);
-        if (excursion == null) {
-            System.out.println("No se encontró una excursión con el código proporcionado.");
-            return;
-        }
-
-        //Cancelamos la inscripción a través del controlador
         try {
-            controladorInscripcion.cancelarInscripcion(socio, excursion);
+            controladorInscripcion.cancelarInscripcion(numSocio, codigoExcursion);
             System.out.println("Inscripción cancelada con éxito.");
-        } catch (InscripcionInvalidaExcepcion e) {
+        } catch (ControladorExcepcion e) {
             System.out.println("Error al cancelar la inscripción: " + e.getMessage());
-        } catch (SocioNoEncontradoExcepcion e) {
-            System.out.println("Error: " + e.getMessage());
         }
     }
 
     // CASO 10:
     private void mostrarInscripciones() {
-        // Llamar al método del controlador para obtener la lista de inscripciones
-        List<Inscripcion> inscripciones = controladorInscripcion.mostrarInscripciones();
+        try {
+            List<Inscripcion> inscripciones = controladorInscripcion.mostrarInscripciones();
 
-        // Verificar si hay inscripciones
-        if (inscripciones.isEmpty()) {
-            System.out.println("No hay inscripciones registradas.");
-            return;
-        }
+            if (inscripciones.isEmpty()) {
+                System.out.println("No hay inscripciones registradas.");
+            } else {
+                System.out.println("Lista de Inscripciones:");
+                for (Inscripcion inscripcion : inscripciones) {
+                    String socioNombre = inscripcion.getSocio().getNombre();
+                    String excursionDescripcion = inscripcion.getExcursion().getDescripcion();
+                    String fechaExcursion = inscripcion.getExcursion().getFecha().toString();
+                    double importe = controladorInscripcion.calcularImporte(inscripcion);
 
-        System.out.println("Lista de Inscripciones:");
-
-        // Recorrer y mostrar cada inscripción
-        for (Inscripcion inscripcion : inscripciones) {
-            // Suponiendo que tienes métodos en Inscripcion, Socio y Excursion para obtener los detalles
-            int numSocio = inscripcion.getSocio().getNumSocio(); // Cambia según el método correcto
-            String nombre = ""; // Cambia según el método correcto para obtener el nombre del socio
-
-            // Obtener el nombre del socio según el tipo
-            if (inscripcion.getSocio() instanceof Estandar) {
-                nombre = ((Estandar) inscripcion.getSocio()).getNombre(); // Asegúrate de tener un método getNombre()
-            } else if (inscripcion.getSocio() instanceof Federado) {
-                nombre = ((Federado) inscripcion.getSocio()).getNombre(); // Asegúrate de tener un método getNombre()
-            } else if (inscripcion.getSocio() instanceof Infantil) {
-                nombre = ((Infantil) inscripcion.getSocio()).getNombre(); // Asegúrate de que tienes este método
+                    System.out.printf("Número de Inscripción: %s, Nombre del Socio: %s, Fecha de Excursión: %s, Descripción: %s, Importe: %.2f%n",
+                            inscripcion.getNumInscripcion(), socioNombre, fechaExcursion, excursionDescripcion, importe);
+                }
             }
-
-            // Obtener detalles de la excursión
-            String fechaExcursion = inscripcion.getExcursion().getFecha().toString(); // Asegúrate de que esto devuelve la fecha correctamente
-            String descripcionExcursion = inscripcion.getExcursion().getDescripcion();
-            double importe = controladorInscripcion.calcularImporte(inscripcion); // Método que calculará el importe con cargos o descuentos
-
-            // Imprime los detalles de la inscripción
-            System.out.printf("Número de Socio: %s, Nombre: %s, Fecha de Excursión: %s, Descripción: %s, Importe: %.2f%n",
-                    numSocio, nombre, fechaExcursion, descripcionExcursion, importe);
+        } catch (ControladorExcepcion e) {
+            System.out.println("Error al mostrar las inscripciones: " + e.getMessage());
         }
     }
+
 
     // Metodo para calcular el importe con cargos o descuentos aplicados
     private double calcularImporte(Inscripcion inscripcion) {
