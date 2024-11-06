@@ -1,11 +1,14 @@
 package backsolutions.vista;
 
 import backsolutions.controlador.ControladorExcursion;
-import backsolutions.modelo.Excursion;
+import backsolutions.controlador.ControladorExcepcion;
+import backsolutions.dto.ExcursionDTO;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class VistaExcursiones {
 
@@ -19,21 +22,19 @@ public class VistaExcursiones {
 
     public void mostrarMenu() {
         int opcion = 0;
-        while (opcion != 4) {
+        while (opcion != 3) {
             System.out.println("---- Menú Excursiones ----");
             System.out.println("1. Añadir excursión");
-            System.out.println("2. Mostrar todas las excursiones");
-            System.out.println("3. Filtrar excursiones por fecha");
-            System.out.println("4. Salir");
+            System.out.println("2. Filtrar o mostrar todas las excursiones");
+            System.out.println("3. Salir");
             System.out.print("Seleccione una opción: ");
             opcion = scanner.nextInt();
             scanner.nextLine(); // Limpiar buffer
 
             switch (opcion) {
                 case 1 -> addExcursion();
-                case 2 -> mostrarExcursiones();
-                case 3 -> filtrarExcursiones();
-                case 4 -> System.out.println("Saliendo del menú excursiones.");
+                case 2 -> filtrarExcursiones();
+                case 3 -> System.out.println("Saliendo del menú excursiones.");
                 default -> System.out.println("Opción no válida.");
             }
         }
@@ -56,38 +57,46 @@ public class VistaExcursiones {
         double precioInscripcion = scanner.nextDouble();
         scanner.nextLine(); // Limpiar buffer
 
-        // Crear el objeto Excursion
-        Excursion excursion = new Excursion(codigo, descripcion, fecha, numDias, precioInscripcion);
+        // Crear el ExcursionDTO para pasar al controlador
+        ExcursionDTO excursionDTO = new ExcursionDTO(codigo, descripcion, fecha, numDias, precioInscripcion);
 
-        // Añadir la excursión a través del controlador
         try {
-            controladorExcursion.addExcursion(excursion);
+            controladorExcursion.addExcursion(excursionDTO); // Usar ExcursionDTO
             System.out.println("Excursión añadida con éxito.");
-        } catch (backsolutions.controlador.ControladorExcepcion e) {
+        } catch (ControladorExcepcion e) {
             System.out.println(e.getMessage());
-        }
-    }
-
-    private void mostrarExcursiones() {
-        List<Excursion> excursiones = controladorExcursion.mostrarExcursiones();
-        if (excursiones.isEmpty()) {
-            System.out.println("No hay excursiones disponibles.");
-        } else {
-            excursiones.forEach(System.out::println);
         }
     }
 
     private void filtrarExcursiones() {
-        System.out.print("Ingrese la fecha de inicio (YYYY-MM-DD): ");
-        LocalDate inicio = LocalDate.parse(scanner.nextLine());
-        System.out.print("Ingrese la fecha de fin (YYYY-MM-DD): ");
-        LocalDate fin = LocalDate.parse(scanner.nextLine());
+        System.out.print("Ingrese la fecha de inicio (YYYY-MM-DD) o presione Enter para ver todas: ");
+        String inicioString = scanner.nextLine().trim();
+        LocalDate inicio = null;
+
+        System.out.print("Ingrese la fecha de fin (YYYY-MM-DD) o presione Enter para ver todas: ");
+        String finString = scanner.nextLine().trim();
+        LocalDate fin = null;
 
         try {
-            List<Excursion> filtradas = controladorExcursion.filtrarExcursiones(inicio, fin);
-            filtradas.forEach(System.out::println);
-        } catch (backsolutions.controlador.ControladorExcepcion e) {
-            System.out.println(e.getMessage());
+            DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            if (!inicioString.isEmpty()) {
+                inicio = LocalDate.parse(inicioString, formatoFecha);
+            }
+            if (!finString.isEmpty()) {
+                fin = LocalDate.parse(finString, formatoFecha);
+            }
+
+            List<ExcursionDTO> filtradas = controladorExcursion.filtrarExcursiones(inicio, fin);
+            if (filtradas.isEmpty()) {
+                System.out.println("No se encontraron excursiones en el rango de fechas proporcionado.");
+            } else {
+                filtradas.forEach(System.out::println);
+            }
+
+        } catch (DateTimeParseException e) {
+            System.out.println("Formato de fecha inválido. Use 'YYYY-MM-DD'.");
+        } catch (ControladorExcepcion e) {
+            System.out.println("Error al filtrar las excursiones: " + e.getMessage());
         }
     }
 }

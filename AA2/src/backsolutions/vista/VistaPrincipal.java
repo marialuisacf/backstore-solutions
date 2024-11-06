@@ -2,6 +2,7 @@ package backsolutions.vista;
 
 import backsolutions.controlador.*;
 import backsolutions.modelo.*;
+import backsolutions.dto.*;
 
 
 import java.time.LocalDate;
@@ -60,7 +61,7 @@ public class VistaPrincipal {
                     addExcursion(scanner);
                     break;
                 case 2:
-                    filtrarExcursiones(scanner);
+                    filtrarExcursiones();
                     break;
                 case 3:
                     addSocio(scanner);
@@ -97,38 +98,39 @@ public class VistaPrincipal {
         scanner.close();
     }
 
-    //CASO 1:
+    //CASO 1: Agregar Excursión
     private void addExcursion(Scanner scanner) {
-        // Solicitar al usuario los datos para crear la excursión
         System.out.print("Ingrese el código de la excursión: ");
         String codigo = scanner.next();
 
         System.out.print("Ingrese la descripción de la excursión: ");
-        String descripcion = scanner.next();
+        scanner.nextLine(); // Limpiar el buffer después de scanner.next()
+        String descripcion = scanner.nextLine(); // Captura toda la línea para la descripción
 
-        System.out.print("Ingrese la fecha de la excursión (dd-MM-yyyy): ");
-        String fechaString = scanner.next();
         LocalDate fecha = null;
-        try {
-            DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-            fecha = LocalDate.parse(fechaString, formatoFecha);
-        } catch (DateTimeParseException e) {
-            System.out.println("Formato de fecha inválido. Use 'dd-MM-yyyy'.");
-            return; // Salir si la fecha es inválida
+        while (fecha == null) {
+            System.out.print("Ingrese la fecha de la excursión (dd-MM-yyyy): ");
+            String fechaString = scanner.next();
+            try {
+                DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                fecha = LocalDate.parse(fechaString, formatoFecha);
+            } catch (DateTimeParseException e) {
+                System.out.println("Formato de fecha inválido. Use 'dd-MM-yyyy'. Intente de nuevo.");
+            }
         }
 
         System.out.print("Ingrese el número de días que dura la excursión: ");
-        int numDias = scanner.nextInt(); // Cambiado a nextInt()
+        int numDias = scanner.nextInt();
 
         System.out.print("Ingrese el precio de la inscripción: ");
         double precioInscripcion = scanner.nextDouble();
 
-        // Crear la instancia de Excursion
-        Excursion excursion = new Excursion(codigo, descripcion, fecha, numDias, precioInscripcion);
+        // Crear la instancia de ExcursionDTO
+        ExcursionDTO excursionDTO = new ExcursionDTO(codigo, descripcion, fecha, numDias, precioInscripcion);
 
         // Intentar agregar la excursión a través del controlador
         try {
-            controladorExcursion.addExcursion(excursion);
+            controladorExcursion.addExcursion(excursionDTO);
             System.out.println("Excursión añadida con éxito.");
         } catch (ControladorExcepcion e) {
             System.out.println("Error al añadir la excursión: " + e.getMessage());
@@ -136,36 +138,42 @@ public class VistaPrincipal {
     }
 
     //CASO 2:
-    private void filtrarExcursiones(Scanner scanner) {
-        System.out.print("Ingrese la fecha de inicio (dd-MM-yyyy): ");
-        String inicioString = scanner.next();
+    private void filtrarExcursiones() {
+        System.out.println("Ingrese las fechas para filtrar excursiones o presione Enter para ver todas:");
+
+        System.out.print("Fecha de inicio (dd-MM-yyyy) o Enter para mostrar todas las excursiones: ");
+        String inicioString = scanner.nextLine().trim();
         LocalDate inicio = null;
 
-        System.out.print("Ingrese la fecha de fin (dd-MM-yyyy): ");
-        String finString = scanner.next();
+        // Asegurarse de que el usuario tiene oportunidad de ingresar la fecha de fin
+        System.out.print("Fecha de fin (dd-MM-yyyy) o Enter para mostrar todas: ");
+        String finString = scanner.nextLine().trim();
         LocalDate fin = null;
 
         try {
             DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-            inicio = LocalDate.parse(inicioString, formatoFecha);
-            fin = LocalDate.parse(finString, formatoFecha);
-        } catch (DateTimeParseException e) {
-            System.out.println("Formato de fecha inválido. Use 'dd-MM-yyyy'.");
-            return; // Salir si las fechas son inválidas
-        }
 
-        // Filtramos excursiones a través del controlador
-        try {
-            List<Excursion> excursionesFiltradas = controladorExcursion.filtrarExcursiones(inicio, fin);
-            if (excursionesFiltradas.isEmpty()) {
+            if (!inicioString.isEmpty()) {
+                inicio = LocalDate.parse(inicioString, formatoFecha);
+            }
+            if (!finString.isEmpty()) {
+                fin = LocalDate.parse(finString, formatoFecha);
+            }
+
+            List<ExcursionDTO> filtradas = controladorExcursion.filtrarExcursiones(inicio, fin);
+            if (filtradas.isEmpty()) {
                 System.out.println("No se encontraron excursiones en el rango de fechas proporcionado.");
             } else {
-                excursionesFiltradas.forEach(System.out::println);
+                filtradas.forEach(System.out::println);
             }
+
+        } catch (DateTimeParseException e) {
+            System.out.println("Formato de fecha inválido. Use 'dd-MM-yyyy'.");
         } catch (ControladorExcepcion e) {
-            System.out.println("Error: " + e.getMessage());
+            System.out.println("Error al filtrar las excursiones: " + e.getMessage());
         }
     }
+
 
     //CASO 3:
     private void addSocio(Scanner scanner) {

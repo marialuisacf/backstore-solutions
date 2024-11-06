@@ -8,9 +8,6 @@ import java.util.ArrayList; // Importar ArrayList
 
 public class Main {
     public static void main(String[] args) {
-        // Crear listas vacías para Excursion e Inscripcion
-        ArrayList<Excursion> excursiones = new ArrayList<>();
-        ArrayList<Inscripcion> inscripciones = new ArrayList<>();
 
         // Crear el controlador de inscripciones primero
         ControladorInscripcion controladorInscripcion = new ControladorInscripcion();
@@ -19,7 +16,7 @@ public class Main {
         ControladorSocio controladorSocio = new ControladorSocio(controladorInscripcion);
 
         // Finalmente, crear el controlador de excursiones
-        ControladorExcursion controladorExcursion = new ControladorExcursion(excursiones);
+        ControladorExcursion controladorExcursion = new ControladorExcursion();
 
         // Crear la vista principal
         VistaPrincipal vista = new VistaPrincipal(controladorExcursion, controladorSocio, controladorInscripcion);

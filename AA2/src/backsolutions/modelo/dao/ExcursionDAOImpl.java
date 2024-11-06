@@ -5,6 +5,7 @@ import backsolutions.util.DatabaseConnection;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDate;
 
 public class ExcursionDAOImpl implements ExcursionDAO {
 
@@ -76,6 +77,40 @@ public class ExcursionDAOImpl implements ExcursionDAO {
             stmt.executeUpdate();
         }
     }
+
+    @Override
+    public List<Excursion> filtrarExcursiones(LocalDate inicio, LocalDate fin) throws SQLException {
+        String sql = "SELECT * FROM Excursiones";
+        List<Excursion> excursionesFiltradas = new ArrayList<>();
+
+        if (inicio != null && fin != null) {
+            sql += " WHERE fecha BETWEEN ? AND ?";
+        }
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            if (inicio != null && fin != null) {
+                stmt.setDate(1, Date.valueOf(inicio));
+                stmt.setDate(2, Date.valueOf(fin));
+            }
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    String codigo = rs.getString("codigo");
+                    String descripcion = rs.getString("descripcion");
+                    LocalDate fecha = rs.getDate("fecha").toLocalDate();
+                    int numDias = rs.getInt("numDias");
+                    double precioInscripcion = rs.getDouble("precioInscripcion");
+
+                    Excursion excursion = new Excursion(codigo, descripcion, fecha, numDias, precioInscripcion);
+                    excursionesFiltradas.add(excursion);
+                }
+            }
+        }
+        return excursionesFiltradas;
+    }
+
 
     @Override
     public void eliminarExcursion(String codigo) throws SQLException {

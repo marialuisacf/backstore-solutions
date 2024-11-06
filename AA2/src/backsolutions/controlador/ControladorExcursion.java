@@ -1,46 +1,65 @@
 package backsolutions.controlador;
 
+import backsolutions.dto.ExcursionDTO;
 import backsolutions.modelo.Excursion;
+import backsolutions.modelo.dao.ExcursionDAO;
+import backsolutions.modelo.dao.ExcursionDAOImpl;
+
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ControladorExcursion {
-    private List<Excursion> excursiones;
+    private ExcursionDAO excursionDAO;
 
-    public ControladorExcursion(List<Excursion> excursiones) {
-        this.excursiones = excursiones;
+    //constructor
+    public ControladorExcursion() {
+        this.excursionDAO = new ExcursionDAOImpl(); // Inicializamos el DAO
     }
 
     // Metodo para buscar una excursión por código
-    public Excursion buscarExcursion(String codigoExcursion) {
-        return excursiones.stream()
-                .filter(exc -> exc.getCodigo().equals(codigoExcursion))
-                .findFirst()
-                .orElse(null);
-    }
-
-    public void addExcursion(Excursion excursion) throws ControladorExcepcion {
-        if (excursiones.stream().anyMatch(e -> e.getCodigo().equals(excursion.getCodigo()))) {
-            throw new ControladorExcepcion("La excursión con código " + excursion.getCodigo() + " ya existe.");
+    public Excursion buscarExcursion(String codigo) throws ControladorExcepcion {
+        try {
+            return excursionDAO.buscarExcursion(codigo);
+        } catch (SQLException e) {
+            throw new ControladorExcepcion("Error al buscar la excursión: " + e.getMessage());
         }
-        excursiones.add(excursion);
     }
 
-
-
-    public List<Excursion> mostrarExcursiones() {
-        return excursiones;
-    }
-
-    public List<Excursion> filtrarExcursiones(LocalDate inicio, LocalDate fin) throws ControladorExcepcion {
-        List<Excursion> filtradas = excursiones.stream()
-                .filter(exc -> exc.getFecha().isAfter(inicio) && exc.getFecha().isBefore(fin))
-                .toList();
-
-        if (filtradas.isEmpty()) {
-            throw new ControladorExcepcion("No se encontraron excursiones en el rango de fechas proporcionado.");
+    //metodo para añadir una excursión usando ExcursionDTO
+    public void addExcursion(ExcursionDTO excursionDTO) throws ControladorExcepcion {
+        try {
+            // Convierte el ExcursionDTO en un objeto Excursion
+            Excursion excursion = new Excursion(
+                    excursionDTO.getCodigo(),
+                    excursionDTO.getDescripcion(),
+                    excursionDTO.getFecha(),
+                    excursionDTO.getNumDias(),
+                    excursionDTO.getPrecioInscripcion()
+            );
+            excursionDAO.guardarExcursion(excursion);
+        } catch (SQLException e) {
+            throw new ControladorExcepcion("Error al añadir la excursión: " + e.getMessage());
         }
-
-        return filtradas;
     }
+
+
+    //metodo para buscar excursiones por un filtro de fechas
+    public List<ExcursionDTO> filtrarExcursiones(LocalDate inicio, LocalDate fin) throws ControladorExcepcion {
+        try {
+            List<Excursion> excursiones = excursionDAO.filtrarExcursiones(inicio, fin);
+            return excursiones.stream()
+                    .map(exc -> new ExcursionDTO(
+                            exc.getCodigo(),
+                            exc.getDescripcion(),
+                            exc.getFecha(),
+                            exc.getNumDias(),
+                            exc.getPrecioInscripcion()))
+                    .collect(Collectors.toList());
+        } catch (SQLException e) {
+            throw new ControladorExcepcion("Error al filtrar las excursiones: " + e.getMessage());
+        }
+    }
+
 }
