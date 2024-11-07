@@ -2,7 +2,6 @@ package backsolutions.modelo;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import java.time.LocalDate;
 import backsolutions.controlador.*;
 
@@ -162,7 +161,7 @@ public class SenderosMontañas {
         }
     }
 
-    // Método para añadir inscripciones y verificar la inscripción
+    //metodo para añadir inscripciones y verificar la inscripción
     public void addInscripcion(String codigoExcursion, boolean esSocio, int numSocio, Seguro seguro) {
         // Buscar la excursión por su código
         Excursion excursion = excursiones.stream()
@@ -178,7 +177,7 @@ public class SenderosMontañas {
             throw new IllegalStateException("El usuario debe ser socio para inscribirse.");
         }
 
-        // Buscar el socio por su número
+        //buscar el socio por su identificador numSocio
         Socio socio = socios.stream()
                 .filter(s -> s.getNumSocio() == numSocio)
                 .findFirst()
@@ -189,21 +188,22 @@ public class SenderosMontañas {
         }
 
         String numInscripcion = generarNumeroInscripcion();
-        // Crear la inscripción con los detalles proporcionados
+        //para crear la inscripción con los detalles proporcionados
         Inscripcion inscripcion = new Inscripcion(numInscripcion, socio, excursion, LocalDate.now(), seguro);
 
         try {
-            // Asegurarse de que el seguro no es nulo antes de llamar al método del controlador
+            //aseguramos de que el seguro no es nulo antes de llamar al metodo del controlador
             String tipoSeguro = (seguro != null) ? seguro.getTipo() : null;
             double precioSeguro = (seguro != null) ? seguro.getPrecio() : 0.0;
 
-            // Llamar al controlador para añadir la inscripción con los datos correctos
+            //llamamos al controlador para añadir la inscripción con los datos correctos
             controladorInscripcion.addInscripcion(codigoExcursion, numSocio, tipoSeguro, precioSeguro);
-            System.out.println("Inscripción añadida correctamente.");
         } catch (InscripcionInvalidaExcepcion e) {
-            System.out.println("Error al añadir la inscripción: " + e.getMessage());
+            //propagamos la excepción para delegar el manejo de errores a la vista/controlador
+            throw new RuntimeException("Error al añadir la inscripción: " + e.getMessage());
         }
     }
+
 
 
     // Metodo para generar un número de inscripción único
