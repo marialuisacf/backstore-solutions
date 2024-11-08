@@ -100,8 +100,8 @@ public class FacturaDAOImpl implements FacturaDAO {
 
     //Metodo de utilidad para mapear los datos de ResultSet a un objeto Factura
     private Factura mapearFactura(ResultSet rs) throws SQLException {
-        int idFactura = rs.getInt("idFactura");
-        int numSocio = rs.getInt("numSocio");
+        int idFactura = rs.getInt("ID Factura");
+        int numSocio = rs.getInt("Numero de socio");
 
         // Obtener datos de la factura
         Socio socio = new SocioDAOImpl().buscarSocio(numSocio);

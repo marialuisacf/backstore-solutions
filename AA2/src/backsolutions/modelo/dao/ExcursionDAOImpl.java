@@ -32,11 +32,11 @@ public class ExcursionDAOImpl implements ExcursionDAO {
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return new Excursion(
-                        rs.getString("codigo"),
-                        rs.getString("descripcion"),
-                        rs.getDate("fecha").toLocalDate(),
-                        rs.getInt("numDias"),
-                        rs.getDouble("precioInscripcion")
+                        rs.getString("Codigo"),
+                        rs.getString("Descripcion"),
+                        rs.getDate("Fecha").toLocalDate(),
+                        rs.getInt("Numero de dias"),
+                        rs.getDouble("Precio")
                 );
             }
         }
@@ -52,11 +52,11 @@ public class ExcursionDAOImpl implements ExcursionDAO {
              ResultSet rs = stmt.executeQuery(query)) {
             while (rs.next()) {
                 Excursion excursion = new Excursion(
-                        rs.getString("codigo"),
-                        rs.getString("descripcion"),
-                        rs.getDate("fecha").toLocalDate(),
-                        rs.getInt("numDias"),
-                        rs.getDouble("precioInscripcion")
+                        rs.getString("Codigo"),
+                        rs.getString("Descripcion"),
+                        rs.getDate("Fecha").toLocalDate(),
+                        rs.getInt("Numero de dias"),
+                        rs.getDouble("Precio")
                 );
                 excursiones.add(excursion);
             }
@@ -97,11 +97,11 @@ public class ExcursionDAOImpl implements ExcursionDAO {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    String codigo = rs.getString("codigo");
-                    String descripcion = rs.getString("descripcion");
-                    LocalDate fecha = rs.getDate("fecha").toLocalDate();
-                    int numDias = rs.getInt("numDias");
-                    double precioInscripcion = rs.getDouble("precioInscripcion");
+                    String codigo = rs.getString("Codigo");
+                    String descripcion = rs.getString("Descripcion");
+                    LocalDate fecha = rs.getDate("Fecha").toLocalDate();
+                    int numDias = rs.getInt("Numero de dias");
+                    double precioInscripcion = rs.getDouble("Precio");
 
                     Excursion excursion = new Excursion(codigo, descripcion, fecha, numDias, precioInscripcion);
                     excursionesFiltradas.add(excursion);
@@ -136,11 +136,11 @@ public class ExcursionDAOImpl implements ExcursionDAO {
             ResultSet rs = stmt.executeQuery(); //recuperacion de resultados
 
             while (rs.next()) {
-                String codigo = rs.getString("codigo");
-                String descripcion = rs.getString("descripcion");
-                LocalDate fecha = rs.getDate("fecha").toLocalDate();
-                int numDias = rs.getInt("numDias");
-                double precioInscripcion = rs.getDouble("precioInscripcion");
+                String codigo = rs.getString("Codigo");
+                String descripcion = rs.getString("Descripcion");
+                LocalDate fecha = rs.getDate("Fecha").toLocalDate();
+                int numDias = rs.getInt("Numero de dias");
+                double precioInscripcion = rs.getDouble("Precio");
 
                 Excursion excursion = new Excursion(codigo, descripcion, fecha, numDias, precioInscripcion);
                 excursionesFiltradas.add(excursion);
