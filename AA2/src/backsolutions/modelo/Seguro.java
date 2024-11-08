@@ -70,9 +70,9 @@ public class Seguro {
      */
     @Override
     public String toString() {
-        return "especificaciones del seguro -> " +
-                "tipo='" + tipo + '\'' +
-                ", precio=" + precio +
+        return "Especificaciones del seguro -> " +
+                "Tipo='" + tipo + '\'' +
+                ", Precio=" + precio +
                 '.';
     }
 }

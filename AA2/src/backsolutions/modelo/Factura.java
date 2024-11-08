@@ -143,10 +143,10 @@ public class Factura {
      */
     @Override
     public String toString() {
-        return "Factura{" +
-                "idFactura=" + idFactura +
-                ", socio=" + socio +
-                ", inscripciones=" + inscripciones +
-                '}';
+        return "Factura" +
+                "ID Factura=" + idFactura +
+                ", Socio=" + socio +
+                ", Inscripciones=" + inscripciones +
+                '.';
     }
 }

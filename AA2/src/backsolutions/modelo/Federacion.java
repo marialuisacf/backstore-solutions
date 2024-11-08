@@ -68,9 +68,9 @@ public class Federacion {
      */
     @Override
     public String toString() {
-        return "backsolutions.modelo.Federacion{" +
-                "codigo='" + codigo + '\'' +
-                ", nombre='" + nombre + '\'' +
-                '}';
+        return "Federacion: " +
+                "Codigo='" + codigo + '\'' +
+                ", Nombre de la federacion='" + nombre + '\'' +
+                '.';
     }
 }

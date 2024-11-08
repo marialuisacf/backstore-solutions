@@ -149,9 +149,9 @@ public class Inscripcion {
         return "Inscripcion: " +
                 "Número de inscripción='" + numInscripcion + '\'' +
                 ", Socio=" + socio +
-                ", excursion=" + excursion +
-                ", fechaInscripcion=" + fechaInscripcion +
-                ", seguro=" + seguro +
+                ", Excursion=" + excursion +
+                ", Fecha de inscripcion=" + fechaInscripcion +
+                ", Seguro=" + seguro +
                 '.';
     }
 }
