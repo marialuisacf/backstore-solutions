@@ -8,16 +8,16 @@ import java.time.LocalDate;
 
 
 import backsolutions.modelo.dao.InscripcionDAO;
-import backsolutions.modelo.dao.InscripcionDAOImpl;
 import backsolutions.modelo.dao.ExcursionDAOImpl;
+import backsolutions.modelo.dao.DAOFactoryProvider;
 
 
 public class ControladorInscripcion {
-    private InscripcionDAO inscripcionDAO; //declaramos el atributo inscripcionDAO
+    private final InscripcionDAO inscripcionDAO; //declaramos el atributo inscripcionDAO
 
     //Constructor
     public ControladorInscripcion() {
-        this.inscripcionDAO = new InscripcionDAOImpl();
+        this.inscripcionDAO = DAOFactoryProvider.getDAOFactory().getInscripcionDAO(); // Obtener el DAO de Factory
     }
 
 

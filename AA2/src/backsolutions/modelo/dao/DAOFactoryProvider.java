@@ -6,5 +6,5 @@ public class DAOFactoryProvider {
     public static DAOFactory getDAOFactory() {
         return new MySQLDAOFactory();
     }
-    
+
 }

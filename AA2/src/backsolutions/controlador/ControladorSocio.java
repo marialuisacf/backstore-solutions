@@ -2,16 +2,16 @@ package backsolutions.controlador;
 
 import backsolutions.modelo.*;
 import backsolutions.modelo.dao.SocioDAO;
-import backsolutions.modelo.dao.SocioDAOImpl;
+import backsolutions.modelo.dao.DAOFactoryProvider;
 import java.sql.SQLException;
 import java.util.List;
 
 public class ControladorSocio {
-    private SocioDAO socioDAO;
-    private ControladorInscripcion controladorInscripcion;
+    private final SocioDAO socioDAO;
+    private final ControladorInscripcion controladorInscripcion;
 
     public ControladorSocio(ControladorInscripcion controladorInscripcion) {
-        this.socioDAO = new SocioDAOImpl(); // Inicializamos SocioDAO
+        this.socioDAO = DAOFactoryProvider.getDAOFactory().getSocioDAO(); // Obtener el DAO de DAOFactoryProvider
         this.controladorInscripcion = controladorInscripcion;
     }
 

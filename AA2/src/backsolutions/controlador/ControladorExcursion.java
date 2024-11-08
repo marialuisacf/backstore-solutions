@@ -3,7 +3,7 @@ package backsolutions.controlador;
 import backsolutions.dto.ExcursionDTO;
 import backsolutions.modelo.Excursion;
 import backsolutions.modelo.dao.ExcursionDAO;
-import backsolutions.modelo.dao.ExcursionDAOImpl;
+import backsolutions.modelo.dao.DAOFactoryProvider;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -11,11 +11,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ControladorExcursion {
-    private ExcursionDAO excursionDAO;
+    private final ExcursionDAO excursionDAO;
 
     //constructor
     public ControladorExcursion() {
-        this.excursionDAO = new ExcursionDAOImpl(); // Inicializamos el DAO
+        this.excursionDAO = DAOFactoryProvider.getDAOFactory().getExcursionDAO(); // Obtener el DAO de DAOFactoryProvider
     }
 
     // Metodo para buscar una excursión por código
