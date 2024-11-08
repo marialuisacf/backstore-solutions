@@ -154,4 +154,28 @@ public class SocioDAOImpl implements SocioDAO {
         return socios;
     }
 
+    public double generarFacturaMensual(int socioId) throws SQLException {
+        String sql = "{ CALL GenerarFacturaMensual(?, ?) }";
+        try (Connection conn = DatabaseConnection.getConnection();
+             CallableStatement stmt = conn.prepareCall(sql)) {
+
+            stmt.setInt(1, socioId);
+            stmt.registerOutParameter(2, Types.DECIMAL);
+
+            stmt.execute();
+            return stmt.getDouble(2);
+        }
+    }
+
+    public void actualizarSeguro(int numSocio, String tipoSeguro, double precioSeguro, Connection conn) throws SQLException {
+        String sql = "UPDATE Socios SET seguroTipo = ?, precioSeguro = ? WHERE numSocio = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, tipoSeguro);
+            stmt.setDouble(2, precioSeguro);
+            stmt.setInt(3, numSocio);
+            stmt.executeUpdate();
+        }
+    }
+
+
 }

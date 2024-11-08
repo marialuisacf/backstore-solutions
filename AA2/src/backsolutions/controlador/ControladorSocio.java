@@ -5,6 +5,8 @@ import backsolutions.modelo.dao.SocioDAO;
 import backsolutions.modelo.dao.DAOFactoryProvider;
 import java.sql.SQLException;
 import java.util.List;
+import java.sql.Connection;
+import backsolutions.util.DatabaseConnection;
 
 public class ControladorSocio {
     private final SocioDAO socioDAO;
@@ -52,18 +54,38 @@ public class ControladorSocio {
 
     //Metodo para buscar y actualizar el seguro de un socio estándar en la BD
     public void modificarSeguro(int numSocio, String nuevoTipoSeguro, double nuevoPrecioSeguro) throws ControladorExcepcion {
+        Connection conn = null;
         try {
-            Socio socio = socioDAO.buscarSocio(numSocio);
+            conn = DatabaseConnection.getConnection();
+            conn.setAutoCommit(false);  // Iniciar transacción
 
-            if (socio instanceof Estandar) {
-                Estandar socioEstandar = (Estandar) socio;
-                socioEstandar.modificarSeguro(nuevoTipoSeguro, nuevoPrecioSeguro);
-                socioDAO.actualizarSocio(socioEstandar); // Guardamos los cambios en la BD
-            } else {
-                throw new ControladorExcepcion("El socio con el número " + numSocio + " no es de tipo Estándar.");
+            // Recuperar y verificar que el socio sea de tipo estándar
+            Socio socio = socioDAO.buscarSocio(numSocio);
+            if (!(socio instanceof Estandar)) {
+                throw new ControladorExcepcion("El socio no es de tipo estándar.");
             }
+
+            // Actualizar el seguro del socio
+            socioDAO.actualizarSeguro(numSocio, nuevoTipoSeguro, nuevoPrecioSeguro, conn);
+
+            conn.commit();  // Confirmar transacción
         } catch (SQLException e) {
-            throw new ControladorExcepcion("Error al modificar el seguro: " + e.getMessage());
+            if (conn != null) {
+                try {
+                    conn.rollback();  // Deshacer cambios en caso de error
+                } catch (SQLException ex) {
+                    throw new ControladorExcepcion("Error al hacer rollback: " + ex.getMessage());
+                }
+            }
+            throw new ControladorExcepcion("Error al modificar el seguro del socio: " + e.getMessage());
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();  // Cerrar la conexión
+                } catch (SQLException ex) {
+                    throw new ControladorExcepcion("Error al cerrar la conexión: " + ex.getMessage());
+                }
+            }
         }
     }
 

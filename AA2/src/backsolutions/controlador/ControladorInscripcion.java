@@ -2,10 +2,11 @@ package backsolutions.controlador;
 
 import backsolutions.modelo.*;
 import backsolutions.modelo.dao.*;
+import backsolutions.util.DatabaseConnection;
 import java.sql.SQLException;
 import java.util.List;
 import java.time.LocalDate;
-
+import java.sql.Connection;
 
 import backsolutions.modelo.dao.InscripcionDAO;
 import backsolutions.modelo.dao.ExcursionDAOImpl;
@@ -21,30 +22,35 @@ public class ControladorInscripcion {
     }
 
 
-    //metodo para añadir inscripciones con excepciones personalizadas
+    //Metodo para añadir inscripciones de un socio a una excursion
     public void addInscripcion(String codigoExcursion, int numSocio, String tipoSeguro, double precioSeguro) throws ControladorExcepcion {
-        try {
-            // Verificar si la excursión existe en la BD
+
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            conn.setAutoCommit(false); //Inicio de la transaccion. El metodo establece conexion con la BD y desactiva autocommit
+            //para que los cambios no se guarden de inmediato, para ejecutar todas las operaciones en 1 unica transaccion.
+
+            //verifica si la excursion existe para asegurar que se realizan inscripciones en excursiones validas
             Excursion excursion = new ExcursionDAOImpl().buscarExcursion(codigoExcursion);
             if (excursion == null) {
                 throw new ControladorExcepcion("La excursión con código " + codigoExcursion + " no existe.");
             }
-
-            // Verificar si el socio existe en la BD
+            //verifica si el socio existe, si no existe lanza ControladorExcepcion garantizando que solo los socios validos se inscriban
             Socio socio = new SocioDAOImpl().buscarSocio(numSocio);
             if (socio == null) {
                 throw new ControladorExcepcion("No se encontró un socio con el número proporcionado.");
             }
 
-            // Crear una instancia de Seguro si el tipo y precio son válidos
+            //creacion seguro opcional, si tipoSeguro es null, el seguro sera null para indicar que no hay seguro para la inscripcion
             Seguro seguro = (tipoSeguro != null) ? new Seguro(tipoSeguro, precioSeguro) : null;
+            String numInscripcion = "INS" + System.currentTimeMillis(); //generacion de un numero de inscripcion único
+            Inscripcion inscripcion = new Inscripcion(numInscripcion, socio, excursion, LocalDate.now(), seguro); //creacion de la inscripcion
 
-            // Crear la inscripción con una fecha de inscripción actual
-            String numInscripcion = "INS" + System.currentTimeMillis();  // Generación de un número de inscripción único
-            Inscripcion inscripcion = new Inscripcion(numInscripcion, socio, excursion, LocalDate.now(), seguro);
+            //guardar la inscripcion en la BD
+            new InscripcionDAOImpl().guardarInscripcion(inscripcion);
 
-            // Guardar la inscripción en la BD usando inscripcionDAO
-            inscripcionDAO.guardarInscripcion(inscripcion);
+            //Confirmacion de la transaccion
+            conn.commit(); //si todas las operaciones anteriores han sido exitosas se confirma la transaccion 'commit' guardando los cambios en BD
+            //si algo falla antes de este punto, la transaccion se revierte automaticamente
         } catch (SQLException e) {
             throw new ControladorExcepcion("Error al guardar la inscripción: " + e.getMessage());
         }

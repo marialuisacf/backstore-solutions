@@ -121,4 +121,33 @@ public class ExcursionDAOImpl implements ExcursionDAO {
             stmt.executeUpdate();
         }
     }
+
+    public List<Excursion> filtrarExcursionesPorFecha(LocalDate fechaInicio, LocalDate fechaFin) throws SQLException {
+        String sql = "{ CALL FiltrarExcursiones(?, ?) }";  //los ? ? representan los parametros fechaInicio fechaFin
+        List<Excursion> excursionesFiltradas = new ArrayList<>();
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             //utilizamos callablestatement para llamar al procedimiento almacenado en MySQL
+             CallableStatement stmt = conn.prepareCall(sql)) {
+
+            stmt.setDate(1, Date.valueOf(fechaInicio)); //convertimos los valores de LocalDate a java.sql.Date
+            stmt.setDate(2, Date.valueOf(fechaFin));//para que sean compatibles con JDBC y el procedimiento almacenado
+
+            ResultSet rs = stmt.executeQuery(); //recuperacion de resultados
+
+            while (rs.next()) {
+                String codigo = rs.getString("codigo");
+                String descripcion = rs.getString("descripcion");
+                LocalDate fecha = rs.getDate("fecha").toLocalDate();
+                int numDias = rs.getInt("numDias");
+                double precioInscripcion = rs.getDouble("precioInscripcion");
+
+                Excursion excursion = new Excursion(codigo, descripcion, fecha, numDias, precioInscripcion);
+                excursionesFiltradas.add(excursion);
+            }
+        }
+
+        return excursionesFiltradas;
+    }
+
 }
