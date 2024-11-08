@@ -32,7 +32,7 @@ public class SeguroDAOImpl implements SeguroDAO {
             stmt.setString(1, tipo);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return new Seguro(rs.getString("Tipo"), rs.getDouble("Precio"));
+                return new Seguro(rs.getString("tipo"), rs.getDouble("precio"));
             }
             return null;
         }
@@ -46,7 +46,7 @@ public class SeguroDAOImpl implements SeguroDAO {
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(SELECT_ALL_SEGUROS)) {
             while (rs.next()) {
-                seguros.add(new Seguro(rs.getString("Tipo"), rs.getDouble("Precio")));
+                seguros.add(new Seguro(rs.getString("tipo"), rs.getDouble("precio")));
             }
         }
         return seguros;

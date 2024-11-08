@@ -111,12 +111,12 @@ public class InscripcionDAOImpl implements InscripcionDAO {
     }
 
     private Inscripcion mapearInscripcion(ResultSet rs) throws SQLException {
-        String numInscripcion = rs.getString("Numero Inscripcion");
-        int numSocio = rs.getInt("Numero Socio");
-        String codigoExcursion = rs.getString("Codigo Excursion");
-        Date fechaInscripcion = rs.getDate("Fecha Inscripcion");
-        String tipoSeguro = rs.getString("Tipo Seguro");
-        double precioSeguro = rs.getDouble("Precio del seguro");
+        String numInscripcion = rs.getString("numInscripcion");
+        int numSocio = rs.getInt("numSocio");
+        String codigoExcursion = rs.getString("codigoExcursion");
+        Date fechaInscripcion = rs.getDate("fechaInscripcion");
+        String tipoSeguro = rs.getString("tipoSeguro");
+        double precioSeguro = rs.getDouble("seguroPrecio");
 
         Socio socio = new SocioDAOImpl().buscarSocio(numSocio);
         Excursion excursion = new ExcursionDAOImpl().buscarExcursion(codigoExcursion);

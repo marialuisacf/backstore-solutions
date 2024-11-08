@@ -66,22 +66,22 @@ public class SocioDAOImpl implements SocioDAO {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                String tipo = rs.getString("Tipo");
-                String nombre = rs.getString("Nombre");
+                String tipo = rs.getString("tipo");
+                String nombre = rs.getString("nombre");
 
                 switch (tipo) {
                     case "Estandar":
                         // Recuperar seguro
-                        String seguroTipo = rs.getString("Tipo de Seguro");
-                        double precioSeguro = rs.getDouble("Precio del Seguro");
+                        String seguroTipo = rs.getString("seguroTipo");
+                        double precioSeguro = rs.getDouble("precioSeguro");
                         Seguro seguro = new Seguro(seguroTipo, precioSeguro);
-                        return new Estandar(numSocio, nombre, rs.getString("NIF"), seguro);
+                        return new Estandar(numSocio, nombre, rs.getString("nif"), seguro);
                     case "Federado":
-                        String codigoFederacion = rs.getString("Codigo Federacion");
-                        Federacion federacion = new Federacion(codigoFederacion, rs.getString("Nombre Federacion"));
-                        return new Federado(numSocio, nombre, rs.getString("NIF"), federacion);
+                        String codigoFederacion = rs.getString("codigoFederacion");
+                        Federacion federacion = new Federacion(codigoFederacion, rs.getString("nombreFederacion"));
+                        return new Federado(numSocio, nombre, rs.getString("nif"), federacion);
                     case "Infantil":
-                        return new Infantil(numSocio, nombre, rs.getString("Numero socio del Tutor"));
+                        return new Infantil(numSocio, nombre, rs.getString("numSocioTutor"));
                 }
             }
         }
@@ -127,25 +127,25 @@ public class SocioDAOImpl implements SocioDAO {
 
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                int numSocio = rs.getInt("Numero Socio");
-                String nombre = rs.getString("Nombre");
-                String tipo = rs.getString("Tipo");
+                int numSocio = rs.getInt("numSocio");
+                String nombre = rs.getString("nombre");
+                String tipo = rs.getString("tipo");
 
                 Socio socio = null;
                 switch (tipo) {
                     case "Estandar":
-                        String seguroTipo = rs.getString("Tipo de Seguro");
-                        double precioSeguro = rs.getDouble("Precio Seguro");
+                        String seguroTipo = rs.getString("seguroTipo");
+                        double precioSeguro = rs.getDouble("precioSeguro");
                         Seguro seguro = new Seguro(seguroTipo, precioSeguro);
                         socio = new Estandar(numSocio, nombre, rs.getString("nif"), seguro);
                         break;
                     case "Federado":
-                        String codigoFederacion = rs.getString("Codigo Federacion");
-                        Federacion federacion = new Federacion(codigoFederacion, rs.getString("Nombre Federacion"));
-                        socio = new Federado(numSocio, nombre, rs.getString("NIF"), federacion);
+                        String codigoFederacion = rs.getString("codigoFederacion");
+                        Federacion federacion = new Federacion(codigoFederacion, rs.getString("nombreFederacion"));
+                        socio = new Federado(numSocio, nombre, rs.getString("nif"), federacion);
                         break;
                     case "Infantil":
-                        socio = new Infantil(numSocio, nombre, rs.getString("Numero socio del Tutor"));
+                        socio = new Infantil(numSocio, nombre, rs.getString("numSocioTutor"));
                         break;
                 }
                 socios.add(socio);
@@ -166,7 +166,7 @@ public class SocioDAOImpl implements SocioDAO {
             return stmt.getDouble(2);
         }
     }
-
+    
     public void actualizarSeguro(int numSocio, String tipoSeguro, double precioSeguro, Connection conn) throws SQLException {
         String sql = "UPDATE Socios SET seguroTipo = ?, precioSeguro = ? WHERE numSocio = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {

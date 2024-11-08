@@ -29,7 +29,7 @@ public class FederacionDAOImpl implements FederacionDAO {
             pstmt.setString(1, codigo);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                return new Federacion(rs.getString("Codigo"), rs.getString("Nombre federacion"));
+                return new Federacion(rs.getString("codigo"), rs.getString("nombre"));
             }
             return null;
         }
@@ -42,7 +42,7 @@ public class FederacionDAOImpl implements FederacionDAO {
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(SELECT_ALL_FEDERACIONES)) {
             while (rs.next()) {
-                Federacion federacion = new Federacion(rs.getString("Codigo"), rs.getString("Nombre federacion"));
+                Federacion federacion = new Federacion(rs.getString("codigo"), rs.getString("nombre"));
                 federaciones.add(federacion);
             }
         }
