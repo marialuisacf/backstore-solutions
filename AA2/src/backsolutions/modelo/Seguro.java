@@ -1,15 +1,25 @@
 package backsolutions.modelo;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+
 /**
  * Se crea la clase backsolutions.modelo.Seguro
  */
+@Embeddable
 public class Seguro {
 
     /**
      * Atributos de la clase backsolutions.modelo.Seguro
      */
+    @Column(name = "tipoSeguro", nullable = true)
     private String tipo;
+
+    @Column(name = "precioSeguro", nullable = true)
     private double precio;
+
+    //Constructor vacio para JPA
+    public Seguro() {}
 
     //Constructor de la clase backsolutions.modelo.Seguro con los parámetros necesarios para inicializar un seguro
 
