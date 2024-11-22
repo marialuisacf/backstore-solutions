@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
+             version="3.0">
+    <persistence-unit name="SenderosMontanasPU" transaction-type="RESOURCE_LOCAL">
+        <!-- Clases Entidades JPA -->
+        <class>backsolutions.modelo.Datos</class>
+        <class>backsolutions.modelo.DetallesFactura</class>
+        <class>backsolutions.modelo.Estandar</class>
+        <class>backsolutions.modelo.Excursion</class>
+        <class>backsolutions.modelo.Factura</class>
+        <class>backsolutions.modelo.Federacion</class>
+        <class>backsolutions.modelo.Federado</class>
+        <class>backsolutions.modelo.Infantil</class>
+        <class>backsolutions.modelo.Inscripcion</class>
+        <class>backsolutions.modelo.Lista</class>
+        <class>backsolutions.modelo.Seguro</class>
+        <class>backsolutions.modelo.SenderosMontañas</class>
+        <class>backsolutions.modelo.Socio</class>
+
+        <properties>
+            <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/senderos_montanas"/>
+            <property name="jakarta.persistence.jdbc.user" value="developer"/>
+            <property name="jakarta.persistence.jdbc.password" value="Poobbdd.1"/>
+
+            <!-- Opcional: configuración de Hibernate -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.show_sql" value="true"/>
+        </properties>
+    </persistence-unit>
+</persistence>

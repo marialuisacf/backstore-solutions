@@ -1,7 +1,14 @@
 package backsolutions.modelo;
 
+import jakarta.persistence.*;
+
 import java.util.ArrayList;
 import java.util.List;
+
+@Entity
+@Table(name = "socios") //Nombre de la tabla en la BD
+@Inheritance(strategy = InheritanceType.JOINED) //para manejar la herencia en la BD
+@DiscriminatorColumn(name = "tipo", discriminatorType = DiscriminatorType.STRING) //decidimos mantener tipo, por ello mapeamos el discriminador
 
 /**
  * Se crea la clase abstracta backsolutions.modelo.Socio
@@ -12,12 +19,27 @@ public abstract class Socio {
     /**
      * Atributos de la clase asbtracta backsolutions.modelo.Socio
      */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //Autonumerico
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "numSocio", nullable = false, unique = true)
     private int numSocio;
+
+    @Column(name = "nombre", nullable = false)
     private String nombre;
-    private List<Inscripcion> inscripciones;
+
+    @Column(name = "tipo", nullable = false)
+    private String tipo;
+
+    @OneToMany(mappedBy = "socio", cascade = CascadeType.ALL, orphanRemoval = true) // Relación con Inscripcion de uno a muchos
+    private List<Inscripcion> inscripciones = new ArrayList<>();
+
+    //Constructor vacio obligatorio para JPA
+    public Socio() {}
 
     //Constructor de la clase backsolutions.modelo.Socio con los parámetros necesarios para inicializar un backsolutions.modelo.Socio
-
     /**
      * Atributos de la clase backsolutions.modelo.Socio añadidos en el constructor
      * @param numSocio parámetro distintivo del número de socio
@@ -26,10 +48,18 @@ public abstract class Socio {
     public Socio(int numSocio, String nombre) {
         this.numSocio = numSocio;
         this.nombre = nombre;
-        this.inscripciones = new ArrayList<Inscripcion>(); //inicializa la lista de inscripciones
+        this.inscripciones = new ArrayList<>();
     }
 
     //Getter y Setter
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     /**
      * Getter de numSocio
@@ -60,6 +90,11 @@ public abstract class Socio {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
     /**
      * Getter de inscripciones
      * @return devuelve las inscripciones si han sido encontradas
@@ -73,6 +108,19 @@ public abstract class Socio {
      */
     public void setInscripciones(List<Inscripcion> inscripciones) {
         this.inscripciones = inscripciones;
+    }
+
+    // Metodos equals y hashCode basados en numSocio, para que se basen en un identificador unico y no en atributos cambiantes
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Socio)) return false;
+        Socio other = (Socio) obj;
+        return numSocio == other.numSocio;
+    }
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(numSocio);
     }
 
     //Métodos de la clase backsolutions.modelo.Socio
@@ -103,7 +151,7 @@ public abstract class Socio {
     }
 
     /**
-     * Método getTipo
+     * Metodo getTipo
      * @return devuelve el tipo de socio, que es específico para cada subclase del socio
      * (backsolutions.modelo.Estandar, backsolutions.modelo.Federado, backsolutions.modelo.Infantil)
      */

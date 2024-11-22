@@ -1,23 +1,43 @@
 package backsolutions.modelo;
 
+import jakarta.persistence.*;
 import java.time.LocalDate;
 
 /**
  * Se crea la clase backsolutions.modelo.Excursion
  */
 
+@Entity
+@Table(name = "excursiones") //Nombre de la tabla en la BD
+
 public class Excursion {
     /**
      * Atributos de la clase backsolutions.modelo.Excursion
      */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //Autonumerico
+    @Column(name = "id") //columna en la tabla
+    private Long id;
+
+    @Column (name = "codigo", nullable = false, unique = true)
     private String codigo;
+
+    @Column (name = "descripcion", nullable = false)
     private String descripcion;
+
+    @Column (name = "fecha", nullable = false)
     private LocalDate fecha;
+
+    @Column (name = "numDias", nullable = false)
     private int numDias;
+
+    @Column (name = "precioInscripcion", nullable = false)
     private double precioInscripcion;
 
-    //Constructor de la clase backsolutions.modelo.Excursion con los parámetros necesarios para inicializar una excursion
+    //Constructor vacio obligatorio para JPA
+    public Excursion() {}
 
+    //Constructor completo de la clase backsolutions.modelo.Excursion con los parámetros necesarios para inicializar una excursion
     /**
      * Atributos de la clase backsolutions.modelo.Excursion añadidos al constructor
      * @param codigo parámetro identificativo del codigo de la excursion
@@ -40,6 +60,15 @@ public class Excursion {
      * Getter de codigo
      * @return devuelve el código de la excursión
      */
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getCodigo() {
         return codigo;
     }

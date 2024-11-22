@@ -1,6 +1,11 @@
 package backsolutions.modelo;
 
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
+
+@Entity
+@Table (name = "inscripciones") //nombre de la tabla en la BD
 /**
  * Se crea la clase backsolutions.modelo.Inscripcion
  */
@@ -10,30 +15,80 @@ public class Inscripcion {
     /**
      * Atributos de la clase backsolutions.modelo.Inscripcion
      */
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)//Autonumerico
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "numInscripcion", nullable = false, unique = true)
     private String numInscripcion;
+
+    @ManyToOne
+    @JoinColumn (name = "numSocio", nullable = false) //clave FORANEA hacia SOCIO
     private Socio socio;
+
+    @ManyToOne
+    @JoinColumn(name = "codigoExcursion", nullable = false)//clave Foranea hacia Excursion
     private Excursion excursion;
+
+    @Column(name = "fechaInscripcion", nullable = false)
     private LocalDate fechaInscripcion;
-    private Seguro seguro; //Atributo para el seguro contratado (opcional para algunos socios como Federado o Infantil)
+
+    @Column(name = "tipoSeguro")
+    private String tipoSeguro;
+
+    @Column(name = "seguroPrecio")
+    private double seguroPrecio;
+
+
+    // Constructor vacío obligatorio para JPA
+    public Inscripcion() {}
 
     //Constructor de la clase Inscripción con los parámetros necesarios para inicializar una inscripción
-
     /**
      * Constructor de la clase Inscripcion
      * @param numInscripcion parámetro identificativo del número de la inscricion
      * @param socio parámetro que identifica al socio que realiza la inscripcion
      * @param excursion parámetro que identifica la excursion a la que se inscribe el socio
      * @param fechaInscripcion identifica la fecha en la que se realizó la inscripción
-     * @param seguro identifica el seguro del socio Estandar.
+     * @param tipoSeguro
+     * @param seguroPrecio
      */
-    public Inscripcion(String numInscripcion, Socio socio, Excursion excursion, LocalDate fechaInscripcion, Seguro seguro) {
+    public Inscripcion(String numInscripcion, Socio socio, Excursion excursion, LocalDate fechaInscripcion, String tipoSeguro, double seguroPrecio) {
         this.numInscripcion = numInscripcion;
         this.socio = socio;
         this.excursion = excursion;
         this.fechaInscripcion = fechaInscripcion;
-        this.seguro = seguro;
+        this.tipoSeguro = tipoSeguro;
+        this.seguroPrecio = seguroPrecio;
     }
+
     //Getter y Setter
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTipoSeguro() {
+        return tipoSeguro;
+    }
+
+    public void setTipoSeguro(String tipoSeguro) {
+        this.tipoSeguro = tipoSeguro;
+    }
+
+    public double getSeguroPrecio() {
+        return seguroPrecio;
+    }
+
+    public void setSeguroPrecio(double seguroPrecio) {
+        this.seguroPrecio = seguroPrecio;
+    }
 
     /**
      * Getter de numInscripcion
@@ -93,21 +148,7 @@ public class Inscripcion {
         this.fechaInscripcion = fechaInscripcion;
     }
 
-    /**
-     * Getter de seguro
-     * @return devuelve el precio del seguro contratado por el socio Estandar
-     */
-    public Seguro getSeguro() {
-        return seguro;
-    }
 
-    /**
-     * Setter seguro
-     * @param seguro parámetro del seguro contratado
-     */
-    public void setSeguro(Seguro seguro) {
-        this.seguro = seguro;
-    }
 
     //Métodos de la clase Inscripcion
 
@@ -119,13 +160,10 @@ public class Inscripcion {
         double precioExcursion = excursion.calculoPrecioExcursion(socio);
 
         if (socio instanceof Estandar) {
-            //Los socios estándar deben contratar un seguro, se suma al precio de la excursión
-            return precioExcursion + seguro.getPrecio();
+            return precioExcursion + seguroPrecio;
         } else if (socio instanceof Federado || socio instanceof Infantil) {
-            //Los socios federados e infantiles no pagan seguro, solo el precio de la excursión
             return precioExcursion;
         } else {
-            //Caso por defecto para cualquier otro tipo de socio
             return precioExcursion;
         }
     }
@@ -146,12 +184,13 @@ public class Inscripcion {
      */
     @Override
     public String toString() {
-        return "Inscripcion: " +
-                "Número de inscripción='" + numInscripcion + '\'' +
-                ", Socio=" + socio +
-                ", Excursion=" + excursion +
-                ", Fecha de inscripcion=" + fechaInscripcion +
-                ", Seguro=" + seguro +
-                '.';
+        return "Inscripcion:" +
+                "Numero de inscripcion='" + numInscripcion + '\'' +
+                ", Socio=" + socio.getNombre() +
+                ", Excursion=" + excursion.getDescripcion() +
+                ", Fecha de Inscripcion=" + fechaInscripcion +
+                ", Tipo de Seguro='" + tipoSeguro + '\'' +
+                ", Precio del seguro=" + seguroPrecio +
+                '}';
     }
 }
