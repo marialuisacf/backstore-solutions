@@ -19,7 +19,7 @@ public class Federado extends Socio {
     private String nif;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "codigoFederacion", referencedColumnName = "codigo", nullable = true)
+    @JoinColumn(name = "codigoFederacion", referencedColumnName = "codigo")
     private Federacion federacion;
 
     // Constructor vacío obligatorio para JPA

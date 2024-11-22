@@ -1,5 +1,10 @@
 package backsolutions.modelo;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "federaciones")
+
 /**
  * Se crea la clase Federación
  */
@@ -9,8 +14,15 @@ public class Federacion {
     /**
      * Atributos de la clase Federación
      */
+    @Id
+    @Column(name = "codigo", nullable = false, unique = true)
     private String codigo;
+
+    @Column(name = "nombre", nullable = false)
     private String nombre;
+
+    //Constructor vacio para JPA
+    public Federacion() {}
 
     //Constructor de la clase Federación con los parámetros necesarios para inicializar una federación
 
