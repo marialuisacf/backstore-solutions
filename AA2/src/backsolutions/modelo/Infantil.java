@@ -1,7 +1,13 @@
 package backsolutions.modelo;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+
 import java.util.List;
 
+@Entity
+@DiscriminatorValue("Infantil")
 /**
  * Se crea la clase backsolutions.modelo.Infantil
  */
@@ -11,7 +17,13 @@ public class Infantil extends Socio {
     /**
      * Atributos de la clase backsolutions.modelo.Infantil
      */
+    @Column(name = "numSocioTutor", nullable = true)
     private String numSocioTutor;
+
+    // Constructor vacio para JPA
+    public Infantil() {
+        super();
+    }
 
     //Constructor de la clase backsolutions.modelo.Infantil con los parámetros necesarios para inicializar un socio infantil
 

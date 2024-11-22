@@ -1,6 +1,13 @@
 package backsolutions.modelo;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+
 import java.util.List;
+@Entity
+@DiscriminatorValue("Estandar") // valor de discriminador en la herencia
 
 /**
  * Se crea la clase backsolutions.modelo.Estandar
@@ -11,8 +18,16 @@ public class Estandar extends Socio {
     /**
      * Atributos de la clase backsolutions.modelo.Estandar
      */
+    @Column(name = "nif", nullable = false)
     private String nif;
-    private Seguro seguro;
+
+    @Embedded
+    private Seguro seguro; //para una blase embebida
+
+    //constructor vacio para JPA
+    public Estandar() {
+        super();
+    }
 
     //Constructor de la clase backsolutions.modelo.Estandar con los parámetros necesarios para inicializar un socio estandar
 

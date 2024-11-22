@@ -1,18 +1,31 @@
 package backsolutions.modelo;
 
+import jakarta.persistence.*;
+
 import java.util.List;
+
+@Entity
+@DiscriminatorValue("Federado")
 
 /**
  * Se crea la clase backsolutions.modelo.Federado
  */
-
 public class Federado extends Socio {
 
     /**
      * Atributos de la clase backsolutions.modelo.Federado
      */
+    @Column (name = "nif", nullable=false)
     private String nif;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "codigoFederacion", referencedColumnName = "codigo", nullable = true)
     private Federacion federacion;
+
+    // Constructor vacío obligatorio para JPA
+    public Federado() {
+        super();
+    }
 
     //Constructor de la clase backsolutions.modelo.Federado con los parámetros necesarios para inicializar un socio federado
 
