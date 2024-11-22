@@ -2,6 +2,11 @@ package backsolutions.modelo;
 
 import java.util.List;
 import java.time.LocalDate;
+import jakarta.persistence.*;
+import java.util.ArrayList;
+
+@Entity
+@Table(name = "facturas") //nombre de la tabla en la BD
 
 /**
  * Se crea la clase backsolutions.modelo.Factura
@@ -11,9 +16,41 @@ public class Factura {
     /**
      * Atributos de la clase backsolutions.modelo.Factura
      */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //campo autonumerico
+    @Column(name = "idFactura") //nombre del campo en la BD
     private int idFactura;
+
+    @ManyToOne(fetch = FetchType.LAZY) //relacion muchos a uno con Socio/ fetch controla como se cargan las relaciones entre entidaddes /LAZY para que se cargue la relacion solo cuando se necesite
+    @JoinColumn(name = "numSocio", nullable = false)
     private Socio socio;
-    private List<Inscripcion> inscripciones;
+
+    @Column(name = "fechaFactura", nullable = false)
+    private LocalDate fechaFactura;
+
+    @Column(name = "totalExcursiones", nullable = false)
+    private double totalExcursiones;
+
+    @Column(name = "totalCuota", nullable = false)
+    private double totalCuota;
+
+    @Column(name = "totalPagar", nullable = false)
+    private double totalPagar;
+
+    @OneToMany(mappedBy = "factura", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY) // Relación uno a muchos con Inscripcion
+    private List<Inscripcion> inscripciones = new ArrayList<>();
+
+    // Constructor vacío obligatorio para JPA
+    public Factura() {}
+
+    // Constructor con parámetros para inicializar Factura
+    public Factura(Socio socio, LocalDate fechaFactura, double totalExcursiones, double totalCuota, double totalPagar) {
+        this.socio = socio;
+        this.fechaFactura = fechaFactura;
+        this.totalExcursiones = totalExcursiones;
+        this.totalCuota = totalCuota;
+        this.totalPagar = totalPagar;
+    }
 
     //Constructor de la clase backsolutions.modelo.Factura con los parámetros necesarios para inicializar una factura
     /**
@@ -43,6 +80,7 @@ public class Factura {
     }
 
     //Getters y Setters
+
     /**
      * Getter de socio
      * @return devuelve el socio de la factura
@@ -56,6 +94,38 @@ public class Factura {
      */
     public void setSocio(Socio socio) {
         this.socio = socio;
+    }
+
+    public LocalDate getFechaFactura() {
+        return fechaFactura;
+    }
+
+    public void setFechaFactura(LocalDate fechaFactura) {
+        this.fechaFactura = fechaFactura;
+    }
+
+    public double getTotalExcursiones() {
+        return totalExcursiones;
+    }
+
+    public void setTotalExcursiones(double totalExcursiones) {
+        this.totalExcursiones = totalExcursiones;
+    }
+
+    public double getTotalCuota() {
+        return totalCuota;
+    }
+
+    public void setTotalCuota(double totalCuota) {
+        this.totalCuota = totalCuota;
+    }
+
+    public double getTotalPagar() {
+        return totalPagar;
+    }
+
+    public void setTotalPagar(double totalPagar) {
+        this.totalPagar = totalPagar;
     }
 
     /**
@@ -74,6 +144,17 @@ public class Factura {
         this.inscripciones = inscripciones;
     }
 
+
+    // Métodos auxiliares
+    public void addInscripcion(Inscripcion inscripcion) {
+        inscripciones.add(inscripcion);
+        inscripcion.setFactura(this);
+    }
+
+    public void removeInscripcion(Inscripcion inscripcion) {
+        inscripciones.remove(inscripcion);
+        inscripcion.setFactura(null);
+    }
 
     //Métodos de la clase Factura
 
@@ -141,12 +222,25 @@ public class Factura {
      * Representación de la información de la clase Factura con toString
      * @return devuelve el metodo toString de la clase Factura
      */
-    @Override
+    /*@Override
     public String toString() {
         return "Factura" +
                 "ID Factura=" + idFactura +
                 ", Socio=" + socio +
                 ", Inscripciones=" + inscripciones +
                 '.';
+    }*/
+    @Override
+    public String toString() {
+        return "Factura:" +
+                "ID Factura=" + idFactura +
+                ", Socio=" + (socio != null ? socio.getNombre() : "Sin socio") +
+                ", Fecha Factura=" + fechaFactura +
+                ", Total Excursiones=" + totalExcursiones +
+                ", Total Cuota=" + totalCuota +
+                ", Total a Pagar=" + totalPagar +
+                ", Inscripciones=" + inscripciones +
+                '}';
     }
+
 }

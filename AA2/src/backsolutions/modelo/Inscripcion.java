@@ -41,6 +41,10 @@ public class Inscripcion {
     @Column(name = "seguroPrecio")
     private double seguroPrecio;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idFactura")
+    private Factura factura;
+
 
     // Constructor vacío obligatorio para JPA
     public Inscripcion() {}
@@ -148,7 +152,13 @@ public class Inscripcion {
         this.fechaInscripcion = fechaInscripcion;
     }
 
+    public Factura getFactura() {
+        return factura;
+    }
 
+    public void setFactura(Factura factura) {
+        this.factura = factura;
+    }
 
     //Métodos de la clase Inscripcion
 
