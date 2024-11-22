@@ -19,17 +19,24 @@ public class InscripcionDAOImpl implements InscripcionDAO {
     //metodo inserta una inscripcion en la tabla
     @Override
     public void guardarInscripcion(Inscripcion inscripcion) throws SQLException {
+        String sql = "INSERT INTO inscripciones (numInscripcion, numSocio, codigoExcursion, fechaInscripcion, tipoSeguro, seguroPrecio) " +
+                "VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement statement = conn.prepareStatement(INSERT_INSCRIPCION)) {
+             PreparedStatement statement = conn.prepareStatement(sql)) {
 
             statement.setString(1, inscripcion.getNumInscripcion());
             statement.setInt(2, inscripcion.getSocio().getNumSocio());
             statement.setString(3, inscripcion.getExcursion().getCodigo());
             statement.setDate(4, java.sql.Date.valueOf(inscripcion.getFechaInscripcion()));
 
-            // Verificar si el seguro está presente
-            statement.setString(5, inscripcion.getTipoSeguro());
-            statement.setDouble(6, inscripcion.getSeguroPrecio());
+            // Manejar el seguro opcional
+            if (inscripcion.getTipoSeguro() != null && !inscripcion.getTipoSeguro().equalsIgnoreCase("ninguno")) {
+                statement.setString(5, inscripcion.getTipoSeguro());
+                statement.setDouble(6, inscripcion.getSeguroPrecio());
+            } else {
+                statement.setNull(5, java.sql.Types.VARCHAR);
+                statement.setNull(6, java.sql.Types.DOUBLE);
+            }
 
             statement.executeUpdate();
         }
