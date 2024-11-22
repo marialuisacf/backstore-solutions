@@ -188,18 +188,15 @@ public class SenderosMontañas {
         }
 
         String numInscripcion = generarNumeroInscripcion();
-        //para crear la inscripción con los detalles proporcionados
-        Inscripcion inscripcion = new Inscripcion(numInscripcion, socio, excursion, LocalDate.now(), seguro);
+        String tipoSeguro = (seguro != null) ? seguro.getTipo() : null;
+        double precioSeguro = (seguro != null) ? seguro.getPrecio() : 0.0;
+
+        Inscripcion inscripcion = new Inscripcion(numInscripcion, socio, excursion, LocalDate.now(), tipoSeguro, precioSeguro);
 
         try {
-            //aseguramos de que el seguro no es nulo antes de llamar al metodo del controlador
-            String tipoSeguro = (seguro != null) ? seguro.getTipo() : null;
-            double precioSeguro = (seguro != null) ? seguro.getPrecio() : 0.0;
-
-            //llamamos al controlador para añadir la inscripción con los datos correctos
             controladorInscripcion.addInscripcion(codigoExcursion, numSocio, tipoSeguro, precioSeguro);
+            inscripciones.add(inscripcion);
         } catch (InscripcionInvalidaExcepcion e) {
-            //propagamos la excepción para delegar el manejo de errores a la vista/controlador
             throw new RuntimeException("Error al añadir la inscripción: " + e.getMessage());
         }
     }

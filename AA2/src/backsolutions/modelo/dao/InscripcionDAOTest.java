@@ -12,13 +12,23 @@ public class InscripcionDAOTest {
         ExcursionDAO excursionDAO = new ExcursionDAOImpl();
 
         try {
-            //1.Crear una nueva inscripción
+            // 1. Crear una nueva inscripción
             System.out.println("Guardando una nueva inscripción...");
             Socio socio = socioDAO.buscarSocio(2); // Supongamos que existe un socio con numSocio 2
             Excursion excursion = excursionDAO.buscarExcursion("EXC001"); // Supongamos que existe una excursión con código EXC001
 
             if (socio != null && excursion != null) {
-                Inscripcion inscripcion = new Inscripcion("INS001", socio, excursion, LocalDate.now(), null); // Seguro solo si es Estandar
+                // Determinar si el seguro es necesario según el tipo de socio
+                String tipoSeguro = null;
+                double seguroPrecio = 0.0;
+
+                if (socio instanceof Estandar) {
+                    tipoSeguro = "básico"; // Puedes establecer el tipo de seguro por defecto
+                    seguroPrecio = 15.0; // Precio de ejemplo para el seguro
+                }
+
+                // Crear la inscripción con el seguro opcional
+                Inscripcion inscripcion = new Inscripcion("INS001", socio, excursion, LocalDate.now(), tipoSeguro, seguroPrecio);
                 inscripcionDAO.guardarInscripcion(inscripcion);
                 System.out.println("Inscripción guardada correctamente.");
             } else {

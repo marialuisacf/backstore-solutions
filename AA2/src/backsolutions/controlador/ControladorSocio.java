@@ -123,7 +123,7 @@ public class ControladorSocio {
 
         // Aplica descuentos según el tipo de socio
         if (inscripcion.getSocio() instanceof Estandar) {
-            return precioBase + inscripcion.getSeguro().getPrecio(); // Asegúrate de tener un método para obtener el precio del seguro
+            return precioBase + inscripcion.getSeguroPrecio(); // Asegurate de tener un metodo para obtener el precio del seguro
         } else if (inscripcion.getSocio() instanceof Federado) {
             return precioBase * 0.9; // Descuento del 10% para federados
         } else if (inscripcion.getSocio() instanceof Infantil) {

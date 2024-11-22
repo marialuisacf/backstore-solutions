@@ -19,24 +19,17 @@ public class InscripcionDAOImpl implements InscripcionDAO {
     //metodo inserta una inscripcion en la tabla
     @Override
     public void guardarInscripcion(Inscripcion inscripcion) throws SQLException {
-        String sql = "INSERT INTO inscripciones (numInscripcion, numSocio, codigoExcursion, fechaInscripcion, tipoSeguro, seguroPrecio) " +
-                "VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement statement = conn.prepareStatement(sql)) {
+             PreparedStatement statement = conn.prepareStatement(INSERT_INSCRIPCION)) {
 
             statement.setString(1, inscripcion.getNumInscripcion());
             statement.setInt(2, inscripcion.getSocio().getNumSocio());
             statement.setString(3, inscripcion.getExcursion().getCodigo());
             statement.setDate(4, java.sql.Date.valueOf(inscripcion.getFechaInscripcion()));
 
-            //Verificar si el socio tiene un seguro (ya que solo los socios Estandar lo tienen)
-            if (inscripcion.getSeguro() != null) {
-                statement.setString(5, inscripcion.getSeguro().getTipo());
-                statement.setDouble(6, inscripcion.getSeguro().getPrecio());
-            } else {
-                statement.setNull(5, java.sql.Types.VARCHAR);
-                statement.setNull(6, java.sql.Types.DOUBLE);
-            }
+            // Verificar si el seguro está presente
+            statement.setString(5, inscripcion.getTipoSeguro());
+            statement.setDouble(6, inscripcion.getSeguroPrecio());
 
             statement.executeUpdate();
         }
@@ -110,6 +103,7 @@ public class InscripcionDAOImpl implements InscripcionDAO {
         return importe;
     }
 
+    // Metodo para mapear una inscripción desde un ResultSet
     private Inscripcion mapearInscripcion(ResultSet rs) throws SQLException {
         String numInscripcion = rs.getString("numInscripcion");
         int numSocio = rs.getInt("numSocio");
@@ -120,8 +114,7 @@ public class InscripcionDAOImpl implements InscripcionDAO {
 
         Socio socio = new SocioDAOImpl().buscarSocio(numSocio);
         Excursion excursion = new ExcursionDAOImpl().buscarExcursion(codigoExcursion);
-        Seguro seguro = tipoSeguro != null ? new Seguro(tipoSeguro, precioSeguro) : null;
 
-        return new Inscripcion(numInscripcion, socio, excursion, fechaInscripcion.toLocalDate(), seguro);
+        return new Inscripcion(numInscripcion, socio, excursion, fechaInscripcion.toLocalDate(), tipoSeguro, precioSeguro);
     }
 }

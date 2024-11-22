@@ -24,33 +24,38 @@ public class ControladorInscripcion {
 
     //Metodo para añadir inscripciones de un socio a una excursion
     public void addInscripcion(String codigoExcursion, int numSocio, String tipoSeguro, double precioSeguro) throws ControladorExcepcion {
-
         try (Connection conn = DatabaseConnection.getConnection()) {
-            conn.setAutoCommit(false); //Inicio de la transaccion. El metodo establece conexion con la BD y desactiva autocommit
-            //para que los cambios no se guarden de inmediato, para ejecutar todas las operaciones en 1 unica transaccion.
+            conn.setAutoCommit(false);
 
-            //verifica si la excursion existe para asegurar que se realizan inscripciones en excursiones validas
+            // Verifica que la excursión existe
             Excursion excursion = new ExcursionDAOImpl().buscarExcursion(codigoExcursion);
             if (excursion == null) {
                 throw new ControladorExcepcion("La excursión con código " + codigoExcursion + " no existe.");
             }
-            //verifica si el socio existe, si no existe lanza ControladorExcepcion garantizando que solo los socios validos se inscriban
+
+            // Verifica que el socio existe
             Socio socio = new SocioDAOImpl().buscarSocio(numSocio);
             if (socio == null) {
                 throw new ControladorExcepcion("No se encontró un socio con el número proporcionado.");
             }
 
-            //creacion seguro opcional, si tipoSeguro es null, el seguro sera null para indicar que no hay seguro para la inscripcion
-            Seguro seguro = (tipoSeguro != null) ? new Seguro(tipoSeguro, precioSeguro) : null;
-            String numInscripcion = "INS" + System.currentTimeMillis(); //generacion de un numero de inscripcion único
-            Inscripcion inscripcion = new Inscripcion(numInscripcion, socio, excursion, LocalDate.now(), seguro); //creacion de la inscripcion
+            // Genera un número único para la inscripción
+            String numInscripcion = "INS" + System.currentTimeMillis();
 
-            //guardar la inscripcion en la BD
-            new InscripcionDAOImpl().guardarInscripcion(inscripcion);
+            // Crea la inscripción con los detalles
+            Inscripcion inscripcion = new Inscripcion(
+                    numInscripcion,
+                    socio,
+                    excursion,
+                    LocalDate.now(),
+                    tipoSeguro,
+                    precioSeguro
+            );
 
-            //Confirmacion de la transaccion
-            conn.commit(); //si todas las operaciones anteriores han sido exitosas se confirma la transaccion 'commit' guardando los cambios en BD
-            //si algo falla antes de este punto, la transaccion se revierte automaticamente
+            // Guarda la inscripción en la base de datos
+            inscripcionDAO.guardarInscripcion(inscripcion);
+
+            conn.commit();
         } catch (SQLException e) {
             throw new ControladorExcepcion("Error al guardar la inscripción: " + e.getMessage());
         }
@@ -74,7 +79,7 @@ public class ControladorInscripcion {
                 throw new ControladorExcepcion("No se encontró una inscripción para el socio en la excursión proporcionada.");
             }
 
-            // Eliminar la inscripción en la BD
+            // Eliminar la inscripción en la base de datos
             inscripcionDAO.eliminarInscripcion(inscripcionACancelar.getNumInscripcion());
         } catch (SQLException e) {
             throw new ControladorExcepcion("Error al cancelar la inscripción: " + e.getMessage());
@@ -104,7 +109,7 @@ public class ControladorInscripcion {
 
         // Aplica descuentos según el tipo de socio
         if (inscripcion.getSocio() instanceof Estandar) {
-            importe += (inscripcion.getSeguro() != null) ? inscripcion.getSeguro().getPrecio() : 0.0;
+            importe += inscripcion.getSeguroPrecio();
         } else if (inscripcion.getSocio() instanceof Federado) {
             importe *= 0.9; // Descuento del 10%
         } else if (inscripcion.getSocio() instanceof Infantil) {
