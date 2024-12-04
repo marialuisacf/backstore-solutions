@@ -9,5 +9,9 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="bluecatcode.junit.4.12.extended" level="application" />
     <orderEntry type="library" name="github.cschabl.cdi.unit.junit5" level="application" />
+    <orderEntry type="library" name="mysql.connector.j" level="project" />
+    <orderEntry type="library" name="mysql-connector-j-9.1.2" level="project" />
+    <orderEntry type="library" name="junit.jupiter.engine1" level="project" />
+    <orderEntry type="library" name="junit.jupiter.api" level="project" />
   </component>
 </module>
