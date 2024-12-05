@@ -43,6 +43,7 @@ public class ExcursionDAOImpl implements ExcursionDAO {
         return null;
     }
 
+
     @Override
     public List<Excursion> listarExcursiones() throws SQLException {
         String query = "SELECT * FROM Excursiones";
@@ -110,6 +111,38 @@ public class ExcursionDAOImpl implements ExcursionDAO {
         }
         return excursionesFiltradas;
     }
+
+    private Excursion mapearExcursion(ResultSet rs) throws SQLException {
+        //el metodo es una forma de reutilizar el codigo para convertir un ResulSet en un objeto Excursion
+        String codigo = rs.getString("codigo");
+        String descripcion = rs.getString("descripcion");
+        LocalDate fecha = rs.getDate("fecha").toLocalDate();
+        int numDias = rs.getInt("numDias");
+        double precioInscripcion = rs.getDouble("precioInscripcion");
+
+        return new Excursion(codigo, descripcion, fecha, numDias, precioInscripcion);
+    }
+
+
+    @Override
+    public List<Excursion> filtrarExcursionesPorFechas(LocalDate inicio, LocalDate fin) throws SQLException {
+        String sql = "SELECT * FROM excursiones WHERE fecha >= ? AND fecha <= ?";
+        List<Excursion> excursiones = new ArrayList<>();
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setDate(1, Date.valueOf(inicio));
+            pstmt.setDate(2, Date.valueOf(fin));
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                Excursion excursion = mapearExcursion(rs);
+                excursiones.add(excursion);
+            }
+        }
+        return excursiones;
+    }
+
 
 
     @Override
