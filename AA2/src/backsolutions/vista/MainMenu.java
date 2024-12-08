@@ -5,50 +5,68 @@ import javafx.scene.Scene;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
+
 import backsolutions.controlador.gui.ControladorExcursionesGUI;
 import backsolutions.vista.gui.VistaExcursionesGUI;
+
 import backsolutions.controlador.gui.ControladorSociosGUI;
 import backsolutions.vista.gui.VistaSociosGUI;
 
+import backsolutions.controlador.gui.ControladorInscripcionesGUI;
+import backsolutions.vista.gui.VistaInscripcionesGUI;
+
 public class MainMenu extends Application {
-    //La clase extiende Application de JavaFX permitiendo inicializar y mostrar la interfaz gráfica.
     @Override
     public void start(Stage primaryStage) {
-        // Creamos el TabPane para manejar las pestañas de la interfaz
+        // Creamos el TabPane para manejar las pestañas
         TabPane tabPane = new TabPane();
 
-        // Gestión de Excursiones
+        // ---------------------------
+        // Pestaña de Gestión Excursiones
+        // ---------------------------
         Tab gestionExcursionesTab = new Tab("Gestión de Excursiones");
-        VistaExcursionesGUI vistaExcursiones = new VistaExcursionesGUI(primaryStage); // Pasa el Stage como parámetro
-        ControladorExcursionesGUI controladorExcursiones = new ControladorExcursionesGUI(vistaExcursiones); // Asociar el controlador
-        gestionExcursionesTab.setContent(vistaExcursiones.getVistaPrincipal()); // Usa el VBox principal
-        gestionExcursionesTab.setClosable(false); //Evita que se pueda cerrar la pestaña
+        VistaExcursionesGUI vistaExcursiones = new VistaExcursionesGUI(primaryStage);
+        ControladorExcursionesGUI controladorExcursiones = new ControladorExcursionesGUI(vistaExcursiones);
+        gestionExcursionesTab.setContent(vistaExcursiones.getVistaPrincipal());
+        gestionExcursionesTab.setClosable(false);
 
-        // Gestión de Socios
+        // ---------------------------
+        // Pestaña de Gestión Socios
+        // ---------------------------
         Tab gestionSociosTab = new Tab("Gestión de Socios");
-        VistaSociosGUI vistaSocios = new VistaSociosGUI(); //Instancia de la vista
-        ControladorSociosGUI controladorSocios = new ControladorSociosGUI(vistaSocios); // Asociar controlador
-        gestionSociosTab.setContent(vistaSocios.getVistaPrincipal()); //Usa el VBox principal de la vista
+        VistaSociosGUI vistaSocios = new VistaSociosGUI();
+        ControladorSociosGUI controladorSocios = new ControladorSociosGUI(vistaSocios);
+        gestionSociosTab.setContent(vistaSocios.getVistaPrincipal());
         gestionSociosTab.setClosable(false);
 
-        // Gestión de Inscripciones (placeholder por ahora)
+        // ---------------------------
+        // Pestaña de Gestión Inscripciones
+        // ---------------------------
         Tab gestionInscripcionesTab = new Tab("Gestión de Inscripciones");
-        gestionInscripcionesTab.setContent(new javafx.scene.control.Label("Gestión de Inscripciones en proceso de creación aún..."));
+        VistaInscripcionesGUI vistaInscripciones = new VistaInscripcionesGUI();
+        ControladorInscripcionesGUI controladorInscripciones = new ControladorInscripcionesGUI(vistaInscripciones);
+        gestionInscripcionesTab.setContent(vistaInscripciones.getVistaPrincipal());
         gestionInscripcionesTab.setClosable(false);
 
-        // Agregamos las pestañas al TabPane
-        tabPane.getTabs().addAll(gestionExcursionesTab, gestionSociosTab, gestionInscripcionesTab);
+        // ---------------------------
+        // Agregar todas las pestañas al TabPane
+        // ---------------------------
+        tabPane.getTabs().addAll(
+                gestionExcursionesTab,
+                gestionSociosTab,
+                gestionInscripcionesTab
+        );
 
-        // La escena principal
+        // ---------------------------
+        // Configurar la ventana principal
+        // ---------------------------
         Scene scene = new Scene(tabPane, 800, 600);
-        primaryStage.setTitle("¡Bienvenidos a Senderos y Montañas! - Menú Principal:");
+        primaryStage.setTitle("¡Bienvenidos a Senderos y Montañas! - Menú Principal");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
-
     public static void main(String[] args) {
         launch(args);
-        //Este es el punto de entrada, el metodo main() llama a launch(args) que iniciliza JavaFX y muestra la ventana.
     }
 }
