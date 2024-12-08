@@ -7,6 +7,8 @@ import backsolutions.vista.gui.VistaSociosGUI;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
+import java.sql.Connection;
+import backsolutions.util.DatabaseConnection;
 
 public class ControladorSociosGUI {
     private final VistaSociosGUI vista; //Enlace con la interfaz grafica
@@ -99,15 +101,31 @@ public class ControladorSociosGUI {
     private void modificarSeguro() {
         try {
             int numSocio = Integer.parseInt(vista.getModificarNumSocioField().getText());
-            String nuevoTipo = vista.getNuevoTipoSeguroBox().getValue();
-            double nuevoPrecio = Double.parseDouble(vista.getNuevoPrecioSeguroField().getText());
+            String nuevoTipoSeguro = vista.getNuevoTipoSeguroBox().getValue();
+            double nuevoPrecioSeguro = Double.parseDouble(vista.getNuevoPrecioSeguroField().getText());
 
-            socioDAO.actualizarSeguro(numSocio, nuevoTipo, nuevoPrecio, null);
+            // Verificar que todos los campos estén completos
+            if (nuevoTipoSeguro == null || nuevoTipoSeguro.isEmpty()) {
+                mostrarError("Debe seleccionar un tipo de seguro.");
+                return;
+            }
+
+            // Llamada al metodo del DAO para modificar el seguro
+            Connection conn = DatabaseConnection.getConnection();
+            socioDAO.actualizarSeguro(numSocio, nuevoTipoSeguro, nuevoPrecioSeguro, conn);
+
+
+            // Mostrar mensaje de éxito y actualizar la tabla
+            mostrarExito("Tipo de seguro modificado correctamente.");
             cargarSocios();
+        } catch (NumberFormatException e) {
+            mostrarError("Formato inválido. Verifique los datos ingresados.");
         } catch (Exception e) {
             mostrarError("Error al modificar el seguro: " + e.getMessage());
         }
     }
+
+
 
     // 4. Eliminar Socio de la BD
     private void eliminarSocio() {
@@ -147,4 +165,13 @@ public class ControladorSociosGUI {
         alert.setContentText(mensaje);
         alert.showAndWait();
     }
+
+    private void mostrarExito(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Éxito");
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
+
 }

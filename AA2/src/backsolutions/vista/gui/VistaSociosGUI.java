@@ -61,7 +61,7 @@ public class VistaSociosGUI {
         numSocioTutorField.setPromptText("Num. Socio Tutor (Infantil)");
 
         seguroBox = new ComboBox<>();
-        seguroBox.getItems().addAll("Básico", "Completo");
+        seguroBox.getItems().addAll("basico", "completo");
         seguroBox.setPromptText("Seguro (Estandar)");
 
         precioSeguroField = new TextField();
@@ -183,7 +183,7 @@ public class VistaSociosGUI {
         modificarNumSocioField.setPromptText("Num. Socio");
 
         nuevoTipoSeguroBox = new ComboBox<>();
-        nuevoTipoSeguroBox.getItems().addAll("Básico", "Completo");
+        nuevoTipoSeguroBox.getItems().addAll("basico", "completo");
         nuevoTipoSeguroBox.setPromptText("Nuevo Tipo Seguro");
 
         nuevoPrecioSeguroField = new TextField();
