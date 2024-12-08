@@ -110,10 +110,21 @@ public class ControladorSociosGUI {
                 return;
             }
 
-            // Llamada al metodo del DAO para modificar el seguro
+            // Verificar si el socio existe y es de tipo Estandar
+            Socio socio = socioDAO.buscarSocio(numSocio); // Recuperar socio por numSocio
+            if (socio == null) {
+                mostrarError("No se encontró un socio con el número indicado.");
+                return;
+            }
+
+            if (!(socio instanceof Estandar)) { // Solo permite socios de tipo Estandar
+                mostrarError("Solo se puede modificar el seguro de los socios de tipo Estandar.");
+                return;
+            }
+
+            // Llamada al método del DAO para modificar el seguro
             Connection conn = DatabaseConnection.getConnection();
             socioDAO.actualizarSeguro(numSocio, nuevoTipoSeguro, nuevoPrecioSeguro, conn);
-
 
             // Mostrar mensaje de éxito y actualizar la tabla
             mostrarExito("Tipo de seguro modificado correctamente.");
@@ -127,16 +138,30 @@ public class ControladorSociosGUI {
 
 
 
+
     // 4. Eliminar Socio de la BD
     private void eliminarSocio() {
         try {
             int numSocio = Integer.parseInt(vista.getEliminarNumSocioField().getText());
+
+            // Verificar si el socio existe antes de eliminarlo
+            Socio socio = socioDAO.buscarSocio(numSocio); // Recuperar el socio
+            if (socio == null) {
+                mostrarError("Número de socio incorrecto o inexistente.");
+                return; // Termina el método si el socio no existe
+            }
+
+            // Eliminar el socio
             socioDAO.eliminarSocio(numSocio);
-            cargarSocios();
+            mostrarExito("Socio eliminado correctamente.");
+            cargarSocios(); // Actualizar la tabla de socios
+        } catch (NumberFormatException e) {
+            mostrarError("Formato inválido. Por favor, ingrese un número válido.");
         } catch (Exception e) {
             mostrarError("Error al eliminar el socio: " + e.getMessage());
         }
     }
+
 
     // 5. Mostrar Factura mensual de un socio en un area de texto
     private void mostrarFactura() {
