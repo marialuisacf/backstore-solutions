@@ -7,6 +7,8 @@ import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
 import backsolutions.controlador.gui.ControladorExcursionesGUI;
 import backsolutions.vista.gui.VistaExcursionesGUI;
+import backsolutions.controlador.gui.ControladorSociosGUI;
+import backsolutions.vista.gui.VistaSociosGUI;
 
 public class MainMenu extends Application {
     //La clase extiende Application de JavaFX permitiendo inicializar y mostrar la interfaz gráfica.
@@ -20,11 +22,13 @@ public class MainMenu extends Application {
         VistaExcursionesGUI vistaExcursiones = new VistaExcursionesGUI(primaryStage); // Pasa el Stage como parámetro
         ControladorExcursionesGUI controladorExcursiones = new ControladorExcursionesGUI(vistaExcursiones); // Asociar el controlador
         gestionExcursionesTab.setContent(vistaExcursiones.getVistaPrincipal()); // Usa el VBox principal
-        gestionExcursionesTab.setClosable(false); // Evita que se pueda cerrar la pestaña
+        gestionExcursionesTab.setClosable(false); //Evita que se pueda cerrar la pestaña
 
-        // Gestión de Socios (placeholder por ahora)
+        // Gestión de Socios
         Tab gestionSociosTab = new Tab("Gestión de Socios");
-        gestionSociosTab.setContent(new javafx.scene.control.Label("Gestión de Socios en proceso de creación aún..."));
+        VistaSociosGUI vistaSocios = new VistaSociosGUI(); //Instancia de la vista
+        ControladorSociosGUI controladorSocios = new ControladorSociosGUI(vistaSocios); // Asociar controlador
+        gestionSociosTab.setContent(vistaSocios.getVistaPrincipal()); //Usa el VBox principal de la vista
         gestionSociosTab.setClosable(false);
 
         // Gestión de Inscripciones (placeholder por ahora)
