@@ -6,6 +6,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
 public class VistaInscripcionesGUI {
     private final VBox vistaPrincipal;
@@ -55,9 +57,11 @@ public class VistaInscripcionesGUI {
         mostrarInscripcionesLabel.setFont(Font.font("Arial", FontWeight.BOLD, 16));
 
         tablaInscripciones = new TableView<>();
-        mostrarInscripcionesButton = new Button("Mostrar Inscripciones"); // Asignar el botón correctamente aquí
+        definirColumnasTabla(); // Metodo para definir las columnas
+        mostrarInscripcionesButton = new Button("Mostrar Inscripciones");
 
         VBox mostrarInscripcionesBox = new VBox(10, mostrarInscripcionesButton, tablaInscripciones);
+
 
         // Sección "Cancelar Inscripción"
         Label cancelarInscripcionLabel = new Label("Cancelar Inscripción");
@@ -76,6 +80,43 @@ public class VistaInscripcionesGUI {
                 añadirInscripcionLabel, añadirInscripcionBox,
                 mostrarInscripcionesLabel, mostrarInscripcionesBox,
                 cancelarInscripcionLabel, cancelarInscripcionBox
+        );
+    }
+
+    //Metodo para definir las columnas de la tabla
+    private void definirColumnasTabla() {
+        TableColumn<Inscripcion, String> numInscripcionCol = new TableColumn<>("Nº Inscripción");
+        numInscripcionCol.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getNumInscripcion()));
+
+        TableColumn<Inscripcion, String> numSocioCol = new TableColumn<>("Nº Socio");
+        numSocioCol.setCellValueFactory(cellData ->
+                new SimpleStringProperty(String.valueOf(cellData.getValue().getSocio().getNumSocio())));
+
+        TableColumn<Inscripcion, String> codigoExcursionCol = new TableColumn<>("Código Excursión");
+        codigoExcursionCol.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getExcursion().getCodigo()));
+
+        TableColumn<Inscripcion, String> fechaInscripcionCol = new TableColumn<>("Fecha Inscripción");
+        fechaInscripcionCol.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getFechaInscripcion().toString()));
+
+        TableColumn<Inscripcion, String> tipoSeguroCol = new TableColumn<>("Tipo Seguro");
+        tipoSeguroCol.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getTipoSeguro()));
+
+        TableColumn<Inscripcion, Double> precioSeguroCol = new TableColumn<>("Precio Seguro");
+        precioSeguroCol.setCellValueFactory(cellData ->
+                new SimpleObjectProperty<>(cellData.getValue().getSeguroPrecio()));
+
+        // Añadir las columnas a la tabla
+        tablaInscripciones.getColumns().addAll(
+                numInscripcionCol,
+                numSocioCol,
+                codigoExcursionCol,
+                fechaInscripcionCol,
+                tipoSeguroCol,
+                precioSeguroCol
         );
     }
 
