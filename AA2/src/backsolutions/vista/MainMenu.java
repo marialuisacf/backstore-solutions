@@ -18,48 +18,38 @@ import backsolutions.vista.gui.VistaInscripcionesGUI;
 public class MainMenu extends Application {
     @Override
     public void start(Stage primaryStage) {
-        // Creamos el TabPane para manejar las pestañas
+        //Creamos el TabPane para manejar las pestañas
         TabPane tabPane = new TabPane();
 
-        // ---------------------------
-        // Pestaña de Gestión Excursiones
-        // ---------------------------
+        //Pestaña de Gestión Excursiones
         Tab gestionExcursionesTab = new Tab("Gestión de Excursiones");
         VistaExcursionesGUI vistaExcursiones = new VistaExcursionesGUI(primaryStage);
         ControladorExcursionesGUI controladorExcursiones = new ControladorExcursionesGUI(vistaExcursiones);
         gestionExcursionesTab.setContent(vistaExcursiones.getVistaPrincipal());
         gestionExcursionesTab.setClosable(false);
 
-        // ---------------------------
-        // Pestaña de Gestión Socios
-        // ---------------------------
+        //Pestaña de Gestión Socios
         Tab gestionSociosTab = new Tab("Gestión de Socios");
         VistaSociosGUI vistaSocios = new VistaSociosGUI();
         ControladorSociosGUI controladorSocios = new ControladorSociosGUI(vistaSocios);
         gestionSociosTab.setContent(vistaSocios.getVistaPrincipal());
         gestionSociosTab.setClosable(false);
 
-        // ---------------------------
-        // Pestaña de Gestión Inscripciones
-        // ---------------------------
+        //Pestaña de Gestión Inscripciones
         Tab gestionInscripcionesTab = new Tab("Gestión de Inscripciones");
         VistaInscripcionesGUI vistaInscripciones = new VistaInscripcionesGUI();
         ControladorInscripcionesGUI controladorInscripciones = new ControladorInscripcionesGUI(vistaInscripciones);
         gestionInscripcionesTab.setContent(vistaInscripciones.getVistaPrincipal());
         gestionInscripcionesTab.setClosable(false);
 
-        // ---------------------------
-        // Agregar todas las pestañas al TabPane
-        // ---------------------------
+        //Agregamos todas las pestañas al TabPane
         tabPane.getTabs().addAll(
                 gestionExcursionesTab,
                 gestionSociosTab,
                 gestionInscripcionesTab
         );
 
-        // ---------------------------
-        // Configurar la ventana principal
-        // ---------------------------
+        //Ventana principal
         Scene scene = new Scene(tabPane, 800, 600);
         primaryStage.setTitle("¡Bienvenidos a Senderos y Montañas! - Menú Principal");
         primaryStage.setScene(scene);
